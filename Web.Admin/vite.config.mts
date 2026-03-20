@@ -33,8 +33,8 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 				ws: true,
 				/** 是否允许跨域 */
 				changeOrigin: true,
-				rewrite: (path: string) => path.replace(/^\/api/, ""),
-				// rewrite: (path: string) => path,
+				// rewrite: (path: string) => path.replace(/^\/api/, ""),
+				rewrite: (path: string) => path,
 			},
 		};
 	}
