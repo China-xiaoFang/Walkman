@@ -118,4 +118,27 @@ public class CacheConst
         /// </summary>
         public const string City = "City";
     }
+
+    /// <summary>
+    /// Walkman 随身听
+    /// </summary>
+    public class Walkman
+    {
+        /// <summary>教材列表</summary>
+        public const string TextbookList = "Walkman:TextbookList";
+
+        /// <summary>册列表</summary>
+        /// <remarks>{0}教材Id</remarks>
+        public const string VolumeList = "Walkman:VolumeList:{0}";
+
+        /// <summary>课程列表</summary>
+        /// <remarks>{0}册Id</remarks>
+        public const string LessonList = "Walkman:LessonList:{0}";
+
+        /// <summary>音频类型列表</summary>
+        public const string AudioTypeList = "Walkman:AudioTypeList";
+
+        /// <summary>发音类型列表</summary>
+        public const string PronunciationTypeList = "Walkman:PronunciationTypeList";
+    }
 }
