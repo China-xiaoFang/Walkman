@@ -601,6 +601,44 @@ public partial class PermissionConst
         public const string Delete = "Word:Delete";
     }
 
+    /// <summary><see cref="LessonContentManage"/> 课程内容</summary>
+    public class LessonContentManage
+    {
+        /// <summary>课程内容列表</summary>
+        public const string Paged = "LessonContent:Paged";
+
+        /// <summary>课程内容详情</summary>
+        public const string Detail = "LessonContent:Detail";
+
+        /// <summary>课程内容新增</summary>
+        public const string Add = "LessonContent:Add";
+
+        /// <summary>课程内容编辑</summary>
+        public const string Edit = "LessonContent:Edit";
+
+        /// <summary>课程内容删除</summary>
+        public const string Delete = "LessonContent:Delete";
+    }
+
+    /// <summary><see cref="QuestionManage"/> 题目</summary>
+    public class QuestionManage
+    {
+        /// <summary>题目列表</summary>
+        public const string Paged = "Question:Paged";
+
+        /// <summary>题目详情</summary>
+        public const string Detail = "Question:Detail";
+
+        /// <summary>题目新增</summary>
+        public const string Add = "Question:Add";
+
+        /// <summary>题目编辑</summary>
+        public const string Edit = "Question:Edit";
+
+        /// <summary>题目删除</summary>
+        public const string Delete = "Question:Delete";
+    }
+
     /// <summary><see cref="ActivationCode"/> 激活码</summary>
     public class ActivationCode
     {
