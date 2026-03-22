@@ -18,6 +18,22 @@
 			:indicator="{ type: 'dots-bar' }"
 		/>
 
+		<!-- 快捷入口 -->
+		<view class="quick-entry">
+			<view class="entry-item" @click="router.push({ path: '/pages/walkman/ranking/index' })">
+				<wd-icon name="trophy" size="48rpx" color="#ff9900" />
+				<text>排行榜</text>
+			</view>
+			<view class="entry-item" @click="router.push({ path: '/pages/walkman/studyStats/index' })">
+				<wd-icon name="chart" size="48rpx" color="#667eea" />
+				<text>学习统计</text>
+			</view>
+			<view class="entry-item" @click="router.push({ path: '/pages/walkman/activation/index' })">
+				<wd-icon name="gift" size="48rpx" color="#ee0a24" />
+				<text>激活码</text>
+			</view>
+		</view>
+
 		<!-- 教材列表 -->
 		<view class="section-title">教材列表</view>
 		<view class="textbook-list">

@@ -10,6 +10,25 @@
 	padding: 0 20rpx;
 }
 
+.quick-entry {
+	display: flex;
+	justify-content: space-around;
+	padding: 24rpx 0;
+	margin-bottom: 8rpx;
+
+	.entry-item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8rpx;
+
+		text {
+			font-size: 24rpx;
+			color: var(--wot-color-subtitle);
+		}
+	}
+}
+
 .section-title {
 	font-size: 32rpx;
 	font-weight: bold;

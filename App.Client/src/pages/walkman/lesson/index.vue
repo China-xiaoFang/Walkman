@@ -67,11 +67,11 @@ const handleLessonClick = (item: LessonListOutput, index: number) => {
 		return;
 	}
 	router.push({
-		path: "/pages/walkman/player/index",
+		path: "/pages/walkman/lessonDetail/index",
 		query: {
 			volumeId: state.volumeId,
 			lessonId: item.lessonId,
-			lessonIndex: index,
+			lessonName: item.lessonName,
 		},
 	});
 };
