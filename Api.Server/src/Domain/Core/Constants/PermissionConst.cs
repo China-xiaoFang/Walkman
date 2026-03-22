@@ -582,6 +582,25 @@ public partial class PermissionConst
         public const string Delete = "PronunciationType:Delete";
     }
 
+    /// <summary><see cref="WordManage"/> 单词</summary>
+    public class WordManage
+    {
+        /// <summary>单词列表</summary>
+        public const string Paged = "Word:Paged";
+
+        /// <summary>单词详情</summary>
+        public const string Detail = "Word:Detail";
+
+        /// <summary>单词新增</summary>
+        public const string Add = "Word:Add";
+
+        /// <summary>单词编辑</summary>
+        public const string Edit = "Word:Edit";
+
+        /// <summary>单词删除</summary>
+        public const string Delete = "Word:Delete";
+    }
+
     /// <summary><see cref="ActivationCode"/> 激活码</summary>
     public class ActivationCode
     {
