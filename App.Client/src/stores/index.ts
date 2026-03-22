@@ -29,4 +29,5 @@ export const loadPinia = (app: App): void => {
 
 export * from "./app";
 export * from "./config";
+export * from "./player";
 export * from "./userInfo";
