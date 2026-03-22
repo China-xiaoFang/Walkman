@@ -8,5 +8,88 @@
 
 .wd-swiper {
 	padding: 0 20rpx;
-	// --wot-swiper-radius: 0;
+}
+
+.quick-entry {
+	display: flex;
+	justify-content: space-around;
+	padding: 24rpx 0;
+	margin-bottom: 8rpx;
+
+	.entry-item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8rpx;
+
+		text {
+			font-size: 24rpx;
+			color: var(--wot-color-subtitle);
+		}
+	}
+}
+
+.section-title {
+	font-size: 32rpx;
+	font-weight: bold;
+	padding: 20rpx 0;
+	color: var(--wot-color-title);
+}
+
+.textbook-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20rpx;
+}
+
+.textbook-card {
+	width: calc(50% - 10rpx);
+	background: var(--wot-card-bg-color, #fff);
+	border-radius: 16rpx;
+	overflow: hidden;
+	box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+
+	.textbook-cover-placeholder {
+		width: 100%;
+		height: 260rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: #fff;
+		font-size: 64rpx;
+		font-weight: bold;
+	}
+
+	.textbook-info {
+		padding: 16rpx;
+
+		.textbook-name {
+			font-size: 28rpx;
+			font-weight: bold;
+			color: var(--wot-color-title);
+			display: block;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.textbook-desc {
+			font-size: 24rpx;
+			color: var(--wot-color-subtitle);
+			display: block;
+			margin-top: 8rpx;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+}
+
+.empty-tip {
+	display: flex;
+	justify-content: center;
+	padding: 100rpx 0;
+	color: var(--wot-color-subtitle);
+	font-size: 28rpx;
 }

@@ -76,6 +76,15 @@ internal static class ConfigSeedData
                     ConfigValue = "",
                     Remark = null,
                     CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.FreeLessonCount,
+                    ConfigName = "免费课程数量",
+                    ConfigValue = "3",
+                    Remark = "未激活用户可免费访问的课程数量",
+                    CreatedTime = dateTime
                 }
             })
             .ExecuteCommandAsync();

@@ -47,4 +47,9 @@ public class ConfigConst
     /// 高德地图Key
     /// </summary>
     public const string GaoDeMapKey = "GAO_DE_MAP_KEY";
+
+    /// <summary>
+    /// 免费课程数量
+    /// </summary>
+    public const string FreeLessonCount = "FREE_LESSON_COUNT";
 }

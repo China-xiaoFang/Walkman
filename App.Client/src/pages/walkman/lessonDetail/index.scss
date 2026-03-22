@@ -1,0 +1,245 @@
+.lesson-detail-page {
+	padding-bottom: 0;
+}
+
+.lesson-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20rpx;
+	background: var(--wot-card-bg-color, #fff);
+	margin-bottom: 16rpx;
+
+	.lesson-title {
+		font-size: 32rpx;
+		font-weight: bold;
+		color: var(--wot-color-title);
+	}
+
+	.lesson-check-in {
+		display: flex;
+		align-items: center;
+		gap: 8rpx;
+		font-size: 24rpx;
+		color: #52c41a;
+	}
+}
+
+.tab-content {
+	padding: 20rpx;
+	min-height: 400rpx;
+}
+
+// Listen tab
+.listen-entry,
+.exercise-entry {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 60rpx 40rpx;
+	background: var(--wot-card-bg-color, #fff);
+	border-radius: 16rpx;
+	margin-bottom: 20rpx;
+	box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+
+	.entry-icon {
+		margin-bottom: 20rpx;
+	}
+
+	.entry-title {
+		font-size: 32rpx;
+		font-weight: bold;
+		color: var(--wot-color-title);
+		margin-top: 16rpx;
+	}
+
+	.entry-desc {
+		font-size: 24rpx;
+		color: var(--wot-color-subtitle);
+		margin-top: 8rpx;
+	}
+}
+
+// Read tab
+.reading-section {
+	background: var(--wot-card-bg-color, #fff);
+	border-radius: 16rpx;
+	padding: 24rpx;
+	margin-bottom: 20rpx;
+
+	.section-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 16rpx;
+
+		.section-title {
+			font-size: 30rpx;
+			font-weight: bold;
+			color: var(--wot-color-title);
+		}
+	}
+
+	.reading-text {
+		font-size: 28rpx;
+		line-height: 1.8;
+		white-space: pre-wrap;
+	}
+
+	.english-text {
+		color: var(--wot-color-title);
+	}
+
+	.chinese-text {
+		color: var(--wot-color-subtitle);
+		margin-top: 16rpx;
+		padding-top: 16rpx;
+		border-top: 1rpx dashed var(--wot-border-color, #eee);
+	}
+
+	.grammar-text,
+	.knowledge-text {
+		color: var(--wot-color-title);
+	}
+}
+
+// Word tab
+.word-stats {
+	display: flex;
+	justify-content: space-between;
+	padding: 16rpx 0;
+	font-size: 26rpx;
+	color: var(--wot-color-subtitle);
+
+	.mastered-count {
+		color: #52c41a;
+	}
+}
+
+.word-list {
+	.word-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 20rpx;
+		background: var(--wot-card-bg-color, #fff);
+		border-radius: 12rpx;
+		margin-bottom: 12rpx;
+
+		.word-main {
+			flex: 1;
+
+			.word-english-row {
+				display: flex;
+				align-items: center;
+				gap: 12rpx;
+
+				.word-english {
+					font-size: 30rpx;
+					font-weight: bold;
+					color: var(--wot-color-title);
+				}
+
+				.word-phonetic {
+					font-size: 24rpx;
+					color: var(--wot-color-subtitle);
+				}
+			}
+
+			.word-chinese {
+				font-size: 26rpx;
+				color: var(--wot-color-subtitle);
+				margin-top: 4rpx;
+			}
+		}
+
+		.word-actions {
+			display: flex;
+			align-items: center;
+			gap: 16rpx;
+			flex-shrink: 0;
+
+			.play-btn {
+				padding: 8rpx;
+			}
+		}
+	}
+}
+
+// Word detail popup
+.word-detail-popup {
+	padding: 40rpx;
+
+	.word-detail-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		.word-detail-english {
+			font-size: 48rpx;
+			font-weight: bold;
+			color: var(--wot-color-title);
+		}
+
+		.play-btn {
+			padding: 16rpx;
+		}
+	}
+
+	.word-detail-phonetic {
+		font-size: 28rpx;
+		color: var(--wot-color-subtitle);
+		margin-top: 8rpx;
+		display: block;
+	}
+
+	.word-detail-chinese {
+		font-size: 36rpx;
+		color: var(--wot-color-title);
+		margin-top: 20rpx;
+		display: block;
+	}
+
+	.word-detail-example {
+		margin-top: 30rpx;
+		padding: 20rpx;
+		background: var(--wot-color-bg, #f5f5f5);
+		border-radius: 12rpx;
+
+		.example-label {
+			font-size: 24rpx;
+			color: var(--wot-color-subtitle);
+			display: block;
+			margin-bottom: 8rpx;
+		}
+
+		.example-en {
+			font-size: 28rpx;
+			color: var(--wot-color-title);
+			line-height: 1.6;
+			display: block;
+		}
+
+		.example-cn {
+			font-size: 26rpx;
+			color: var(--wot-color-subtitle);
+			margin-top: 8rpx;
+			display: block;
+		}
+	}
+
+	.word-detail-actions {
+		display: flex;
+		justify-content: center;
+		gap: 20rpx;
+		margin-top: 40rpx;
+	}
+}
+
+.empty-tip {
+	display: flex;
+	justify-content: center;
+	padding: 100rpx 0;
+	color: var(--wot-color-subtitle);
+	font-size: 28rpx;
+}

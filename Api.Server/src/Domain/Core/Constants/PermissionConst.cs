@@ -467,4 +467,188 @@ public partial class PermissionConst
 
     /// <summary>请求日志列表</summary>
     public const string RequestLogPaged = "RequestLog:Paged";
+
+    /// <summary><see cref="Textbook"/> 教材</summary>
+    public class Textbook
+    {
+        /// <summary>教材列表</summary>
+        public const string Paged = "Textbook:Paged";
+
+        /// <summary>教材详情</summary>
+        public const string Detail = "Textbook:Detail";
+
+        /// <summary>教材新增</summary>
+        public const string Add = "Textbook:Add";
+
+        /// <summary>教材编辑</summary>
+        public const string Edit = "Textbook:Edit";
+
+        /// <summary>教材删除</summary>
+        public const string Delete = "Textbook:Delete";
+    }
+
+    /// <summary><see cref="Volume"/> 册</summary>
+    public class Volume
+    {
+        /// <summary>册列表</summary>
+        public const string Paged = "Volume:Paged";
+
+        /// <summary>册详情</summary>
+        public const string Detail = "Volume:Detail";
+
+        /// <summary>册新增</summary>
+        public const string Add = "Volume:Add";
+
+        /// <summary>册编辑</summary>
+        public const string Edit = "Volume:Edit";
+
+        /// <summary>册删除</summary>
+        public const string Delete = "Volume:Delete";
+    }
+
+    /// <summary><see cref="Lesson"/> 课程</summary>
+    public class Lesson
+    {
+        /// <summary>课程列表</summary>
+        public const string Paged = "Lesson:Paged";
+
+        /// <summary>课程详情</summary>
+        public const string Detail = "Lesson:Detail";
+
+        /// <summary>课程新增</summary>
+        public const string Add = "Lesson:Add";
+
+        /// <summary>课程编辑</summary>
+        public const string Edit = "Lesson:Edit";
+
+        /// <summary>课程删除</summary>
+        public const string Delete = "Lesson:Delete";
+    }
+
+    /// <summary><see cref="AudioManage"/> 音频管理</summary>
+    public class AudioManage
+    {
+        /// <summary>音频列表</summary>
+        public const string Paged = "Audio:Paged";
+
+        /// <summary>音频详情</summary>
+        public const string Detail = "Audio:Detail";
+
+        /// <summary>音频新增</summary>
+        public const string Add = "Audio:Add";
+
+        /// <summary>音频编辑</summary>
+        public const string Edit = "Audio:Edit";
+
+        /// <summary>音频删除</summary>
+        public const string Delete = "Audio:Delete";
+    }
+
+    /// <summary><see cref="AudioTypeManage"/> 音频类型</summary>
+    public class AudioTypeManage
+    {
+        /// <summary>音频类型列表</summary>
+        public const string Paged = "AudioType:Paged";
+
+        /// <summary>音频类型详情</summary>
+        public const string Detail = "AudioType:Detail";
+
+        /// <summary>音频类型新增</summary>
+        public const string Add = "AudioType:Add";
+
+        /// <summary>音频类型编辑</summary>
+        public const string Edit = "AudioType:Edit";
+
+        /// <summary>音频类型删除</summary>
+        public const string Delete = "AudioType:Delete";
+    }
+
+    /// <summary><see cref="PronunciationTypeManage"/> 发音类型</summary>
+    public class PronunciationTypeManage
+    {
+        /// <summary>发音类型列表</summary>
+        public const string Paged = "PronunciationType:Paged";
+
+        /// <summary>发音类型详情</summary>
+        public const string Detail = "PronunciationType:Detail";
+
+        /// <summary>发音类型新增</summary>
+        public const string Add = "PronunciationType:Add";
+
+        /// <summary>发音类型编辑</summary>
+        public const string Edit = "PronunciationType:Edit";
+
+        /// <summary>发音类型删除</summary>
+        public const string Delete = "PronunciationType:Delete";
+    }
+
+    /// <summary><see cref="WordManage"/> 单词</summary>
+    public class WordManage
+    {
+        /// <summary>单词列表</summary>
+        public const string Paged = "Word:Paged";
+
+        /// <summary>单词详情</summary>
+        public const string Detail = "Word:Detail";
+
+        /// <summary>单词新增</summary>
+        public const string Add = "Word:Add";
+
+        /// <summary>单词编辑</summary>
+        public const string Edit = "Word:Edit";
+
+        /// <summary>单词删除</summary>
+        public const string Delete = "Word:Delete";
+    }
+
+    /// <summary><see cref="LessonContentManage"/> 课程内容</summary>
+    public class LessonContentManage
+    {
+        /// <summary>课程内容列表</summary>
+        public const string Paged = "LessonContent:Paged";
+
+        /// <summary>课程内容详情</summary>
+        public const string Detail = "LessonContent:Detail";
+
+        /// <summary>课程内容新增</summary>
+        public const string Add = "LessonContent:Add";
+
+        /// <summary>课程内容编辑</summary>
+        public const string Edit = "LessonContent:Edit";
+
+        /// <summary>课程内容删除</summary>
+        public const string Delete = "LessonContent:Delete";
+    }
+
+    /// <summary><see cref="QuestionManage"/> 题目</summary>
+    public class QuestionManage
+    {
+        /// <summary>题目列表</summary>
+        public const string Paged = "Question:Paged";
+
+        /// <summary>题目详情</summary>
+        public const string Detail = "Question:Detail";
+
+        /// <summary>题目新增</summary>
+        public const string Add = "Question:Add";
+
+        /// <summary>题目编辑</summary>
+        public const string Edit = "Question:Edit";
+
+        /// <summary>题目删除</summary>
+        public const string Delete = "Question:Delete";
+    }
+
+    /// <summary><see cref="ActivationCode"/> 激活码</summary>
+    public class ActivationCode
+    {
+        /// <summary>激活码列表</summary>
+        public const string Paged = "ActivationCode:Paged";
+
+        /// <summary>激活码详情</summary>
+        public const string Detail = "ActivationCode:Detail";
+
+        /// <summary>激活码批量生成</summary>
+        public const string Generate = "ActivationCode:Generate";
+    }
 }
