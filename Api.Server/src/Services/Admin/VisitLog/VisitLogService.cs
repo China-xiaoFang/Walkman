@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.VisitLog;
 /// <summary>
 /// <see cref="VisitLogService"/> 访问日志服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "visitLog")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "visitLog")]
 public class VisitLogService : IDynamicApplication
 {
     private readonly IUser _user;

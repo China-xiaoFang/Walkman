@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.ExceptionLog;
 /// <summary>
 /// <see cref="ExceptionLogService"/> 异常日志服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "exceptionLog")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "exceptionLog")]
 public class ExceptionLogService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<ExceptionLogModel> _repository;

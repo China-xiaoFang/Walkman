@@ -49,9 +49,9 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
-import { merchantApi } from "@/api/services/Center/merchant";
-import { AddMerchantInput } from "@/api/services/Center/merchant/models/AddMerchantInput";
-import { EditMerchantInput } from "@/api/services/Center/merchant/models/EditMerchantInput";
+import { merchantApi } from "@/api/services/Admin/merchant";
+import { AddMerchantInput } from "@/api/services/Admin/merchant/models/AddMerchantInput";
+import { EditMerchantInput } from "@/api/services/Admin/merchant/models/EditMerchantInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({

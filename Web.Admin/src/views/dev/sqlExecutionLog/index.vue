@@ -74,8 +74,8 @@ import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { Delete } from "@element-plus/icons-vue";
 import { dateUtil } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
-import { sqlExecutionLogApi } from "@/api/services/Center/sqlExecutionLog";
-import { SqlExecutionLogModel } from "@/api/services/Center/sqlExecutionLog/models/SqlExecutionLogModel";
+import { sqlExecutionLogApi } from "@/api/services/Admin/sqlExecutionLog";
+import { SqlExecutionLogModel } from "@/api/services/Admin/sqlExecutionLog/models/SqlExecutionLogModel";
 import { FastTableInstance } from "@/components";
 import { useConfig, useUserInfo } from "@/stores";
 

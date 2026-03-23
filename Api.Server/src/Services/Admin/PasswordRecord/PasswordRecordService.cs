@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.PasswordRecord;
 /// <summary>
 /// <see cref="PasswordRecordService"/> 密码记录服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "passwordRecord")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "passwordRecord")]
 public class PasswordRecordService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<PasswordRecordModel> _repository;

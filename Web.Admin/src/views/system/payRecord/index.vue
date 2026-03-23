@@ -65,8 +65,8 @@
 <script lang="ts" setup>
 import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
-import { payRecordApi } from "@/api/services/Center/payRecord";
-import { PayRecordModel } from "@/api/services/Center/payRecord/models/PayRecordModel";
+import { payRecordApi } from "@/api/services/Admin/payRecord";
+import { PayRecordModel } from "@/api/services/Admin/payRecord/models/PayRecordModel";
 
 defineOptions({
 	name: "SystemPayRecord",

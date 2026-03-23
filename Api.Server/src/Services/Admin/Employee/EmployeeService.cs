@@ -110,6 +110,7 @@ public class EmployeeService : IDynamicApplication
             .SelectMergeTable((t1, t2, t3) => new QueryEmployeePagedOutput
             {
                 EmployeeId = t1.EmployeeId,
+                UserType = t1.UserType,
                 EmployeeNo = t1.EmployeeNo,
                 EmployeeName = t1.EmployeeName,
                 Mobile = t1.Mobile,

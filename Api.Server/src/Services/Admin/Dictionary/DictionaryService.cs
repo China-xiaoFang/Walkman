@@ -33,7 +33,7 @@ namespace Fast.Admin.Service.Dictionary;
 /// <summary>
 /// <see cref="DictionaryService"/> 字典服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "Dictionary", Order = 995)]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "Dictionary", Order = 995)]
 public class DictionaryService : IDynamicApplication
 {
     private readonly ICache<CenterCCL> _centerCache;

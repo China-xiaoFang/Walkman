@@ -86,8 +86,8 @@ import { computed, reactive } from "vue";
 import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
-import { exceptionLogApi } from "@/api/services/Center/exceptionLog";
-import { ExceptionLogModel } from "@/api/services/Center/exceptionLog/models/ExceptionLogModel";
+import { exceptionLogApi } from "@/api/services/Admin/exceptionLog";
+import { ExceptionLogModel } from "@/api/services/Admin/exceptionLog/models/ExceptionLogModel";
 import { useConfig } from "@/stores";
 
 defineOptions({

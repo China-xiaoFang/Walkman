@@ -32,7 +32,7 @@ namespace Fast.Admin.Service.ApplicationOpenId;
 /// <summary>
 /// <see cref="ApplicationOpenIdService"/> 应用标识服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "applicationOpenId")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "applicationOpenId")]
 public class ApplicationOpenIdService : IDynamicApplication
 {
     private readonly IUser _user;

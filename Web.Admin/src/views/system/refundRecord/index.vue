@@ -48,8 +48,8 @@
 <script lang="ts" setup>
 import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
-import { refundRecordApi } from "@/api/services/Center/refundRecord";
-import { RefundRecordModel } from "@/api/services/Center/refundRecord/models/RefundRecordModel";
+import { refundRecordApi } from "@/api/services/Admin/refundRecord";
+import { RefundRecordModel } from "@/api/services/Admin/refundRecord/models/RefundRecordModel";
 
 defineOptions({
 	name: "SystemRefundRecord",

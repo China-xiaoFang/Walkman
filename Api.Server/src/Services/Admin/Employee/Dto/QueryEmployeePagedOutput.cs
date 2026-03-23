@@ -35,6 +35,11 @@ public class QueryEmployeePagedOutput
     public long EmployeeId { get; set; }
 
     /// <summary>
+    /// 用户类型
+    /// </summary>
+    public UserTypeEnum UserType { get; set; }
+
+    /// <summary>
     /// 工号
     /// </summary>
     [SugarSearchValue]

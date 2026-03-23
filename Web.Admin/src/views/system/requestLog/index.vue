@@ -94,8 +94,8 @@ import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { Delete } from "@element-plus/icons-vue";
 import { cryptoUtil, dateUtil } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
-import { requestLogApi } from "@/api/services/Center/requestLog";
-import { RequestLogModel } from "@/api/services/Center/requestLog/models/RequestLogModel";
+import { requestLogApi } from "@/api/services/Admin/requestLog";
+import { RequestLogModel } from "@/api/services/Admin/requestLog/models/RequestLogModel";
 import { FastTableInstance } from "@/components";
 import { useConfig, useUserInfo } from "@/stores";
 

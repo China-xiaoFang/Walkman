@@ -30,7 +30,6 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { useGlobalSize } from "element-plus";
-import { useApp } from "@/stores";
 
 defineOptions({
 	// eslint-disable-next-line vue/no-reserved-component-names
@@ -38,12 +37,11 @@ defineOptions({
 });
 
 const globalSize = useGlobalSize();
-const appStore = useApp();
 
 const state = reactive({
 	appVersion: import.meta.env.VITE_APP_VERSION,
-	publicSecurityCode: appStore.publicSecurityCode,
-	icpText: appStore.icpSecurityCode,
+	publicSecurityCode: "甘公网安备 62090202000584号",
+	icpText: "陇ICP备2020003856号",
 });
 </script>
 

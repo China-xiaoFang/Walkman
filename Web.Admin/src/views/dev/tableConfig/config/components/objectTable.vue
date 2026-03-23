@@ -35,7 +35,7 @@
 import { Plus } from "@element-plus/icons-vue";
 import { definePropType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
-import type { FaTableColumnAdvancedCtx } from "@/api/services/Center/table/models/FaTableColumnAdvancedCtx";
+import type { FaTableColumnAdvancedCtx } from "@/api/services/Admin/table/models/FaTableColumnAdvancedCtx";
 
 defineOptions({
 	name: "DevTableConfigObjectTable",

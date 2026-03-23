@@ -86,8 +86,8 @@ import { computed, reactive } from "vue";
 import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
-import { sqlExceptionLogApi } from "@/api/services/Center/sqlExceptionLog";
-import { SqlExceptionLogModel } from "@/api/services/Center/sqlExceptionLog/models/SqlExceptionLogModel";
+import { sqlExceptionLogApi } from "@/api/services/Admin/sqlExceptionLog";
+import { SqlExceptionLogModel } from "@/api/services/Admin/sqlExceptionLog/models/SqlExceptionLogModel";
 import { useConfig } from "@/stores";
 
 const configStore = useConfig();

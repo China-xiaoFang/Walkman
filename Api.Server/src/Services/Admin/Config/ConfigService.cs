@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.Config;
 /// <summary>
 /// <see cref="ConfigService"/> 配置服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "config")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "config")]
 public class ConfigService : IDynamicApplication
 {
     private readonly IUser _user;

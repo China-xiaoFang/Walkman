@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.Merchant;
 /// <summary>
 /// <see cref="MerchantService"/> 商户号服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "merchant")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "merchant")]
 public class MerchantService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<MerchantModel> _repository;

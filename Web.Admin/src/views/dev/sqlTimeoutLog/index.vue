@@ -68,8 +68,8 @@ import { computed, reactive } from "vue";
 import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
-import { sqlTimeoutLogApi } from "@/api/services/Center/sqlTimeoutLog";
-import { SqlTimeoutLogModel } from "@/api/services/Center/sqlTimeoutLog/models/SqlTimeoutLogModel";
+import { sqlTimeoutLogApi } from "@/api/services/Admin/sqlTimeoutLog";
+import { SqlTimeoutLogModel } from "@/api/services/Admin/sqlTimeoutLog/models/SqlTimeoutLogModel";
 import { useConfig } from "@/stores";
 
 defineOptions({

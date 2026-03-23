@@ -14,7 +14,7 @@
 				<el-input v-model="state.formData.prefix" maxlength="5" placeholder="请输入前缀" />
 			</FaFormItem>
 			<FaFormItem v-if="state.dialogState === 'add'" prop="ruleType" label="规则类型">
-				<RadioGroup name="SysSerialRuleTypeEnum" v-model="state.formData.ruleType" />
+				<RadioGroup name="SerialRuleTypeEnum" v-model="state.formData.ruleType" />
 			</FaFormItem>
 			<FaFormItem prop="dateType" label="时间类型">
 				<RadioGroup name="SerialDateTypeEnum" v-model="state.formData.dateType" />
@@ -34,15 +34,15 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { SerialDateTypeEnum } from "@/api/enums/SerialDateTypeEnum";
+import { SerialRuleTypeEnum } from "@/api/enums/SerialRuleTypeEnum";
 import { SerialSpacerEnum } from "@/api/enums/SerialSpacerEnum";
-import { SysSerialRuleTypeEnum } from "@/api/enums/SysSerialRuleTypeEnum";
-import { sysSerialApi } from "@/api/services/Center/sysSerial";
-import type { AddSysSerialRuleInput } from "@/api/services/Center/sysSerial/models/AddSysSerialRuleInput";
-import type { EditSysSerialRuleInput } from "@/api/services/Center/sysSerial/models/EditSysSerialRuleInput";
+import { serialApi } from "@/api/services/Admin/serial";
+import type { AddSerialRuleInput } from "@/api/services/Admin/serial/models/AddSerialRuleInput";
+import type { EditSerialRuleInput } from "@/api/services/Admin/serial/models/EditSerialRuleInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
-	name: "DevSysSerialEdit",
+	name: "DevSerialEdit",
 });
 
 const emit = defineEmits(["ok"]);
@@ -51,7 +51,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditSysSerialRuleInput & AddSysSerialRuleInput>({}),
+	formData: withDefineType<EditSerialRuleInput & AddSerialRuleInput>({}),
 	formRules: withDefineType<FormRules>({
 		length: [{ required: true, message: "请输入长度", trigger: "blur" }],
 	}),
@@ -65,11 +65,11 @@ const handleConfirm = () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
-				await sysSerialApi.addSysSerialRule(state.formData);
+				await serialApi.addSerialRule(state.formData);
 				ElMessage.success("新增成功！");
 				break;
 			case "edit":
-				await sysSerialApi.editSysSerialRule(state.formData);
+				await serialApi.editSerialRule(state.formData);
 				ElMessage.success("保存成功！");
 				break;
 		}
@@ -80,7 +80,7 @@ const handleConfirm = () => {
 const detail = (serialRuleId: number) => {
 	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
-		const apiRes = await sysSerialApi.querySysSerialRuleDetail(serialRuleId);
+		const apiRes = await serialApi.querySerialRuleDetail(serialRuleId);
 		state.formData = apiRes;
 		state.dialogTitle = `序号详情`;
 	});
@@ -92,7 +92,7 @@ const add = () => {
 		state.dialogTitle = "添加序号";
 		state.formDisabled = false;
 		state.formData = {
-			ruleType: SysSerialRuleTypeEnum.AppNo,
+			ruleType: SerialRuleTypeEnum.EmployeeNo,
 			dateType: SerialDateTypeEnum.Year,
 			spacer: SerialSpacerEnum.None,
 		};
@@ -103,7 +103,7 @@ const edit = (serialRuleId: number) => {
 	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
-		const apiRes = await sysSerialApi.querySysSerialRuleDetail(serialRuleId);
+		const apiRes = await serialApi.querySerialRuleDetail(serialRuleId);
 		state.formData = apiRes;
 		state.dialogTitle = `编辑序号`;
 	});

@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.SqlExceptionLog;
 /// <summary>
 /// <see cref="SqlExceptionLogModelService"/> Sql异常日志服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "sqlExceptionLog")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "sqlExceptionLog")]
 public class SqlExceptionLogModelService : IDynamicApplication
 {
     private readonly IUser _user;

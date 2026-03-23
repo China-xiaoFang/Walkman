@@ -29,7 +29,7 @@ namespace Fast.Admin.Service.PayRecord;
 /// <summary>
 /// <see cref="PayRecordService"/> 支付记录服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "payRecord")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "payRecord")]
 public class PayRecordService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<PayRecordModel> _repository;

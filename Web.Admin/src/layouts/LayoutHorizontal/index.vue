@@ -14,31 +14,6 @@
 					<LayoutMenu />
 				</div>
 				<div class="right">
-					<FaSelect
-						ref="faTenantSelectRef"
-						width="180px"
-						size="default"
-						valueKey="userKey"
-						:props="{ label: 'tenantName' }"
-						:lazy="false"
-						moreDetail
-						:requestApi="loginApi.queryLoginUser"
-						@change="handleTenantChange"
-						@data-change-call-back="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
-					>
-						<template #default="data">
-							<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">
-								<FaAvatar :src="data.idPhoto" thumb size="small" />
-								<div style="flex: 1">
-									<span>{{ data.tenantName }}</span>
-									<span style="display: flex; justify-content: space-between; width: 100%">
-										<span style="font-size: var(--el-font-size-extra-small); padding-right: 8px">{{ data.employeeName }}</span>
-										<span style="font-size: var(--el-font-size-extra-small)">{{ data.employeeNo }}</span>
-									</span>
-								</div>
-							</div>
-						</template>
-					</FaSelect>
 					<el-icon class="menu-search fa__hover__twinkle" title="搜索菜单" @click="menuSearchRef.open()">
 						<Search />
 					</el-icon>
@@ -94,13 +69,11 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { inject } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Key, Lock, Refresh, Search, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
 import { RouterView, useRouter } from "vue-router";
-import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
-import { loginApi } from "@/api/services/Auth/login";
 import { changePasswordKey, layoutConfigKey, menuSearchKey } from "@/layouts";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";
 import LayoutNavTab from "@/layouts/components/NavTab/index.vue";
@@ -109,8 +82,6 @@ import LayoutScreenLock from "@/layouts/components/ScreenLock/index.vue";
 import { routerUtil } from "@/router";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
 import LayoutMenu from "./components/menu.vue";
-import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
-import type { FaSelectInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "LayoutHorizontal",
@@ -124,7 +95,6 @@ const userInfoStore = useUserInfo();
 const layoutConfigRef = inject(layoutConfigKey);
 const menuSearchRef = inject(menuSearchKey);
 const changePasswordRef = inject(changePasswordKey);
-const faTenantSelectRef = ref<FaSelectInstance>();
 
 const handleRefreshSystem = () => {
 	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
@@ -133,22 +103,6 @@ const handleRefreshSystem = () => {
 		Local.removeByPrefix("HTTP_CACHE_");
 		window.location.reload();
 	});
-};
-
-const handleTenantChange = async (value: LoginTenantOutput) => {
-	const { accountKey, userKey } = userInfoStore;
-	if (value.userKey !== userKey) {
-		await userInfoStore.logout();
-		const loginRes = await loginApi.tenantLogin({ accountKey, userKey: value.userKey });
-		if (loginRes.status === LoginStatusEnum.Success) {
-			ElMessage.success(`切换租户【${value.tenantName}】成功`);
-			userInfoStore.login();
-			Local.removeByPrefix("HTTP_CACHE_");
-			window.location.reload();
-		} else {
-			ElMessage.error(loginRes.message);
-		}
-	}
 };
 
 const handleScreenLock = () => {

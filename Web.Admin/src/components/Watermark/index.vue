@@ -8,14 +8,13 @@
 import { computed, reactive } from "vue";
 import { useGlobalSize } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import { useApp, useConfig, useUserInfo } from "@/stores";
+import { useConfig, useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "Watermark",
 });
 
 const _globalSize = useGlobalSize();
-const appStore = useApp();
 const configStore = useConfig();
 const userInfoStore = useUserInfo();
 
@@ -32,10 +31,7 @@ const watermarkProps = reactive({
 		};
 	}),
 	content: computed(() => {
-		let watermarkContent = [appStore.appName];
-		if (userInfoStore.tenantName) {
-			watermarkContent = [userInfoStore.tenantName];
-		}
+		const watermarkContent = ["随身听"];
 		if (userInfoStore.asyncRouterGen) {
 			watermarkContent.push(userInfoStore.employeeName || userInfoStore.nickName);
 		}

@@ -16,9 +16,6 @@
 			<FaFormItem prop="buttonCode" label="按钮编码">
 				<el-input v-model="state.formData.buttonCode" maxlength="50" placeholder="请输入按钮编码" />
 			</FaFormItem>
-			<FaFormItem prop="edition" label="版本" span="2">
-				<RadioGroup name="EditionEnum" v-model="state.formData.edition" />
-			</FaFormItem>
 			<FaFormItem prop="roleType" label="角色" span="4">
 				<el-checkbox-group v-model="state.formData.roleTypes">
 					<el-checkbox v-for="(item, index) in roleTypeEnum" :key="index" :label="item.label" :value="item.value" />
@@ -50,11 +47,10 @@ import { FaDialog } from "fast-element-plus";
 import { definePropType, withDefineType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { EditionEnum } from "@/api/enums/EditionEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
-import { EditMenuButtonInput } from "@/api/services/Center/menu/models/EditMenuButtonInput";
 import { useApp } from "@/stores";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import { EditMenuButtonInput } from "@/api/services/Admin/menu/models/EditMenuButtonInput";
 
 defineOptions({
 	name: "DevMenuEditButtonEdit",
@@ -146,7 +142,6 @@ const add = () => {
 		state.dialogTitle = "添加按钮";
 		state.formDisabled = false;
 		state.formData = {
-			edition: EditionEnum.None,
 			hasWeb: true,
 			hasMobile: false,
 			hasDesktop: false,

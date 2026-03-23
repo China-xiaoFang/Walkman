@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.RequestLog;
 /// <summary>
 /// <see cref="RequestLogService"/> 请求日志服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "requestLog")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "requestLog")]
 public class RequestLogService : IDynamicApplication
 {
     private readonly IUser _user;

@@ -28,9 +28,9 @@
 import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { merchantApi } from "@/api/services/Center/merchant";
+import { merchantApi } from "@/api/services/Admin/merchant";
 import ConfigEdit from "./edit/index.vue";
-import type { QueryMerchantPagedOutput } from "@/api/services/Center/merchant/models/QueryMerchantPagedOutput";
+import type { QueryMerchantPagedOutput } from "@/api/services/Admin/merchant/models/QueryMerchantPagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({

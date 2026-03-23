@@ -136,9 +136,8 @@ public class UnifyResponseProvider : IUnifyResponseProvider
         if (responseEncipherAttribute == null)
         {
             // 获取配置
-            var requestEncryptionStr = await ConfigContext.GetConfig(ConfigConst.RequestEncryption);
-            var requestEncryption = bool.TryParse(requestEncryptionStr, out var flag) && flag;
-            responseEncipher = requestEncryption;
+            var responseEncryptionStr = await ConfigContext.GetConfig(ConfigConst.ResponseEncryption);
+            responseEncipher = bool.TryParse(responseEncryptionStr, out var flag) && flag;
         }
         else if (responseEncipherAttribute.Enable)
         {

@@ -1,11 +1,10 @@
 import { resolve } from "path";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { buildRouterPath, buildSvgIcon, cdnImport, componentAutoImport, versionUpdatePlugin } from "fast-vite-plugins";
+import { buildRouterPath, buildSvgIcon, componentAutoImport, versionUpdatePlugin } from "fast-vite-plugins";
 // import { visualizer } from "rollup-plugin-visualizer";
 import { loadEnv } from "vite";
 import viteCompression from "vite-plugin-compression";
-import { getCdnModules } from "./vite.cdn";
 import { rollupManualChunks } from "./vite.rollup";
 import type { ConfigEnv, ProxyOptions, UserConfig } from "vite";
 
@@ -146,12 +145,6 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 				ext: ".gz",
 				// 排除 index.html 文件的压缩
 				filter: (file) => !file.endsWith("index.html"),
-			}),
-			cdnImport({
-				// 开发环境使用 CDN
-				enableInDevMode: false,
-				prodUrl: viteEnv.VITE_CDN_URL,
-				modules: getCdnModules(viteDev),
 			}),
 			// visualizer({
 			// 	filename: "analysis.html",

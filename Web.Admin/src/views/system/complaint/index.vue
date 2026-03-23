@@ -33,8 +33,8 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import { complaintApi } from "@/api/services/Center/complaint";
-import { QueryComplaintPagedOutput } from "@/api/services/Center/complaint/models/QueryComplaintPagedOutput";
+import { complaintApi } from "@/api/services/Admin/complaint";
+import { QueryComplaintPagedOutput } from "@/api/services/Admin/complaint/models/QueryComplaintPagedOutput";
 import ComplaintEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
 

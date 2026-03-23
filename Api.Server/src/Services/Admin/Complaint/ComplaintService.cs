@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.Complaint;
 /// <summary>
 /// <see cref="ComplaintService"/> 投诉服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "Complaint")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "Complaint")]
 public class ComplaintService : IDynamicApplication
 {
     private readonly IUser _user;

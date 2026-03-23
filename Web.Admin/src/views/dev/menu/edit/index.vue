@@ -15,9 +15,6 @@
 				<el-divider contentPosition="left">菜单信息</el-divider>
 			</FaLayoutGridItem>
 
-			<FaFormItem prop="appId" label="应用">
-				<ApplicationSelect v-model="state.formData.appId" v-model:appName="state.formData.appName" />
-			</FaFormItem>
 			<FaFormItem prop="parentId" label="父级">
 				<el-cascader
 					v-model="state.formData.parentId"
@@ -30,9 +27,6 @@
 			</FaFormItem>
 			<FaFormItem prop="menuType" label="菜单类型">
 				<RadioGroup name="MenuTypeEnum" v-model="state.formData.menuType" />
-			</FaFormItem>
-			<FaFormItem prop="edition" label="版本" span="4">
-				<RadioGroup name="EditionEnum" v-model="state.formData.edition" />
 			</FaFormItem>
 			<FaFormItem prop="roleType" label="角色" span="4">
 				<el-checkbox-group v-model="state.formData.roleTypes">
@@ -140,16 +134,15 @@ import { onMounted, reactive, ref } from "vue";
 import { CascaderValue, ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
-import { menuApi } from "@/api/services/Center/menu";
-import { AddMenuInput } from "@/api/services/Center/menu/models/AddMenuInput";
-import { EditMenuInput } from "@/api/services/Center/menu/models/EditMenuInput";
 import routerPath from "@/router/index.json";
 import { useApp } from "@/stores";
 import ButtonTable from "./components/buttonTable.vue";
 import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import { menuApi } from "@/api/services/Admin/menu";
+import { AddMenuInput } from "@/api/services/Admin/menu/models/AddMenuInput";
+import { EditMenuInput } from "@/api/services/Admin/menu/models/EditMenuInput";
 
 defineOptions({
 	name: "DevMenuEdit",
@@ -266,7 +259,6 @@ const add = () => {
 		state.formData = {
 			menuType: MenuTypeEnum.Catalog,
 			roleType: 0 as any,
-			edition: EditionEnum.None,
 			visible: true,
 			hasWeb: true,
 			webTab: false,

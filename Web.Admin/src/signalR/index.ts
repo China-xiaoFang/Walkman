@@ -3,8 +3,8 @@ import { useFastAxios } from "@fast-china/axios";
 import { consoleError, consoleLog, consoleWarn, objectUtil, useIdentity, withDefineType } from "@fast-china/utils";
 import { HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel } from "@microsoft/signalr";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
-import { useApp, useUserInfo } from "@/stores";
-import type { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
+import { useUserInfo } from "@/stores";
+import type { OnlineUserModel } from "@/api/services/Admin/onlineUser/models/OnlineUserModel";
 import type { HubConnection } from "@microsoft/signalr";
 
 /**
@@ -21,9 +21,8 @@ let reLoadingInstance = withDefineType<ReturnType<typeof ElLoading.service>>(nul
 const initWebSocket = async (): Promise<void> => {
 	try {
 		const fastAxios = useFastAxios();
-		const appStore = useApp();
 		const userInfoStore = useUserInfo();
-		const url = `${fastAxios.baseUrl}${appStore.webSocketUrl}`;
+		const url = `${fastAxios.baseUrl}/hubs/chatHub`;
 		const params = {
 			"Fast-Origin": import.meta.env.DEV ? import.meta.env.VITE_APP_ORIGIN || window.location.host : window.location.host,
 			"Fast-Device-Type": Object.keys(AppEnvironmentEnum).find((f) => AppEnvironmentEnum[f] === AppEnvironmentEnum.Web),
@@ -142,7 +141,7 @@ const initWebSocket = async (): Promise<void> => {
 			});
 
 			// 其他地方登录监听
-			connection.on("ElsewhereLogin", async (data: TenantOnlineUserModel) => {
+			connection.on("ElsewhereLogin", async (data: OnlineUserModel) => {
 				consoleWarn("WebSocket", "其他地方登录", data);
 
 				const message = `账号于【${dayjs(data.lastLoginTime).format("YYYY-MM-DD HH:mm:ss")}】在【${data.lastLoginOS} ${data.lastLoginBrowser}(${

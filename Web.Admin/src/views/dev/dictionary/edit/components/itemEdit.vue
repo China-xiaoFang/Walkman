@@ -55,7 +55,7 @@ import { definePropType, withDefineType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
-import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
+import type { EditDictionaryItemInput } from "@/api/services/Admin/dictionary/models/EditDictionaryItemInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({

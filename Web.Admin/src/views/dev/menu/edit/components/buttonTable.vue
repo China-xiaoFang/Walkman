@@ -8,7 +8,6 @@
 			</template>
 			<FaTableColumn prop="buttonName" label="按钮名称" width="120" smallWidth="100" />
 			<FaTableColumn prop="buttonCode" label="按钮编码" width="200" smallWidth="200" />
-			<FaTableColumn prop="edition" label="版本" width="120" smallWidth="120" tag :enum="editionEnum" />
 			<FaTableColumn prop="hasWeb" label="Web端" width="80" smallWidth="80" tag :enum="booleanEnum" />
 			<FaTableColumn prop="hasMobile" label="移动端" width="80" smallWidth="80" tag :enum="booleanEnum" />
 			<FaTableColumn prop="hasDesktop" label="桌面端" width="80" smallWidth="80" tag :enum="booleanEnum" />
@@ -31,10 +30,10 @@ import { ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { definePropType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
-import { EditMenuButtonInput } from "@/api/services/Center/menu/models/EditMenuButtonInput";
 import { useApp } from "@/stores";
 import DevMenuEditButtonEdit from "./buttonEdit.vue";
-import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
+import type { EditDictionaryItemInput } from "@/api/services/Admin/dictionary/models/EditDictionaryItemInput";
+import { EditMenuButtonInput } from "@/api/services/Admin/menu/models/EditMenuButtonInput";
 
 defineOptions({
 	name: "DevMenuEditButtonTable",
@@ -50,7 +49,6 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const appStore = useApp();
-const editionEnum = appStore.getDictionary("EditionEnum");
 const booleanEnum = appStore.getDictionary("BooleanEnum");
 const commonStatusEnum = appStore.getDictionary("CommonStatusEnum");
 

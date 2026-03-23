@@ -91,9 +91,9 @@
 import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { dictionaryApi } from "@/api/services/Center/dictionary";
+import { dictionaryApi } from "@/api/services/Admin/dictionary";
 import DictionaryEdit from "./edit/index.vue";
-import type { QueryDictionaryPagedOutput } from "@/api/services/Center/dictionary/models/QueryDictionaryPagedOutput";
+import type { QueryDictionaryPagedOutput } from "@/api/services/Admin/dictionary/models/QueryDictionaryPagedOutput";
 import type { FaTableInstance } from "fast-element-plus";
 
 defineOptions({

@@ -10,8 +10,11 @@
 		@close="faFormRef.resetFields()"
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled">
-			<FaFormItem prop="configCode" label="配置编码">
+			<FaFormItem v-if="state.dialogState === 'add'" prop="configCode" label="配置编码">
 				<el-input v-model="state.formData.configCode" maxlength="50" placeholder="请输入配置编码" />
+			</FaFormItem>
+			<FaFormItem v-else prop="configCode" label="配置编码">
+				<el-input disabled v-model="state.formData.configCode" maxlength="50" placeholder="请输入配置编码" />
 			</FaFormItem>
 			<FaFormItem prop="configName" label="配置名称">
 				<el-input v-model="state.formData.configName" maxlength="50" placeholder="请输入配置名称" />
@@ -30,9 +33,9 @@
 import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import { configApi } from "@/api/services/Center/config";
-import type { AddConfigInput } from "@/api/services/Center/config/models/AddConfigInput";
-import type { EditConfigInput } from "@/api/services/Center/config/models/EditConfigInput";
+import { configApi } from "@/api/services/Admin/config";
+import type { AddConfigInput } from "@/api/services/Admin/config/models/AddConfigInput";
+import type { EditConfigInput } from "@/api/services/Admin/config/models/EditConfigInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({

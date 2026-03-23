@@ -4,12 +4,10 @@ import { useTitle } from "@vueuse/core";
 import NProgress from "nprogress";
 import { createRouter, createWebHistory } from "vue-router";
 import { initWebSocket } from "@/signalR";
-import { useApp, useUserInfo } from "@/stores";
+import { useUserInfo } from "@/stores";
 import { defaultRoute } from "./modules/defaultRoute";
 import { handleDynamicRoute } from "./utils";
-if (import.meta.env.DEV) {
-	await import("nprogress/nprogress.css");
-}
+import "nprogress/nprogress.css";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.VITE_PUBLIC_PATH),
@@ -42,7 +40,6 @@ router.beforeEach(async (to, from, next) => {
 		return;
 	}
 
-	const appStore = useApp();
 	const userInfoStore = useUserInfo();
 
 	// 判断是否存在Token
@@ -121,9 +118,9 @@ router.beforeEach(async (to, from, next) => {
 	// 刷新页面标题
 	const title = useTitle();
 	if (to.meta.title) {
-		title.value = `${to.meta.title} - ${userInfoStore.employeeName && `${userInfoStore.employeeName} - `}${userInfoStore.tenantName || appStore.appName}`;
+		title.value = `${to.meta.title} - ${userInfoStore.employeeName || "Fast随身听"}`;
 	} else {
-		title.value = `${userInfoStore.employeeName && `${userInfoStore.employeeName} - `}${userInfoStore.tenantName || appStore.appName}`;
+		title.value = `${userInfoStore.employeeName || "Fast随身听"}`;
 	}
 
 	next();

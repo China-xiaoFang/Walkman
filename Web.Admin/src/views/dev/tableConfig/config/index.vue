@@ -111,9 +111,9 @@ import { reactive, ref, watch } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ArrowLeftBold, Close, Plus, Select, StarFilled } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import { tableApi } from "@/api/services/Center/table";
+import { tableApi } from "@/api/services/Admin/table";
 import AdvancedConfigForm from "./components/advancedConfig.vue";
-import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
+import type { FaTableColumnCtx } from "@/api/services/Admin/table/models/FaTableColumnCtx";
 import type { FaTableInstance } from "fast-element-plus";
 import type { WatchHandle } from "vue";
 

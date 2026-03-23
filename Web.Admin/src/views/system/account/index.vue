@@ -5,8 +5,6 @@
 				<el-button link type="primary" @click="editFormRef.detail(row.accountId)">{{ row.nickName }}</el-button>
 				<br />
 				手机：<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
-				<br />
-				邮箱：<span v-iconCopy="row.email">{{ row.email }}</span>
 			</template>
 
 			<template #firstLoginTime="{ row }: { row?: QueryAccountPagedOutput }">
@@ -89,8 +87,8 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { accountApi } from "@/api/services/Center/account";
-import { QueryAccountPagedOutput } from "@/api/services/Center/account/models/QueryAccountPagedOutput";
+import { accountApi } from "@/api/services/Admin/account";
+import { QueryAccountPagedOutput } from "@/api/services/Admin/account/models/QueryAccountPagedOutput";
 import AccountEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
 

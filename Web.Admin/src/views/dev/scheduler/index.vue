@@ -7,10 +7,6 @@
 						<el-text tag="b" size="large" type="primary"> {{ state.schedulerDetail.schedulerName }}</el-text>
 					</div>
 
-					<div v-if="state.tenantName" class="pb10" style="text-align: center">
-						<el-text tag="b" size="large" type="primary"> {{ state.tenantName }}</el-text>
-					</div>
-
 					<div class="mb10" style="border-bottom: var(--el-border); text-align: right">
 						<el-text type="info">{{ dayjs(state.lastUpdateTime).format("YYYY-MM-DD HH:mm:ss") }}</el-text>
 					</div>
@@ -95,8 +91,7 @@
 				</template>
 				<!-- 表格按钮操作区域 -->
 				<template #header>
-					<TenantSelectPage class="pr12" width="280px" v-model="state.tenantId" />
-					<el-button v-auth="'Scheduler:Add'" type="primary" :icon="Plus" @click="editFormRef.add(state.tenantId, state.activeJobGroup)">
+					<el-button v-auth="'Scheduler:Add'" type="primary" :icon="Plus" @click="editFormRef.add(state.activeJobGroup)">
 						添加作业
 					</el-button>
 				</template>
@@ -198,18 +193,10 @@
 				<!-- 表格操作 -->
 				<template #operation="{ row }: { row: SchedulerJobInfoDto }">
 					<div class="mb5">
-						<el-button
-							v-auth="'Scheduler:Edit'"
-							size="small"
-							@click="editFormRef.edit(state.tenantId, row.jobName, state.activeJobGroup)"
-						>
+						<el-button v-auth="'Scheduler:Edit'" size="small" @click="editFormRef.edit(row.jobName, state.activeJobGroup)">
 							编辑
 						</el-button>
-						<el-button
-							v-auth="'Scheduler:Edit'"
-							size="small"
-							@click="editFormRef.copy(state.tenantId, row.jobName, state.activeJobGroup)"
-						>
+						<el-button v-auth="'Scheduler:Edit'" size="small" @click="editFormRef.copy(row.jobName, state.activeJobGroup)">
 							复制
 						</el-button>
 						<el-button
@@ -272,10 +259,6 @@ const state = reactive({
 	polling: false,
 	/** 定时器 */
 	interval: withDefineType<NodeJS.Timeout>(),
-	/** 租户Id */
-	tenantId: withDefineType<number>(),
-	/** 租户名称 */
-	tenantName: "",
 	/** 激活作业分组 */
 	activeJobGroup: SchedulerJobGroupEnum.System,
 	/** 调度器详情 */
@@ -299,7 +282,7 @@ const state = reactive({
 
 /** 表格刷新 */
 const handleTableRefresh = async () => {
-	const apiRes = await schedulerApi.queryAllSchedulerJob(state.activeJobGroup, state.tenantId);
+	const apiRes = await schedulerApi.queryAllSchedulerJob(state.activeJobGroup);
 	state.schedulerJobList = apiRes[0]?.jobInfoList ?? [];
 };
 
@@ -321,7 +304,7 @@ const startInterval = () => {
 		state.interval = setTimeout(async () => {
 			try {
 				state.lastUpdateTime = new Date();
-				[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]);
+				[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(), handleTableRefresh()]);
 			} catch {}
 			schedule();
 		}, 5000);
@@ -341,7 +324,7 @@ const handleStart = () => {
 	ElMessageBox.confirm(`确定要启动【${state.schedulerDetail.schedulerName}】？`, {
 		type: "warning",
 		async beforeClose() {
-			await schedulerApi.startScheduler(state.tenantId);
+			await schedulerApi.startScheduler();
 			ElMessage.success("启动成功！");
 			state.schedulerDetail.schedulerInStandbyMode = false;
 		},
@@ -353,7 +336,7 @@ const handleStop = () => {
 	ElMessageBox.confirm(`确定要待机【${state.schedulerDetail.schedulerName}】？`, {
 		type: "warning",
 		async beforeClose() {
-			await schedulerApi.stopScheduler(state.tenantId);
+			await schedulerApi.stopScheduler();
 			ElMessage.success("待机成功！");
 			state.schedulerDetail.schedulerInStandbyMode = true;
 		},
@@ -372,7 +355,7 @@ const handleDelException = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要删除【${row.jobName}】的异常信息？`, {
 		type: "warning",
 		async beforeClose() {
-			await schedulerApi.deleteSchedulerJobException(state.tenantId, {
+			await schedulerApi.deleteSchedulerJobException({
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
 			});
@@ -389,7 +372,7 @@ const handleLogs = async (row: SchedulerJobInfoDto) => {
 	state.log.visible = true;
 	state.log.loading = true;
 	state.log.contents = await schedulerApi
-		.querySchedulerJobLogs(state.tenantId, {
+		.querySchedulerJobLogs({
 			jobName: row.jobName,
 			jobGroup: state.activeJobGroup,
 		})
@@ -403,7 +386,7 @@ const handleStopJob = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要暂停【${row.jobName}】？`, {
 		type: "warning",
 		async beforeClose() {
-			await schedulerApi.stopSchedulerJob(state.tenantId, {
+			await schedulerApi.stopSchedulerJob({
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
 			});
@@ -418,7 +401,7 @@ const handleResumeJob = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要恢复【${row.jobName}】？`, {
 		type: "warning",
 		async beforeClose() {
-			await schedulerApi.resumeSchedulerJob(state.tenantId, {
+			await schedulerApi.resumeSchedulerJob({
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
 			});
@@ -433,7 +416,7 @@ const handleTriggerJob = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要立即执行【${row.jobName}】？`, {
 		type: "warning",
 		async beforeClose() {
-			await schedulerApi.triggerSchedulerJob(state.tenantId, {
+			await schedulerApi.triggerSchedulerJob({
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
 			});
@@ -448,7 +431,7 @@ const handleDelJob = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要删除【${row.jobName}】？`, {
 		type: "warning",
 		async beforeClose() {
-			await schedulerApi.deleteSchedulerJob(state.tenantId, {
+			await schedulerApi.deleteSchedulerJob({
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
 			});
@@ -460,7 +443,7 @@ const handleDelJob = async (row: SchedulerJobInfoDto) => {
 
 onMounted(async () => {
 	state.loading = true;
-	[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]).finally(() => {
+	[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(), handleTableRefresh()]).finally(() => {
 		state.loading = false;
 	});
 	startInterval();
@@ -468,7 +451,7 @@ onMounted(async () => {
 
 onActivated(async () => {
 	try {
-		[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]);
+		[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(), handleTableRefresh()]);
 	} catch {}
 	startInterval();
 });

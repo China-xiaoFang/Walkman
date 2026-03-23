@@ -1,7 +1,7 @@
 <template>
 	<component
-		:is="loginComponents[appStore.loginComponent]"
-		:background="getThemeGradient(appStore.themeColor, configStore.layout.isDark ? 'dark' : 'light')"
+		:is="loginComponents['ModernLogin']"
+		:background="getThemeGradient(configStore.layout.themeColor, configStore.layout.isDark ? 'dark' : 'light')"
 		:footerHeight="configStore.layout.footerHeight"
 		:formRules="state.formRules"
 	>
@@ -42,10 +42,8 @@ import { ElMessageBox } from "element-plus";
 import { ChromeFilled, Operation, Refresh } from "@element-plus/icons-vue";
 import { Dark, Light } from "@fast-element-plus/icons-vue";
 import { Local, Session, consoleError, useIdentity, withDefineType } from "@fast-china/utils";
-import { useApp, useConfig } from "@/stores";
+import { useConfig } from "@/stores";
 import type { LoginInput } from "@/api/services/Auth/login/models/LoginInput";
-import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
-import type { TenantLoginInput } from "@/api/services/Auth/login/models/TenantLoginInput";
 import type { ILoginComponent } from "@/stores";
 import type { DropdownInstance, FormRules } from "element-plus";
 import type { Component } from "vue";
@@ -59,15 +57,7 @@ export type IFormData = {
 	rememberMe?: boolean;
 	/** 加密密码 */
 	encryptPassword?: boolean;
-} & LoginInput &
-	TenantLoginInput;
-
-export type ITenantData = {
-	/** 租户 */
-	tenant: LoginTenantOutput;
-	/** 表单数据 */
-	formData: IFormData;
-};
+} & LoginInput;
 
 export type IFormStep = "Account" | "TenantAccount" | "SelectTenant" | "NewAccount";
 
@@ -79,7 +69,6 @@ const loginComponents = withDefineType<Record<ILoginComponent, Component>>({
 	SplitLogin: defineAsyncComponent(() => import("./splitLogin/index.vue")),
 });
 
-const appStore = useApp();
 const configStore = useConfig();
 
 const helpDropdownRef = ref<DropdownInstance>();
@@ -95,28 +84,19 @@ const state = reactive({
 		password: [{ required: true, message: "请输入密码", trigger: "blur" }],
 		userKey: [{ required: true, message: "请选择租户", trigger: "change" }],
 	}),
-	/** 租户集合 */
-	tenantList: withDefineType<ITenantData[]>([]),
-	/** 表单步骤 */
-	formStep: withDefineType<IFormStep>("Account"),
 	/** 缓存Key */
 	cFormKey: "LOGIN_FORM",
 });
 
 provide("formData", toRef(state, "formData"));
-provide("tenantList", toRef(state, "tenantList"));
-provide("formStep", toRef(state, "formStep"));
 provide("cFormKey", state.cFormKey);
 
 onMounted(() => {
 	try {
-		const tenantList = Local.get<ITenantData[]>(state.cFormKey);
-		if (tenantList && tenantList.length > 0) {
-			state.tenantList = tenantList;
-			const { formData, tenant } = tenantList[0];
-			state.formData = { ...formData, userKey: tenant.userKey };
+		const formData = Local.get<IFormData>(state.cFormKey);
+		if (formData) {
+			state.formData = formData;
 			state.formData.encryptPassword = formData.rememberMe;
-			state.formStep = "TenantAccount";
 		}
 	} catch (error) {
 		state.helpTourValue = true;

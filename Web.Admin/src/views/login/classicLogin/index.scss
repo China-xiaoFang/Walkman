@@ -111,17 +111,6 @@
 				}
 			}
 
-			.form-back {
-				margin-bottom: 8px;
-				padding-bottom: 4px;
-				border-bottom: 1px solid var(--el-border-color);
-				:deep(.el-button) {
-					span {
-						margin-left: 0;
-					}
-				}
-			}
-
 			:deep(.el-form) {
 				.el-select__wrapper,
 				.el-input__wrapper {
@@ -158,77 +147,6 @@
 					transform: translateY(0);
 				}
 			}
-
-			.tenant__list {
-				flex: 1;
-				overflow: hidden;
-				.el-scrollbar {
-					padding: 0 10px 0 5px;
-					li {
-						padding: 5px 0;
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						justify-content: space-between;
-						gap: 20px;
-						&:not(:last-child) {
-							border-bottom: var(--el-border);
-						}
-						.tenant__warp {
-							flex: 1;
-							display: flex;
-							flex-direction: column;
-							line-height: 20px;
-							.tenant__top {
-								display: flex;
-								align-items: center;
-								justify-content: space-between;
-								.top__name {
-									display: flex;
-									align-items: center;
-									color: var(--el-text-color-regular);
-									font-weight: var(--el-font-weight-primary);
-								}
-								img {
-									width: 25px;
-									height: 25px;
-									margin-right: 5px;
-									border-radius: 50%;
-								}
-							}
-							.tenant__center {
-								margin-left: 30px;
-								color: var(--el-text-color-disabled);
-								display: flex;
-								justify-content: space-between;
-								font-size: var(--el-font-size-small);
-							}
-							.tenant__bottom {
-								margin-left: 15px;
-								color: var(--el-text-color-disabled);
-								display: flex;
-								justify-content: space-between;
-								align-items: center;
-								font-size: var(--el-font-size-small);
-								.bottom__name {
-									display: flex;
-									align-items: center;
-									font-weight: var(--el-font-weight-primary);
-								}
-								.el-tag {
-									margin-right: 5px;
-								}
-								img {
-									width: 20px;
-									height: 20px;
-									margin-left: 5px;
-									border-radius: 50%;
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 
 		.glass-text {
@@ -237,96 +155,6 @@
 			font-size: 12px;
 			color: var(--el-text-color-placeholder);
 			letter-spacing: 0.5px;
-		}
-	}
-}
-
-.tenant__select__popper {
-	.el-select-dropdown__wrap {
-		max-height: 200px;
-		.el-select-dropdown__list {
-			li {
-				height: 100%;
-				padding: 0 15px 0 10px;
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				align-items: center;
-				gap: 10px;
-				&:not(:last-child) {
-					border-bottom: var(--el-border);
-				}
-				.tenant__warp {
-					flex: 1;
-					display: flex;
-					flex-direction: column;
-					.tenant__top {
-						display: flex;
-						align-items: center;
-						justify-content: space-between;
-						.top__name {
-							display: flex;
-							align-items: center;
-							color: var(--el-text-color-regular);
-							font-weight: var(--el-font-weight-primary);
-						}
-						img {
-							width: 25px;
-							height: 25px;
-							margin-right: 5px;
-							border-radius: 50%;
-						}
-					}
-					.tenant__center {
-						margin-left: 30px;
-						margin-top: -15px;
-						color: var(--el-text-color-disabled);
-						display: flex;
-						justify-content: space-between;
-						font-size: var(--el-font-size-small);
-					}
-					.tenant__bottom {
-						margin-left: 15px;
-						margin-top: -15px;
-						color: var(--el-text-color-disabled);
-						display: flex;
-						justify-content: space-between;
-						align-items: center;
-						font-size: var(--el-font-size-small);
-						.bottom__name {
-							display: flex;
-							align-items: center;
-							font-weight: var(--el-font-weight-primary);
-						}
-						.el-tag {
-							margin-right: 5px;
-						}
-						img {
-							width: 20px;
-							height: 20px;
-							margin-left: 5px;
-							border-radius: 50%;
-						}
-					}
-				}
-				.el-icon {
-					transition:
-						background-color var(--el-transition-duration) ease,
-						color var(--el-transition-duration) ease,
-						transform var(--el-transition-duration) ease;
-					&:hover {
-						border-radius: 50%;
-						background-color: var(--el-color-primary);
-						color: var(--el-color-white);
-					}
-				}
-			}
-		}
-	}
-	.el-select-dropdown__footer {
-		padding: 5px 0;
-		.el-button {
-			width: 100%;
 		}
 	}
 }

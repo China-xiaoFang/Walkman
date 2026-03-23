@@ -44,10 +44,10 @@ internal static class ConfigSeedData
                 new()
                 {
                     ConfigId = YitIdHelper.NextId(),
-                    ConfigCode = ConfigConst.RequestEncryption,
-                    ConfigName = "请求加密",
+                    ConfigCode = ConfigConst.ResponseEncryption,
+                    ConfigName = "响应加密",
                     ConfigValue = "False",
-                    Remark = "True：开启请求加密；False：关闭（默认）；",
+                    Remark = "True：开启响应加密；False：关闭（默认）；",
                     CreatedTime = dateTime
                 },
                 new()

@@ -10,9 +10,6 @@
 					<FaFormItem prop="mobile" label="手机">
 						<el-text type="primary">{{ state.formData.mobile }}</el-text>
 					</FaFormItem>
-					<FaFormItem prop="email" label="邮箱">
-						<el-text type="primary">{{ state.formData.email }}</el-text>
-					</FaFormItem>
 					<FaFormItem prop="nickName" label="昵称">
 						{{ state.formData.nickName }}
 					</FaFormItem>
@@ -45,9 +42,6 @@
 			<FaLayoutGridItem span="2">
 				<el-divider contentPosition="left">初次登录信息</el-divider>
 			</FaLayoutGridItem>
-			<FaFormItem prop="firstLoginTenantName" label="租户">
-				<el-text type="primary">{{ state.formData.firstLoginTenantName }}</el-text>
-			</FaFormItem>
 			<FaFormItem prop="firstLoginIp" label="Ip">
 				<el-text type="success">{{ state.formData.firstLoginIp }}</el-text>
 			</FaFormItem>
@@ -73,9 +67,6 @@
 			<FaLayoutGridItem span="2">
 				<el-divider contentPosition="left">最后登录信息</el-divider>
 			</FaLayoutGridItem>
-			<FaFormItem prop="lastLoginTenantName" label="租户">
-				<el-text type="primary">{{ state.formData.lastLoginTenantName }}</el-text>
-			</FaFormItem>
 			<FaFormItem prop="lastLoginIp" label="Ip">
 				<el-text type="success">{{ state.formData.lastLoginIp }}</el-text>
 			</FaFormItem>
@@ -125,8 +116,8 @@
 import { reactive, ref } from "vue";
 import { dayjs } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import { accountApi } from "@/api/services/Center/account";
-import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
+import { accountApi } from "@/api/services/Admin/account";
+import { QueryAccountDetailOutput } from "@/api/services/Admin/account/models/QueryAccountDetailOutput";
 import type { FaDialogInstance } from "fast-element-plus";
 
 defineOptions({

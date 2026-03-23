@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
-import { merchantApi } from "@/api/services/Center/merchant";
+import { merchantApi } from "@/api/services/Admin/merchant";
 import type { ElSelectorOutput } from "fast-element-plus";
 
 defineOptions({

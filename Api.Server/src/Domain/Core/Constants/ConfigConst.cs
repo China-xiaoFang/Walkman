@@ -29,9 +29,9 @@ namespace Fast.Core;
 public class ConfigConst
 {
     /// <summary>
-    /// 请求加密
+    /// 响应加密
     /// </summary>
-    public const string RequestEncryption = "REQUEST_ENCRYPTION";
+    public const string ResponseEncryption = "RESPONSE_ENCRYPTION";
 
     /// <summary>
     /// 单点登录

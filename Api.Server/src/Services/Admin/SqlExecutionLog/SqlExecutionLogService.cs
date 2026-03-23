@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.SqlExecutionLog;
 /// <summary>
 /// <see cref="SqlExecutionLogService"/> Sql执行日志服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "sqlExecutionLog")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "sqlExecutionLog")]
 public class SqlExecutionLogService : IDynamicApplication
 {
     private readonly IUser _user;

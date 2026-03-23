@@ -22,8 +22,6 @@
 					<br />
 					手机：<span v-iconCopy="row.accountMobile">{{ row.accountMobile }}</span>
 					<br />
-					邮箱：<span v-iconCopy="row.accountEmail">{{ row.accountEmail }}</span>
-					<br />
 					<span>
 						登陆时间：{{ row.lastLoginTime ?? "" }}
 						<el-tag v-if="row.lastLoginTime" type="info" round effect="light" class="ml5">
@@ -39,7 +37,7 @@
 			<template #departmentName="{ row }: { row?: QueryEmployeePagedOutput }">
 				机构：<span>{{ row.orgName }}</span>
 				<br />
-				<span>{{ row.departmentNames.join(" > ") }}</span>
+				<span>{{ row.departmentNames?.join(" > ") }}</span>
 				<template v-if="row.isPrincipal">
 					<br />
 					<el-tag type="primary">负责人</el-tag>
@@ -58,8 +56,16 @@
 			<template #operation="{ row }: { row: QueryEmployeePagedOutput }">
 				<div class="mb5">
 					<el-button v-auth="'Employee:Detail'" size="small" plain @click="editFormRef.detail(row.employeeId)">详情</el-button>
-					<el-button v-auth="'Employee:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.employeeId)">编辑</el-button>
-					<el-dropdown v-auth="'Employee:Status'" class="pl12" trigger="click">
+					<el-button
+						v-if="row.userType === UserTypeEnum.None"
+						v-auth="'Employee:Edit'"
+						size="small"
+						plain
+						type="primary"
+						@click="editFormRef.edit(row.employeeId)"
+						>编辑</el-button
+					>
+					<el-dropdown v-if="row.userType === UserTypeEnum.None" v-auth="'Employee:Status'" class="pl12" trigger="click">
 						<el-button size="small" plain type="primary">
 							更多
 							<el-icon class="el-icon--right"><ArrowDown /></el-icon>
@@ -109,31 +115,10 @@
 						</template>
 					</el-dropdown>
 				</div>
-				<template v-if="row.accountMobile">
-					<el-button
-						v-if="row.accountStatus == CommonStatusEnum.Enable"
-						v-auth="'Employee:Status'"
-						size="small"
-						plain
-						type="danger"
-						@click="handleChangeAccountStatus(row)"
-					>
-						禁用账号
-					</el-button>
-					<el-button v-else v-auth="'Employee:Status'" size="small" plain type="warning" @click="handleChangeAccountStatus(row)">
-						启用账号
-					</el-button>
-				</template>
-				<template v-else>
-					<el-button v-auth="'Employee:Edit'" size="small" plain type="primary" @click="bindAccountFormRef.open(row.employeeId)">
-						绑定登录账号
-					</el-button>
-				</template>
 			</template>
 		</FastTable>
 		<EmployeeEdit ref="editFormRef" @ok="fastTableRef.refresh()" />
 		<ResignedEdit ref="resignedEditFormRef" @ok="fastTableRef.refresh()" />
-		<BindAccount ref="bindAccountFormRef" @ok="fastTableRef.refresh()" />
 	</div>
 </template>
 
@@ -142,11 +127,10 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ArrowDown, Plus } from "@element-plus/icons-vue";
 import { dateUtil } from "@fast-china/utils";
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EmployeeStatusEnum } from "@/api/enums/EmployeeStatusEnum";
+import { UserTypeEnum } from "@/api/enums/UserTypeEnum";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
-import BindAccount from "./edit/bindAccount.vue";
 import EmployeeEdit from "./edit/index.vue";
 import ResignedEdit from "./edit/resignedEdit.vue";
 import type { FastTableInstance } from "@/components";
@@ -158,7 +142,6 @@ defineOptions({
 const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof EmployeeEdit>>();
 const resignedEditFormRef = ref<InstanceType<typeof ResignedEdit>>();
-const bindAccountFormRef = ref<InstanceType<typeof BindAccount>>();
 
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryEmployeePagedOutput, status: EmployeeStatusEnum) => {
@@ -169,22 +152,6 @@ const handleChangeStatus = (row: QueryEmployeePagedOutput, status: EmployeeStatu
 			await employeeApi.changeStatus({
 				employeeId,
 				status,
-				rowVersion,
-			});
-			ElMessage.success("操作成功！");
-			fastTableRef.value?.refresh();
-		},
-	});
-};
-
-/** 处理状态变更 */
-const handleChangeAccountStatus = (row: QueryEmployeePagedOutput) => {
-	const { employeeId, accountStatus, rowVersion } = row;
-	ElMessageBox.confirm(`确定${accountStatus === CommonStatusEnum.Enable ? "禁用" : "启用"}登录账号？`, {
-		type: "warning",
-		async beforeClose() {
-			await employeeApi.changeLoginStatus({
-				employeeId,
 				rowVersion,
 			});
 			ElMessage.success("操作成功！");

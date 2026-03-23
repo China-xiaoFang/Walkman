@@ -267,8 +267,6 @@
 								<el-radio value="el-time-select">时间选择器下拉框</el-radio>
 								<el-radio value="el-switch">开关</el-radio>
 								<el-radio value="slot">插槽</el-radio>
-								<el-radio value="ApplicationSelect">应用</el-radio>
-								<el-radio value="TenantSelectPage">租户</el-radio>
 								<el-radio value="AccountSelectPage">账号</el-radio>
 								<el-radio value="EmployeeSelectPage">职员</el-radio>
 							</el-radio-group>
@@ -324,7 +322,7 @@ import { StarFilled } from "@element-plus/icons-vue";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import DevTableConfigObjectTable from "./objectTable.vue";
-import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
+import type { FaTableColumnCtx } from "@/api/services/Admin/table/models/FaTableColumnCtx";
 import type { FaDialogInstance } from "fast-element-plus";
 
 defineOptions({

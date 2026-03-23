@@ -29,7 +29,7 @@ namespace Fast.Admin.Service.Api;
 /// <summary>
 /// <see cref="ApiService"/> Api
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "api")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "api")]
 public class ApiService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<ApiInfoModel> _repository;

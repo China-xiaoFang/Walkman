@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
-import { regionApi } from "@/api/services/Center/region";
+import { regionApi } from "@/api/services/Admin/region";
 import type { ElSelectorOutput } from "fast-element-plus";
 
 defineOptions({

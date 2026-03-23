@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.SqlDiffLog;
 /// <summary>
 /// <see cref="SqlDiffLogService"/> Sql差异日志服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "sqlDiffLog")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "sqlDiffLog")]
 public class SqlDiffLogService : IDynamicApplication
 {
     private readonly IUser _user;

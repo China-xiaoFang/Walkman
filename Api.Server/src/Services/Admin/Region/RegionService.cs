@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.Region;
 /// <summary>
 /// <see cref="RegionService"/> 地区服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "region")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "region")]
 public class RegionService : IDynamicApplication
 {
     private readonly ICache<CenterCCL> _cache;

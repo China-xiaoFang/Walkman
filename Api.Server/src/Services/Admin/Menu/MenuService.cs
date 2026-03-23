@@ -31,7 +31,7 @@ namespace Fast.Admin.Service.Menu;
 /// <summary>
 /// <see cref="MenuService"/> 菜单服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "menu")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "menu")]
 public class MenuService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<MenuModel> _repository;

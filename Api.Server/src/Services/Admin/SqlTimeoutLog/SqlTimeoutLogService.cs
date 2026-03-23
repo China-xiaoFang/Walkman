@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.SqlTimeoutLog;
 /// <summary>
 /// <see cref="SqlTimeoutLogModelService"/> Sql超时日志服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "sqlTimeoutLog")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "sqlTimeoutLog")]
 public class SqlTimeoutLogModelService : IDynamicApplication
 {
     private readonly IUser _user;

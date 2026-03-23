@@ -110,8 +110,8 @@ import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { Delete } from "@element-plus/icons-vue";
 import { dateUtil } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
-import { sqlDiffLogApi } from "@/api/services/Center/sqlDiffLog";
-import { SqlDiffLogModel } from "@/api/services/Center/sqlDiffLog/models/SqlDiffLogModel";
+import { sqlDiffLogApi } from "@/api/services/Admin/sqlDiffLog";
+import { SqlDiffLogModel } from "@/api/services/Admin/sqlDiffLog/models/SqlDiffLogModel";
 import { FastTableInstance } from "@/components";
 import { useConfig, useUserInfo } from "@/stores";
 

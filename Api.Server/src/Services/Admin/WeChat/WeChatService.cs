@@ -35,7 +35,7 @@ namespace Fast.Admin.Service.WeChat;
 /// <summary>
 /// <see cref="WeChatService"/> 微信服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "weChat")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "weChat")]
 public class WeChatService : IDynamicApplication
 {
     private readonly IUser _user;

@@ -31,7 +31,7 @@ namespace Fast.Admin.Service.OnlineUser;
 /// <summary>
 /// <see cref="OnlineUserService"/> 在线用户服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "onlineUser")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "onlineUser")]
 public class OnlineUserService : IDynamicApplication
 {
     private readonly IUser _user;
@@ -54,7 +54,7 @@ public class OnlineUserService : IDynamicApplication
     [HttpPost]
     [ApiInfo("获取在线用户分页列表", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.OnlineUser.Paged)]
-    public async Task<PagedResult<OnlineUserModel>> QueryTenantOnlineUserPaged(QueryTenantOnlineUserPagedInput input)
+    public async Task<PagedResult<OnlineUserModel>> QueryOnlineUserPaged(QueryOnlineUserPagedInput input)
     {
         return await _repository.Entities.WhereIF(input.DeviceType != null, wh => wh.DeviceType == input.DeviceType)
             .WhereIF(input.AccountId != null, wh => wh.AccountId == input.AccountId)

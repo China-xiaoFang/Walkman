@@ -29,7 +29,7 @@ namespace Fast.Admin.Service.RefundRecord;
 /// <summary>
 /// <see cref="RefundRecordService"/> 退款记录服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "refundRecord")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "refundRecord")]
 public class RefundRecordService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<RefundRecordModel> _repository;

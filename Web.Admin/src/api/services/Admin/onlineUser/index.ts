@@ -1,7 +1,7 @@
 import { axiosUtil } from "@fast-china/axios";
 import { PagedResult } from "fast-element-plus";
 import { OnlineUserModel } from "./models/OnlineUserModel";
-import { QueryTenantOnlineUserPagedInput } from "./models/QueryTenantOnlineUserPagedInput";
+import { QueryOnlineUserPagedInput } from "./models/QueryOnlineUserPagedInput";
 import { ForceOfflineInput } from "./models/ForceOfflineInput";
 
 /**
@@ -11,9 +11,9 @@ export const onlineUserApi = {
   /**
    * 获取在线用户分页列表
    */
-  queryTenantOnlineUserPaged(data: QueryTenantOnlineUserPagedInput) {
+  queryOnlineUserPaged(data: QueryOnlineUserPagedInput) {
     return axiosUtil.request<PagedResult<OnlineUserModel>>({
-      url: "/onlineUser/queryTenantOnlineUserPaged",
+      url: "/onlineUser/queryOnlineUserPaged",
       method: "post",
       data,
       requestType: "query",

@@ -3,7 +3,7 @@ import { ElDropdownItem, ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { FaTable, faTableEmits, faTableProps } from "fast-element-plus";
 import { clickUtil, makeSlots, useEmits, useExpose, useProps, useRender, withDefineType } from "@fast-china/utils";
 import { isString } from "lodash";
-import { tableApi } from "@/api/services/Center/table";
+import { tableApi } from "@/api/services/Admin/table";
 import { useApp, useConfig } from "@/stores";
 import type { FaTableColumnCtx, FaTableInstance, FaTableSlots } from "fast-element-plus";
 import type { VNode } from "vue";

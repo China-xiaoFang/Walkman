@@ -5,10 +5,11 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, watch } from "vue";
+import { reactive, watch } from "vue";
 import { type componentSizes } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { useWindowSize } from "@vueuse/core";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 import { RouterView } from "vue-router";
 import { useConfig } from "@/stores";
 
@@ -21,7 +22,7 @@ const configStore = useConfig();
 
 const elConfigProviderProps = reactive({
 	// 语言
-	locale: undefined,
+	locale: zhCn,
 	button: {
 		// 自动插入空格
 		autoInsertSpace: false,
@@ -93,13 +94,4 @@ watch(
 	},
 	{ immediate: true }
 );
-
-onMounted(async () => {
-	if (import.meta.env.DEV) {
-		const { default: zhCn } = await import("element-plus/es/locale/lang/zh-cn");
-		elConfigProviderProps.locale = zhCn;
-	} else {
-		elConfigProviderProps.locale = ElementPlusLocaleZhCn;
-	}
-});
 </script>

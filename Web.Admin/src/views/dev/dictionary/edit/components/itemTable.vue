@@ -61,7 +61,7 @@ import { Plus } from "@element-plus/icons-vue";
 import { definePropType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
 import DictionaryEditItemEdit from "./itemEdit.vue";
-import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
+import type { EditDictionaryItemInput } from "@/api/services/Admin/dictionary/models/EditDictionaryItemInput";
 
 defineOptions({
 	name: "DevDictionaryEditItemTable",

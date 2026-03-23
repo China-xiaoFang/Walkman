@@ -33,7 +33,7 @@ namespace Fast.Admin.Service.Table;
 /// <summary>
 /// <see cref="TableService"/> 表格服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "table", Order = 994)]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "table", Order = 994)]
 public class TableService : IDynamicApplication
 {
     private readonly IUser _user;

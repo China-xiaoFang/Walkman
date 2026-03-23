@@ -74,15 +74,6 @@
 			<FaFormItem prop="sex" label="性别">
 				<RadioGroup name="GenderEnum" v-model="state.formData.sex" />
 			</FaFormItem>
-			<FaFormItem prop="firstWorkDate" label="初次工作日期">
-				<el-date-picker
-					type="date"
-					v-model="state.formData.firstWorkDate"
-					:disabledDate="dateUtil.getDisabledDate"
-					valueFormat="YYYY-MM-DD"
-					placeholder="请选择初次工作日期"
-				/>
-			</FaFormItem>
 			<FaFormItem prop="entryDate" label="入职日期">
 				<el-date-picker
 					type="date"

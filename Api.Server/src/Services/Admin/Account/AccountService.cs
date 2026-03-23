@@ -37,7 +37,7 @@ namespace Fast.Admin.Service.Account;
 /// <summary>
 /// <see cref="AccountService"/> 账号服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "account")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "account")]
 public class AccountService : IDynamicApplication
 {
     private readonly IUser _user;

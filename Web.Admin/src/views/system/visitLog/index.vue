@@ -39,8 +39,8 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { Delete } from "@element-plus/icons-vue";
 import { dateUtil } from "@fast-china/utils";
-import { visitLogApi } from "@/api/services/Center/visitLog";
-import { VisitLogModel } from "@/api/services/Center/visitLog/models/VisitLogModel";
+import { visitLogApi } from "@/api/services/Admin/visitLog";
+import { VisitLogModel } from "@/api/services/Admin/visitLog/models/VisitLogModel";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
 

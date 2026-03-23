@@ -9,9 +9,6 @@
 				<FaFormItem prop="mobile" label="手机">
 					<el-input v-model="state.accountFormData.mobile" maxlength="11" placeholder="请输入手机" />
 				</FaFormItem>
-				<FaFormItem prop="email" label="邮箱">
-					<el-input v-model="state.accountFormData.email" maxlength="50" placeholder="请输入邮箱" />
-				</FaFormItem>
 				<FaFormItem prop="phone" label="电话">
 					<el-input v-model="state.accountFormData.phone" maxlength="11" placeholder="请输入电话" />
 				</FaFormItem>
@@ -163,11 +160,11 @@
 import { inject, onMounted, reactive, ref } from "vue";
 import { ElMessage, type FormRules, dayjs } from "element-plus";
 import { dateUtil, withDefineType } from "@fast-china/utils";
+import { accountApi } from "@/api/services/Admin/account";
+import { EditAccountInput } from "@/api/services/Admin/account/models/EditAccountInput";
+import { QueryAccountDetailOutput } from "@/api/services/Admin/account/models/QueryAccountDetailOutput";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
-import { accountApi } from "@/api/services/Center/account";
-import { EditAccountInput } from "@/api/services/Center/account/models/EditAccountInput";
-import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
 import { fileApi } from "@/api/services/File";
 import { changePasswordKey } from "@/layouts";
 import { useApp, useUserInfo } from "@/stores";
