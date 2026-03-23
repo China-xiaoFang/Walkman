@@ -40,12 +40,7 @@ public class ApiGroupConst
     public const string File = "File";
 
     /// <summary>
-    /// 管理后台
-    /// </summary>
-    public const string Center = "Center";
-
-    /// <summary>
-    /// 业务后台
+    /// Admin
     /// </summary>
     public const string Admin = "Admin";
 
