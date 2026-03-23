@@ -7,7 +7,7 @@ import { EditDictionaryInput } from "./models/EditDictionaryInput";
 import { DictionaryIdInput } from "./models/DictionaryIdInput";
 
 /**
- * Fast.Center.Service.Dictionary.DictionaryService 字典服务Api
+ * Fast.Admin.Service.Dictionary.DictionaryService 字典服务Api
  */
 export const dictionaryApi = {
   /**

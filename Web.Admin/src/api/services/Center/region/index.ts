@@ -2,7 +2,7 @@ import { axiosUtil } from "@fast-china/axios";
 import { ElSelectorOutput } from "fast-element-plus";
 
 /**
- * Fast.Center.Service.Region.RegionService 地区服务Api
+ * Fast.Admin.Service.Region.RegionService 地区服务Api
  */
 export const regionApi = {
   /**

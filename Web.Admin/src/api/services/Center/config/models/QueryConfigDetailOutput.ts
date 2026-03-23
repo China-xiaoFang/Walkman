@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Config.Dto.QueryConfigDetailOutput 获取配置详情输出
+ * Fast.Admin.Service.Config.Dto.QueryConfigDetailOutput 获取配置详情输出
  */
 export interface QueryConfigDetailOutput {
   /**

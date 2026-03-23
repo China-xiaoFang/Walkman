@@ -4,7 +4,7 @@ import { SqlExecutionLogModel } from "./models/SqlExecutionLogModel";
 import { QuerySqlExecutionLogPagedInput } from "./models/QuerySqlExecutionLogPagedInput";
 
 /**
- * Fast.Center.Service.SqlExecutionLog.SqlExecutionLogService Sql执行日志服务Api
+ * Fast.Admin.Service.SqlExecutionLog.SqlExecutionLogService Sql执行日志服务Api
  */
 export const sqlExecutionLogApi = {
   /**

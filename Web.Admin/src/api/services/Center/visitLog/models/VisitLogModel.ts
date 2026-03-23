@@ -1,7 +1,7 @@
 import { VisitTypeEnum } from "@/api/enums/VisitTypeEnum";
 
 /**
- * Fast.CenterLog.Entity.VisitLogModel 访问日志Model类
+ * Fast.AdminLog.Entity.VisitLogModel 访问日志Model类
  */
 export interface VisitLogModel {
   /**
@@ -12,10 +12,6 @@ export interface VisitLogModel {
    * 账号Id
    */
   accountId?: number;
-  /**
-   * 账号
-   */
-  account?: string;
   /**
    * 手机
    */
@@ -32,14 +28,6 @@ export interface VisitLogModel {
    * 访问时间
    */
   createdTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
   /**
    * 
    */

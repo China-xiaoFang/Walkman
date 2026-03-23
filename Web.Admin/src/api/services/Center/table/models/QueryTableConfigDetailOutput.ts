@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Table.Dto.QueryTableConfigDetailOutput 获取表格配置详情输出
+ * Fast.Admin.Service.Table.Dto.QueryTableConfigDetailOutput 获取表格配置详情输出
  */
 export interface QueryTableConfigDetailOutput {
   /**

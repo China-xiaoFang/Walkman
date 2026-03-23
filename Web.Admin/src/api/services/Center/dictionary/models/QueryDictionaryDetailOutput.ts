@@ -3,7 +3,7 @@ import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditDictionaryItemInput } from "./EditDictionaryItemInput";
 
 /**
- * Fast.Center.Service.Dictionary.Dto.QueryDictionaryDetailOutput 获取字典详情输出
+ * Fast.Admin.Service.Dictionary.Dto.QueryDictionaryDetailOutput 获取字典详情输出
  */
 export interface QueryDictionaryDetailOutput {
   /**

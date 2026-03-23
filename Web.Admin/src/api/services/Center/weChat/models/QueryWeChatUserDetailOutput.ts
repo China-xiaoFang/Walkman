@@ -2,7 +2,7 @@ import { WeChatUserTypeEnum } from "@/api/enums/WeChatUserTypeEnum";
 import { GenderEnum } from "@/api/enums/GenderEnum";
 
 /**
- * Fast.Center.Service.WeChat.Dto.QueryWeChatUserDetailOutput 获取微信用户详情输出
+ * Fast.Admin.Service.WeChat.Dto.QueryWeChatUserDetailOutput 获取微信用户详情输出
  */
 export interface QueryWeChatUserDetailOutput {
   /**

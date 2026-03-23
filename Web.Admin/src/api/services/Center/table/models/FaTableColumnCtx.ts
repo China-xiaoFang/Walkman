@@ -1,7 +1,7 @@
 import { FaTableColumnAdvancedCtx } from "./FaTableColumnAdvancedCtx";
 
 /**
- * Fast.Center.Service.Table.Dto.FaTableColumnCtx FastElementPlus FaTable 列上下文
+ * Fast.Admin.Service.Table.Dto.FaTableColumnCtx FastElementPlus FaTable 列上下文
  */
 export interface FaTableColumnCtx {
   /**

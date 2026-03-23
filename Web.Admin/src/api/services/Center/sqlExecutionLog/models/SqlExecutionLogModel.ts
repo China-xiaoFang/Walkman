@@ -1,5 +1,5 @@
 /**
- * Fast.CenterLog.Entity.SqlExecutionLogModel Sql执行日志Model类
+ * Fast.AdminLog.Entity.SqlExecutionLogModel Sql执行日志Model类
  */
 export interface SqlExecutionLogModel {
   /**
@@ -10,10 +10,6 @@ export interface SqlExecutionLogModel {
    * 账号Id
    */
   accountId?: number;
-  /**
-   * 账号
-   */
-  account?: string;
   /**
    * 手机
    */
@@ -27,14 +23,6 @@ export interface SqlExecutionLogModel {
    */
   executeSeconds?: number;
   /**
-   * 原始Sql
-   */
-  rawSql?: string;
-  /**
-   * Sql参数
-   */
-  parameters?: string;
-  /**
    * 纯Sql，参数化之后的Sql
    */
   pureSql?: string;
@@ -42,14 +30,6 @@ export interface SqlExecutionLogModel {
    * 执行时间
    */
   createdTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
   /**
    * 
    */

@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Login.Dto.LoginInput 登录输入
+ * Fast.Admin.Service.Login.Dto.LoginInput 登录输入
  */
 export interface LoginInput {
   /**

@@ -9,7 +9,7 @@ import { EditMerchantInput } from "./models/EditMerchantInput";
 import { MerchantIdInput } from "./models/MerchantIdInput";
 
 /**
- * Fast.Center.Service.Merchant.MerchantService 商户号服务Api
+ * Fast.Admin.Service.Merchant.MerchantService 商户号服务Api
  */
 export const merchantApi = {
   /**

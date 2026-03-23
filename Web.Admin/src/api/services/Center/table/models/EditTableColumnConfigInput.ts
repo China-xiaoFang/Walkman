@@ -1,7 +1,7 @@
 import { FaTableColumnCtx } from "./FaTableColumnCtx";
 
 /**
- * Fast.Center.Service.Table.Dto.EditTableColumnConfigInput 编辑表格列配置输入
+ * Fast.Admin.Service.Table.Dto.EditTableColumnConfigInput 编辑表格列配置输入
  */
 export interface EditTableColumnConfigInput {
   /**

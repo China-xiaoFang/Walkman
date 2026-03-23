@@ -4,7 +4,7 @@ import { SqlDiffLogModel } from "./models/SqlDiffLogModel";
 import { QuerySqlDiffLogPagedInput } from "./models/QuerySqlDiffLogPagedInput";
 
 /**
- * Fast.Center.Service.SqlDiffLog.SqlDiffLogService Sql差异日志服务Api
+ * Fast.Admin.Service.SqlDiffLog.SqlDiffLogService Sql差异日志服务Api
  */
 export const sqlDiffLogApi = {
   /**

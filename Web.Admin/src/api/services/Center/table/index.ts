@@ -13,7 +13,7 @@ import { SyncUserTableConfigInput } from "./models/SyncUserTableConfigInput";
 import { SaveUserTableConfigInput } from "./models/SaveUserTableConfigInput";
 
 /**
- * Fast.Center.Service.Table.TableService 表格服务Api
+ * Fast.Admin.Service.Table.TableService 表格服务Api
  */
 export const tableApi = {
   /**

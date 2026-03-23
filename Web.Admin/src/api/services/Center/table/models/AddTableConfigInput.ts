@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Table.Dto.AddTableConfigInput 添加表格配置输入
+ * Fast.Admin.Service.Table.Dto.AddTableConfigInput 添加表格配置输入
  */
 export interface AddTableConfigInput {
   /**

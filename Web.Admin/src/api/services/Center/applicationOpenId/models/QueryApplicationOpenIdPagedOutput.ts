@@ -2,7 +2,7 @@ import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 
 /**
- * Fast.Center.Service.ApplicationOpenId.Dto.QueryApplicationOpenIdPagedOutput 获取应用标识分页列表输出
+ * Fast.Admin.Service.ApplicationOpenId.Dto.QueryApplicationOpenIdPagedOutput 获取应用标识分页列表输出
  */
 export interface QueryApplicationOpenIdPagedOutput {
   /**
@@ -21,14 +21,6 @@ export interface QueryApplicationOpenIdPagedOutput {
    * 
    */
   environmentType?: EnvironmentTypeEnum;
-  /**
-   * 请求超时时间（毫秒）
-   */
-  requestTimeout?: number;
-  /**
-   * 请求加密
-   */
-  requestEncipher?: boolean;
   /**
    * 微信商户号
    */

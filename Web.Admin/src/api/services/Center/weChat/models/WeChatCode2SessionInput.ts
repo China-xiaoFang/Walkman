@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.WeChat.Dto.WeChatCode2SessionInput 换取微信用户身份信息输入
+ * Fast.Admin.Service.WeChat.Dto.WeChatCode2SessionInput 换取微信用户身份信息输入
  */
 export interface WeChatCode2SessionInput {
   /**

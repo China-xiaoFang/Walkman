@@ -7,8 +7,6 @@ import { AddEmployeeInput } from "./models/AddEmployeeInput";
 import { EditEmployeeInput } from "./models/EditEmployeeInput";
 import { ChangeStatusInput } from "./models/ChangeStatusInput";
 import { EmployeeResignedInput } from "./models/EmployeeResignedInput";
-import { BindLoginAccountInput } from "./models/BindLoginAccountInput";
-import { EmployeeIdInput } from "./models/EmployeeIdInput";
 
 /**
  * Fast.Admin.Service.Employee.EmployeeService 职员服务Api
@@ -99,28 +97,6 @@ export const employeeApi = {
   employeeResigned(data: EmployeeResignedInput) {
     return axiosUtil.request({
       url: "/employee/employeeResigned",
-      method: "post",
-      data,
-      requestType: "edit",
-    });
-  },
-  /**
-   * 绑定登录账号
-   */
-  bindLoginAccount(data: BindLoginAccountInput) {
-    return axiosUtil.request({
-      url: "/employee/bindLoginAccount",
-      method: "post",
-      data,
-      requestType: "edit",
-    });
-  },
-  /**
-   * 更改登录状态
-   */
-  changeLoginStatus(data: EmployeeIdInput) {
-    return axiosUtil.request({
-      url: "/employee/changeLoginStatus",
       method: "post",
       data,
       requestType: "edit",

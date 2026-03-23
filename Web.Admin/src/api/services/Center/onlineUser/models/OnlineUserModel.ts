@@ -1,9 +1,9 @@
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 
 /**
- * Fast.Center.Entity.TenantOnlineUserModel 租户在线用户表Model类
+ * Fast.Admin.Entity.OnlineUserModel 在线用户表Model类
  */
-export interface TenantOnlineUserModel {
+export interface OnlineUserModel {
   /**
    * 连接Id
    */
@@ -17,21 +17,9 @@ export interface TenantOnlineUserModel {
    */
   deviceId?: string;
   /**
-   * 应用编号
-   */
-  appNo?: string;
-  /**
-   * 应用名称
-   */
-  appName?: string;
-  /**
    * 账号Id
    */
   accountId?: number;
-  /**
-   * 账号Key
-   */
-  accountKey?: string;
   /**
    * 手机
    */
@@ -45,17 +33,9 @@ export interface TenantOnlineUserModel {
    */
   avatar?: string;
   /**
-   * 用户Id/职员Id
+   * 职员Id
    */
-  userId?: number;
-  /**
-   * 用户Key
-   */
-  userKey?: string;
-  /**
-   * 账户
-   */
-  account?: string;
+  employeeId?: number;
   /**
    * 工号
    */
@@ -116,9 +96,5 @@ export interface TenantOnlineUserModel {
    * 下线时间
    */
   offlineTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
 }
 

@@ -11,14 +11,6 @@ import { TriggerState } from "@/api/enums/Scheduler/TriggerState";
  */
 export interface SchedulerJobInfo {
   /**
-   * 是否系统默认作业
-   */
-  isSystem?: boolean;
-  /**
-   * 租户ID
-   */
-  tenantId?: number;
-  /**
    * 作业名称
    */
   jobName?: string;
@@ -106,10 +98,6 @@ export interface SchedulerJobInfo {
    * 请求头部
    */
   requestHeader?: any;
-  /**
-   * 是否全部租户作业
-   */
-  isAllTenant?: boolean;
   /**
    * 
    */

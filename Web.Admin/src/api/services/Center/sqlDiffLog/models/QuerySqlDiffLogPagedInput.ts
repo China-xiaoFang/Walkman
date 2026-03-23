@@ -2,7 +2,7 @@ import { PagedInput } from "fast-element-plus";
 import { DiffLogTypeEnum } from "@/api/enums/DiffLogTypeEnum";
 
 /**
- * Fast.Center.Service.SqlDiffLog.Dto.QuerySqlDiffLogPagedInput 获取Sql差异日志分页列表输入
+ * Fast.Admin.Service.SqlDiffLog.Dto.QuerySqlDiffLogPagedInput 获取Sql差异日志分页列表输入
  */
 export interface QuerySqlDiffLogPagedInput extends PagedInput  {
   /**
@@ -13,10 +13,6 @@ export interface QuerySqlDiffLogPagedInput extends PagedInput  {
    * 
    */
   diffType?: DiffLogTypeEnum;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
   /**
    * 
    */

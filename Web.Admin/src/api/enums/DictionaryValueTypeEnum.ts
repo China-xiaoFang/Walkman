@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Enum.DictionaryValueTypeEnum 字典值类型枚举
+ * Fast.Admin.Enum.DictionaryValueTypeEnum 字典值类型枚举
  */
 export enum DictionaryValueTypeEnum {
   /**

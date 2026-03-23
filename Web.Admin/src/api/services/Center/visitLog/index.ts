@@ -4,7 +4,7 @@ import { VisitLogModel } from "./models/VisitLogModel";
 import { QueryVisitLogPagedInput } from "./models/QueryVisitLogPagedInput";
 
 /**
- * Fast.Center.Service.VisitLog.VisitLogService 访问日志服务Api
+ * Fast.Admin.Service.VisitLog.VisitLogService 访问日志服务Api
  */
 export const visitLogApi = {
   /**

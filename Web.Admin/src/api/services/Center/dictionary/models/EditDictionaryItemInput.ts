@@ -2,7 +2,7 @@ import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
- * Fast.Center.Service.Dictionary.Dto.EditDictionaryItemInput 编辑字典项输入
+ * Fast.Admin.Service.Dictionary.Dto.EditDictionaryItemInput 编辑字典项输入
  */
 export interface EditDictionaryItemInput {
   /**

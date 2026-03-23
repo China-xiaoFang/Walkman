@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Table.Dto.CopyTableConfigInput 复制表格配置输入
+ * Fast.Admin.Service.Table.Dto.CopyTableConfigInput 复制表格配置输入
  */
 export interface CopyTableConfigInput {
   /**

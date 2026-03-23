@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Config.Dto.AddConfigInput 添加配置输入
+ * Fast.Admin.Service.Config.Dto.AddConfigInput 添加配置输入
  */
 export interface AddConfigInput {
   /**

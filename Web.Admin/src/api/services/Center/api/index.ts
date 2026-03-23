@@ -3,7 +3,7 @@ import { PagedInput, PagedResult } from "fast-element-plus";
 import { ApiInfoModel } from "./models/ApiInfoModel";
 
 /**
- * Fast.Center.Service.Api.ApiService ApiApi
+ * Fast.Admin.Service.Api.ApiService ApiApi
  */
 export const apiApi = {
   /**

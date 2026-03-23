@@ -1,17 +1,13 @@
 import { ComplaintTypeEnum } from "@/api/enums/ComplaintTypeEnum";
 
 /**
- * Fast.Center.Service.Complaint.Dto.QueryComplaintPagedOutput 获取投诉分页列表输出
+ * Fast.Admin.Service.Complaint.Dto.QueryComplaintPagedOutput 获取投诉分页列表输出
  */
 export interface QueryComplaintPagedOutput {
   /**
    * 投诉Id
    */
   complaintId?: number;
-  /**
-   * 应用名称
-   */
-  appName?: string;
   /**
    * 应用标识
    */
@@ -60,10 +56,6 @@ export interface QueryComplaintPagedOutput {
    * 创建时间
    */
   createdTime?: Date;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
   /**
    * 更新版本控制字段
    */

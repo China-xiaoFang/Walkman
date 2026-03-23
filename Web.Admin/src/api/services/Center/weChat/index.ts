@@ -10,7 +10,7 @@ import { WeChatCode2PhoneNumberOutput } from "./models/WeChatCode2PhoneNumberOut
 import { WeChatCode2PhoneNumberInput } from "./models/WeChatCode2PhoneNumberInput";
 
 /**
- * Fast.Center.Service.WeChat.WeChatService 微信服务Api
+ * Fast.Admin.Service.WeChat.WeChatService 微信服务Api
  */
 export const weChatApi = {
   /**

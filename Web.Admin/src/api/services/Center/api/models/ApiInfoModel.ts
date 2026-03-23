@@ -2,7 +2,7 @@ import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
 import { HttpRequestActionEnum } from "@/api/enums/HttpRequestActionEnum";
 
 /**
- * Fast.Center.Entity.ApiInfoModel 接口信息表Model类
+ * Fast.Admin.Entity.ApiInfoModel 接口信息表Model类
  */
 export interface ApiInfoModel {
   /**

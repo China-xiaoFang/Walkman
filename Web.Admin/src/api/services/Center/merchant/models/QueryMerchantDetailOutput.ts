@@ -1,7 +1,7 @@
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 
 /**
- * Fast.Center.Service.Merchant.Dto.QueryMerchantDetailOutput 获取商户号详情输出
+ * Fast.Admin.Service.Merchant.Dto.QueryMerchantDetailOutput 获取商户号详情输出
  */
 export interface QueryMerchantDetailOutput {
   /**

@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Config.Dto.DeleteConfigCacheInput 删除配置缓存输入
+ * Fast.Admin.Service.Config.Dto.DeleteConfigCacheInput 删除配置缓存输入
  */
 export interface DeleteConfigCacheInput {
   /**

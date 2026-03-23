@@ -1,7 +1,7 @@
 import { ComplaintTypeEnum } from "@/api/enums/ComplaintTypeEnum";
 
 /**
- * Fast.Center.Service.Complaint.Dto.AddComplaintInput 添加投诉输入
+ * Fast.Admin.Service.Complaint.Dto.AddComplaintInput 添加投诉输入
  */
 export interface AddComplaintInput {
   /**

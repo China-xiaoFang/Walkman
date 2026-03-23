@@ -8,7 +8,7 @@ import { EditApplicationOpenIdInput } from "./models/EditApplicationOpenIdInput"
 import { RecordIdInput } from "./models/RecordIdInput";
 
 /**
- * Fast.Center.Service.ApplicationOpenId.ApplicationOpenIdService 应用标识服务Api
+ * Fast.Admin.Service.ApplicationOpenId.ApplicationOpenIdService 应用标识服务Api
  */
 export const applicationOpenIdApi = {
   /**

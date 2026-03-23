@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.ApplicationOpenId.Dto.RecordIdInput 记录Id输入
+ * Fast.Admin.Service.ApplicationOpenId.Dto.RecordIdInput 记录Id输入
  */
 export interface RecordIdInput {
   /**

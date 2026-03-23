@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Config.Dto.EditConfigInput 编辑配置输入
+ * Fast.Admin.Service.Config.Dto.EditConfigInput 编辑配置输入
  */
 export interface EditConfigInput {
   /**

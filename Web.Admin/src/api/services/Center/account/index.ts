@@ -8,7 +8,7 @@ import { ChangePasswordInput } from "./models/ChangePasswordInput";
 import { AccountIdInput } from "./models/AccountIdInput";
 
 /**
- * Fast.Center.Service.Account.AccountService 账号服务Api
+ * Fast.Admin.Service.Account.AccountService 账号服务Api
  */
 export const accountApi = {
   /**

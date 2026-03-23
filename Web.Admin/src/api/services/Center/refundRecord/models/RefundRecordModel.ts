@@ -1,7 +1,7 @@
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 
 /**
- * Fast.Center.Entity.RefundRecordModel 退款记录表Model类
+ * Fast.Admin.Entity.RefundRecordModel 退款记录表Model类
  */
 export interface RefundRecordModel {
   /**
@@ -100,10 +100,6 @@ export interface RefundRecordModel {
    * 更新时间
    */
   updatedTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
   /**
    * 更新版本控制字段
    */

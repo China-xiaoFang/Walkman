@@ -10,10 +10,6 @@ import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
  */
 export interface AddSchedulerJobInput {
   /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
    * 作业名称
    */
   jobName?: string;

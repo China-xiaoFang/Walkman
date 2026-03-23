@@ -1,17 +1,16 @@
 import { axiosUtil } from "@fast-china/axios";
-import { PagedResult } from "fast-element-plus";
+import { PagedInput, PagedResult } from "fast-element-plus";
 import { QueryFilePagedOutput } from "./models/QueryFilePagedOutput";
-import { QueryFilePagedInput } from "./models/QueryFilePagedInput";
 import { DownloadFileInput } from "./models/DownloadFileInput";
 
 /**
- * Fast.Center.Service.File.FileService 文件服务Api
+ * Fast.Admin.Service.File.FileService 文件服务Api
  */
 export const fileApi = {
   /**
    * 获取文件分页列表
    */
-  queryFilePaged(data: QueryFilePagedInput) {
+  queryFilePaged(data: PagedInput) {
     return axiosUtil.request<PagedResult<QueryFilePagedOutput>>({
       url: "/file/queryFilePaged",
       method: "post",

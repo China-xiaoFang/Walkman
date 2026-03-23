@@ -1,7 +1,7 @@
 import { SaveUserTableColumnConfigDto } from "./SaveUserTableColumnConfigDto";
 
 /**
- * Fast.Center.Service.Table.Dto.SaveUserTableConfigInput 保存用户表格配置输入
+ * Fast.Admin.Service.Table.Dto.SaveUserTableConfigInput 保存用户表格配置输入
  */
 export interface SaveUserTableConfigInput {
   /**

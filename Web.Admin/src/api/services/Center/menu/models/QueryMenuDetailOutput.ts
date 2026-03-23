@@ -1,29 +1,16 @@
-import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditMenuButtonInput } from "./EditMenuButtonInput";
 
 /**
- * Fast.Center.Service.Menu.Dto.QueryMenuDetailOutput 获取菜单详情输出
+ * Fast.Admin.Service.Menu.Dto.QueryMenuDetailOutput 获取菜单详情输出
  */
 export interface QueryMenuDetailOutput {
   /**
    * 菜单Id
    */
   menuId?: number;
-  /**
-   * 
-   */
-  edition?: EditionEnum;
-  /**
-   * 应用Id
-   */
-  appId?: number;
-  /**
-   * 应用名称
-   */
-  appName?: string;
   /**
    * 菜单编码
    */

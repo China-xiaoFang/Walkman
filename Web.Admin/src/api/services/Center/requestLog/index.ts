@@ -4,7 +4,7 @@ import { RequestLogModel } from "./models/RequestLogModel";
 import { QueryRequestLogPagedInput } from "./models/QueryRequestLogPagedInput";
 
 /**
- * Fast.Center.Service.RequestLog.RequestLogService 请求日志服务Api
+ * Fast.Admin.Service.RequestLog.RequestLogService 请求日志服务Api
  */
 export const requestLogApi = {
   /**

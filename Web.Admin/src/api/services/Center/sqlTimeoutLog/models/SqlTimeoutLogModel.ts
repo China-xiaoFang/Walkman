@@ -1,5 +1,5 @@
 /**
- * Fast.CenterLog.Entity.SqlTimeoutLogModel Sql超时日志Model类
+ * Fast.AdminLog.Entity.SqlTimeoutLogModel Sql超时日志Model类
  */
 export interface SqlTimeoutLogModel {
   /**
@@ -10,10 +10,6 @@ export interface SqlTimeoutLogModel {
    * 账号Id
    */
   accountId?: number;
-  /**
-   * 账号
-   */
-  account?: string;
   /**
    * 手机
    */
@@ -39,14 +35,6 @@ export interface SqlTimeoutLogModel {
    */
   timeoutSeconds?: number;
   /**
-   * 原始Sql
-   */
-  rawSql?: string;
-  /**
-   * Sql参数
-   */
-  parameters?: string;
-  /**
    * 纯Sql，参数化之后的Sql
    */
   pureSql?: string;
@@ -54,14 +42,6 @@ export interface SqlTimeoutLogModel {
    * 超时时间
    */
   createdTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
   /**
    * 
    */

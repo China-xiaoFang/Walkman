@@ -2,7 +2,7 @@ import { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
- * Fast.Center.Service.Dictionary.Dto.QueryDictionaryPagedOutput 获取字典分页列表输出
+ * Fast.Admin.Service.Dictionary.Dto.QueryDictionaryPagedOutput 获取字典分页列表输出
  */
 export interface QueryDictionaryPagedOutput {
   /**

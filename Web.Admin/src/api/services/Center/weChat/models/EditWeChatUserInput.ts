@@ -1,7 +1,7 @@
 import { GenderEnum } from "@/api/enums/GenderEnum";
 
 /**
- * Fast.Center.Service.WeChat.Dto.EditWeChatUserInput 编辑微信用户输入
+ * Fast.Admin.Service.WeChat.Dto.EditWeChatUserInput 编辑微信用户输入
  */
 export interface EditWeChatUserInput {
   /**

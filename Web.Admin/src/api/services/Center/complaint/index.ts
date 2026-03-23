@@ -6,7 +6,7 @@ import { AddComplaintInput } from "./models/AddComplaintInput";
 import { HandleComplaintInput } from "./models/HandleComplaintInput";
 
 /**
- * Fast.Center.Service.Complaint.ComplaintService 投诉服务Api
+ * Fast.Admin.Service.Complaint.ComplaintService 投诉服务Api
  */
 export const complaintApi = {
   /**
@@ -15,17 +15,6 @@ export const complaintApi = {
   queryComplaintPaged(data: QueryComplaintPagedInput) {
     return axiosUtil.request<PagedResult<QueryComplaintPagedOutput>>({
       url: "/complaint/queryComplaintPaged",
-      method: "post",
-      data,
-      requestType: "query",
-    });
-  },
-  /**
-   * 获取用户投诉分页列表
-   */
-  queryTenantComplaintPaged(data: QueryComplaintPagedInput) {
-    return axiosUtil.request<PagedResult<QueryComplaintPagedOutput>>({
-      url: "/complaint/queryTenantComplaintPaged",
       method: "post",
       data,
       requestType: "query",

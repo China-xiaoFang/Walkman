@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Dictionary.Dto.DictionaryIdInput 字典Id输入
+ * Fast.Admin.Service.Dictionary.Dto.DictionaryIdInput 字典Id输入
  */
 export interface DictionaryIdInput {
   /**

@@ -3,7 +3,7 @@ import { PagedInput, PagedResult } from "fast-element-plus";
 import { RefundRecordModel } from "./models/RefundRecordModel";
 
 /**
- * Fast.Center.Service.RefundRecord.RefundRecordService 退款记录服务Api
+ * Fast.Admin.Service.RefundRecord.RefundRecordService 退款记录服务Api
  */
 export const refundRecordApi = {
   /**

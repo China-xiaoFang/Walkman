@@ -2,7 +2,7 @@ import { PagedInput } from "fast-element-plus";
 import { VisitTypeEnum } from "@/api/enums/VisitTypeEnum";
 
 /**
- * Fast.Center.Service.VisitLog.Dto.QueryVisitLogPagedInput 获取访问日志分页列表输入
+ * Fast.Admin.Service.VisitLog.Dto.QueryVisitLogPagedInput 获取访问日志分页列表输入
  */
 export interface QueryVisitLogPagedInput extends PagedInput  {
   /**
@@ -13,10 +13,6 @@ export interface QueryVisitLogPagedInput extends PagedInput  {
    * 
    */
   visitType?: VisitTypeEnum;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
   /**
    * 
    */

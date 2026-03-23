@@ -2,7 +2,7 @@ import { PasswordOperationTypeEnum } from "@/api/enums/PasswordOperationTypeEnum
 import { PasswordTypeEnum } from "@/api/enums/PasswordTypeEnum";
 
 /**
- * Fast.Center.Service.PasswordRecord.Dto.QueryPasswordRecordPagedOutput 获取密码记录分页列表输出
+ * Fast.Admin.Service.PasswordRecord.Dto.QueryPasswordRecordPagedOutput 获取密码记录分页列表输出
  */
 export interface QueryPasswordRecordPagedOutput {
   /**
@@ -30,17 +30,9 @@ export interface QueryPasswordRecordPagedOutput {
    */
   createdTime?: Date;
   /**
-   * 账号Key
-   */
-  accountKey?: string;
-  /**
    * 手机
    */
   mobile?: string;
-  /**
-   * 邮箱
-   */
-  email?: string;
   /**
    * 昵称
    */

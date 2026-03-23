@@ -2,7 +2,7 @@ import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { GenderEnum } from "@/api/enums/GenderEnum";
 
 /**
- * Fast.Center.Service.Account.Dto.QueryAccountDetailOutput 获取账号详情输出
+ * Fast.Admin.Service.Account.Dto.QueryAccountDetailOutput 获取账号详情输出
  */
 export interface QueryAccountDetailOutput {
   /**
@@ -13,10 +13,6 @@ export interface QueryAccountDetailOutput {
    * 手机
    */
   mobile?: string;
-  /**
-   * 邮箱
-   */
-  email?: string;
   /**
    * 微信用户Id
    */
@@ -46,10 +42,6 @@ export interface QueryAccountDetailOutput {
    */
   birthday?: Date;
   /**
-   * 初次登录租户
-   */
-  firstLoginTenantName?: string;
-  /**
    * 初次登录设备
    */
   firstLoginDevice?: string;
@@ -77,10 +69,6 @@ export interface QueryAccountDetailOutput {
    * 初次登录时间
    */
   firstLoginTime?: Date;
-  /**
-   * 最后登录租户
-   */
-  lastLoginTenantName?: string;
   /**
    * 最后登录设备
    */

@@ -1,9 +1,8 @@
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
-import { EditApplicationTemplateIdInput } from "./EditApplicationTemplateIdInput";
 
 /**
- * Fast.Center.Service.ApplicationOpenId.Dto.QueryApplicationOpenIdDetailOutput 获取应用标识详情输出
+ * Fast.Admin.Service.ApplicationOpenId.Dto.QueryApplicationOpenIdDetailOutput 获取应用标识详情输出
  */
 export interface QueryApplicationOpenIdDetailOutput {
   /**
@@ -35,46 +34,6 @@ export interface QueryApplicationOpenIdDetailOutput {
    */
   environmentType?: EnvironmentTypeEnum;
   /**
-   * 登录组件
-   */
-  loginComponent?: string;
-  /**
-   * WebSocket地址
-   */
-  webSocketUrl?: string;
-  /**
-   * 请求超时时间（毫秒）
-   */
-  requestTimeout?: number;
-  /**
-   * 请求加密
-   */
-  requestEncipher?: boolean;
-  /**
-   * 状态栏图片地址
-   */
-  statusBarImageUrl?: string;
-  /**
-   * 联系电话
-   */
-  contactPhone?: string;
-  /**
-   * 纬度
-   */
-  latitude?: number;
-  /**
-   * 经度
-   */
-  longitude?: number;
-  /**
-   * 地址
-   */
-  address?: string;
-  /**
-   * Banner图
-   */
-  bannerImages?: Array<string>;
-  /**
    * 微信商户号Id
    */
   weChatMerchantId?: number;
@@ -102,10 +61,6 @@ export interface QueryApplicationOpenIdDetailOutput {
    * 备注
    */
   remark?: string;
-  /**
-   * 模板Id信息
-   */
-  templateIdList?: Array<EditApplicationTemplateIdInput>;
   /**
    * 
    */

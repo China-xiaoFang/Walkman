@@ -9,17 +9,9 @@ export interface OperateLogModel {
    */
   recordId?: number;
   /**
-   * 职员Id
-   */
-  employeeId?: number;
-  /**
    * 工号
    */
   employeeNo?: string;
-  /**
-   * 姓名
-   */
-  employeeName?: string;
   /**
    * 手机
    */

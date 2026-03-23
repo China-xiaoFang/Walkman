@@ -1,13 +1,21 @@
 import { GenderEnum } from "@/api/enums/GenderEnum";
 
 /**
- * Fast.Admin.Service.Account.Dto.EditAccountInput 编辑账号输入
+ * Fast.Admin.Service.Login.Dto.ClientRegisterInput 客户端注册
  */
-export interface EditAccountInput {
+export interface ClientRegisterInput {
   /**
    * 手机
    */
   mobile?: string;
+  /**
+   * 密码
+   */
+  password?: string;
+  /**
+   * 验证码
+   */
+  verifyCode?: string;
   /**
    * 昵称
    */
@@ -24,13 +32,5 @@ export interface EditAccountInput {
    * 
    */
   sex?: GenderEnum;
-  /**
-   * 生日
-   */
-  birthday?: Date;
-  /**
-   * 
-   */
-  rowVersion?: number;
 }
 

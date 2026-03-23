@@ -1,5 +1,5 @@
 /**
- * Fast.CenterLog.Entity.SqlExceptionLogModel Sql异常日志Model类
+ * Fast.AdminLog.Entity.SqlExceptionLogModel Sql异常日志Model类
  */
 export interface SqlExceptionLogModel {
   /**
@@ -10,10 +10,6 @@ export interface SqlExceptionLogModel {
    * 账号Id
    */
   accountId?: number;
-  /**
-   * 账号
-   */
-  account?: string;
   /**
    * 手机
    */
@@ -47,14 +43,6 @@ export interface SqlExceptionLogModel {
    */
   stackTrace?: string;
   /**
-   * 原始Sql
-   */
-  rawSql?: string;
-  /**
-   * Sql参数
-   */
-  parameters?: string;
-  /**
    * 纯Sql，参数化之后的Sql
    */
   pureSql?: string;
@@ -62,14 +50,6 @@ export interface SqlExceptionLogModel {
    * 异常时间
    */
   createdTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
   /**
    * 
    */

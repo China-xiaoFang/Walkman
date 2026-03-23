@@ -27,52 +27,40 @@ export const schedulerApi = {
   /**
    * 获取调度器详情
    */
-  querySchedulerDetail(tenantId: number) {
+  querySchedulerDetail() {
     return axiosUtil.request<QuerySchedulerDetailOutput>({
       url: "/scheduler/querySchedulerDetail",
       method: "get",
-      params: {
-        tenantId,
-      },
       requestType: "query",
     });
   },
   /**
    * 启动调度器
    */
-  startScheduler(tenantId: number) {
+  startScheduler() {
     return axiosUtil.request({
       url: "/scheduler/startScheduler",
       method: "post",
-      params: {
-        tenantId,
-      },
       requestType: "other",
     });
   },
   /**
    * 停止调度器
    */
-  stopScheduler(tenantId: number) {
+  stopScheduler() {
     return axiosUtil.request({
       url: "/scheduler/stopScheduler",
       method: "post",
-      params: {
-        tenantId,
-      },
       requestType: "other",
     });
   },
   /**
    * 暂停调度作业
    */
-  stopSchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
+  stopSchedulerJob(data: SchedulerJobKeyInput) {
     return axiosUtil.request({
       url: "/scheduler/stopSchedulerJob",
       method: "post",
-      params: {
-        tenantId,
-      },
       data,
       requestType: "other",
     });
@@ -80,13 +68,10 @@ export const schedulerApi = {
   /**
    * 恢复调度作业
    */
-  resumeSchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
+  resumeSchedulerJob(data: SchedulerJobKeyInput) {
     return axiosUtil.request({
       url: "/scheduler/resumeSchedulerJob",
       method: "post",
-      params: {
-        tenantId,
-      },
       data,
       requestType: "other",
     });
@@ -94,13 +79,10 @@ export const schedulerApi = {
   /**
    * 立即执行调度作业
    */
-  triggerSchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
+  triggerSchedulerJob(data: SchedulerJobKeyInput) {
     return axiosUtil.request({
       url: "/scheduler/triggerSchedulerJob",
       method: "post",
-      params: {
-        tenantId,
-      },
       data,
       requestType: "other",
     });
@@ -108,13 +90,10 @@ export const schedulerApi = {
   /**
    * 获取调度作业日志
    */
-  querySchedulerJobLogs(tenantId: number, data: SchedulerJobKeyInput) {
+  querySchedulerJobLogs(data: SchedulerJobKeyInput) {
     return axiosUtil.request<string[]>({
       url: "/scheduler/querySchedulerJobLogs",
       method: "post",
-      params: {
-        tenantId,
-      },
       data,
       requestType: "query",
     });
@@ -122,13 +101,10 @@ export const schedulerApi = {
   /**
    * 获取调度作业运行次数
    */
-  querySchedulerJobRunNumber(tenantId: number, data: SchedulerJobKeyInput) {
+  querySchedulerJobRunNumber(data: SchedulerJobKeyInput) {
     return axiosUtil.request<number>({
       url: "/scheduler/querySchedulerJobRunNumber",
       method: "post",
-      params: {
-        tenantId,
-      },
       data,
       requestType: "query",
     });
@@ -136,13 +112,12 @@ export const schedulerApi = {
   /**
    * 获取全部调度作业
    */
-  queryAllSchedulerJob(jobGroup: SchedulerJobGroupEnum, tenantId: number) {
+  queryAllSchedulerJob(jobGroup: SchedulerJobGroupEnum) {
     return axiosUtil.request<QueryAllSchedulerJobOutput[]>({
       url: "/scheduler/queryAllSchedulerJob",
       method: "get",
       params: {
         jobGroup,
-        tenantId,
       },
       requestType: "query",
     });
@@ -150,13 +125,10 @@ export const schedulerApi = {
   /**
    * 获取调度作业
    */
-  querySchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
+  querySchedulerJob(data: SchedulerJobKeyInput) {
     return axiosUtil.request<SchedulerJobInfo>({
       url: "/scheduler/querySchedulerJob",
       method: "post",
-      params: {
-        tenantId,
-      },
       data,
       requestType: "query",
     });
@@ -186,13 +158,10 @@ export const schedulerApi = {
   /**
    * 删除调度作业
    */
-  deleteSchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
+  deleteSchedulerJob(data: SchedulerJobKeyInput) {
     return axiosUtil.request({
       url: "/scheduler/deleteSchedulerJob",
       method: "post",
-      params: {
-        tenantId,
-      },
       data,
       requestType: "delete",
     });
@@ -200,13 +169,10 @@ export const schedulerApi = {
   /**
    * 移除调度作业异常信息
    */
-  deleteSchedulerJobException(tenantId: number, data: SchedulerJobKeyInput) {
+  deleteSchedulerJobException(data: SchedulerJobKeyInput) {
     return axiosUtil.request({
       url: "/scheduler/deleteSchedulerJobException",
       method: "post",
-      params: {
-        tenantId,
-      },
       data,
       requestType: "delete",
     });

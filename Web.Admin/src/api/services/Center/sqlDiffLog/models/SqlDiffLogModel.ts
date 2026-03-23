@@ -1,7 +1,7 @@
 import { DiffLogTypeEnum } from "@/api/enums/DiffLogTypeEnum";
 
 /**
- * Fast.CenterLog.Entity.SqlDiffLogModel Sql差异日志Model类
+ * Fast.AdminLog.Entity.SqlDiffLogModel Sql差异日志Model类
  */
 export interface SqlDiffLogModel {
   /**
@@ -12,10 +12,6 @@ export interface SqlDiffLogModel {
    * 账号Id
    */
   accountId?: number;
-  /**
-   * 账号
-   */
-  account?: string;
   /**
    * 手机
    */
@@ -37,10 +33,6 @@ export interface SqlDiffLogModel {
    */
   tableDescription?: string;
   /**
-   * 业务数据
-   */
-  businessData?: any;
-  /**
    * 旧的列信息
    */
   beforeColumnList?: Array<any>;
@@ -53,14 +45,6 @@ export interface SqlDiffLogModel {
    */
   executeSeconds?: number;
   /**
-   * 原始Sql
-   */
-  rawSql?: string;
-  /**
-   * Sql参数
-   */
-  parameters?: string;
-  /**
    * 纯Sql，参数化之后的Sql
    */
   pureSql?: string;
@@ -68,14 +52,6 @@ export interface SqlDiffLogModel {
    * 差异时间
    */
   createdTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
   /**
    * 
    */

@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.WeChat.Dto.WeChatCode2PhoneNumberOutput 换取微信用户手机号输出
+ * Fast.Admin.Service.WeChat.Dto.WeChatCode2PhoneNumberOutput 换取微信用户手机号输出
  */
 export interface WeChatCode2PhoneNumberOutput {
   /**

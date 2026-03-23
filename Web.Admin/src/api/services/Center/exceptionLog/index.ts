@@ -4,7 +4,7 @@ import { ExceptionLogModel } from "./models/ExceptionLogModel";
 import { QueryExceptionLogPagedInput } from "./models/QueryExceptionLogPagedInput";
 
 /**
- * Fast.Center.Service.ExceptionLog.ExceptionLogService 异常日志服务Api
+ * Fast.Admin.Service.ExceptionLog.ExceptionLogService 异常日志服务Api
  */
 export const exceptionLogApi = {
   /**

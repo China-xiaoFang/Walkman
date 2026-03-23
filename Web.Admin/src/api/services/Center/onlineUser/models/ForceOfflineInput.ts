@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.TenantOnlineUser.Dto.ForceOfflineInput 强制下线输入
+ * Fast.Admin.Service.OnlineUser.Dto.ForceOfflineInput 强制下线输入
  */
 export interface ForceOfflineInput {
   /**

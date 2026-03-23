@@ -2,17 +2,13 @@ import { WeChatUserTypeEnum } from "@/api/enums/WeChatUserTypeEnum";
 import { GenderEnum } from "@/api/enums/GenderEnum";
 
 /**
- * Fast.Center.Service.WeChat.Dto.QueryWeChatUserPagedOutput 获取微信用户分页列表输出
+ * Fast.Admin.Service.WeChat.Dto.QueryWeChatUserPagedOutput 获取微信用户分页列表输出
  */
 export interface QueryWeChatUserPagedOutput {
   /**
    * 微信用户Id
    */
   weChatId?: number;
-  /**
-   * 应用Id
-   */
-  appId?: number;
   /**
    * 
    */
@@ -65,6 +61,10 @@ export interface QueryWeChatUserPagedOutput {
    * 语言
    */
   language?: string;
+  /**
+   * 激活时间
+   */
+  activationTime?: Date;
   /**
    * 最后登录设备
    */

@@ -1,19 +1,14 @@
-import { EditionEnum } from "@/api/enums/EditionEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
- * Fast.Center.Service.Menu.Dto.EditMenuButtonInput 编辑菜单按钮输入
+ * Fast.Admin.Service.Menu.Dto.EditMenuButtonInput 编辑菜单按钮输入
  */
 export interface EditMenuButtonInput {
   /**
    * 按钮Id
    */
   buttonId?: number;
-  /**
-   * 
-   */
-  edition?: EditionEnum;
   /**
    * 按钮编码
    */

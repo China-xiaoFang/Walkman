@@ -4,7 +4,7 @@ import { SqlExceptionLogModel } from "./models/SqlExceptionLogModel";
 import { QuerySqlExceptionLogPagedInput } from "./models/QuerySqlExceptionLogPagedInput";
 
 /**
- * Fast.Center.Service.SqlExceptionLog.SqlExceptionLogModelService Sql异常日志服务Api
+ * Fast.Admin.Service.SqlExceptionLog.SqlExceptionLogModelService Sql异常日志服务Api
  */
 export const sqlExceptionLogApi = {
   /**

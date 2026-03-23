@@ -1,7 +1,7 @@
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 
 /**
- * Fast.Center.Entity.PayRecordModel 支付记录表Model类
+ * Fast.Admin.Entity.PayRecordModel 支付记录表Model类
  */
 export interface PayRecordModel {
   /**
@@ -108,10 +108,6 @@ export interface PayRecordModel {
    * 更新时间
    */
   updatedTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
   /**
    * 更新版本控制字段
    */

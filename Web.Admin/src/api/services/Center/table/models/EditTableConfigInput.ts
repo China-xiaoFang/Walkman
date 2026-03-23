@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Table.Dto.EditTableConfigInput 编辑表格配置输入
+ * Fast.Admin.Service.Table.Dto.EditTableConfigInput 编辑表格配置输入
  */
 export interface EditTableConfigInput {
   /**

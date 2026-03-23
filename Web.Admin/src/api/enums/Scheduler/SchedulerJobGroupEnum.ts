@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Enum.SchedulerJobGroupEnum 调度作业分组枚举
+ * Fast.Admin.Enum.SchedulerJobGroupEnum 调度作业分组枚举
  */
 export enum SchedulerJobGroupEnum {
   /**

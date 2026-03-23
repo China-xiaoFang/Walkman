@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Table.Dto.QueryTableColumnConfigOutput 获取表格列配置输出
+ * Fast.Admin.Service.Table.Dto.QueryTableColumnConfigOutput 获取表格列配置输出
  */
 export interface QueryTableColumnConfigOutput {
   /**

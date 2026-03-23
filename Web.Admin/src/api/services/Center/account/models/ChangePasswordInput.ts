@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Account.Dto.ChangePasswordInput 账号修改密码输入
+ * Fast.Admin.Service.Account.Dto.ChangePasswordInput 账号修改密码输入
  */
 export interface ChangePasswordInput {
   /**

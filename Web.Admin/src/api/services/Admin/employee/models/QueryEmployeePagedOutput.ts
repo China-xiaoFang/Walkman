@@ -161,10 +161,6 @@ export interface QueryEmployeePagedOutput {
    */
   roleNames?: string;
   /**
-   * 账户
-   */
-  account?: string;
-  /**
    * 
    */
   accountStatus?: CommonStatusEnum;
@@ -172,10 +168,6 @@ export interface QueryEmployeePagedOutput {
    * 账号手机
    */
   accountMobile?: string;
-  /**
-   * 账号邮箱
-   */
-  accountEmail?: string;
   /**
    * 账号昵称
    */

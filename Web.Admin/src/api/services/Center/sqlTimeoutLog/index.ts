@@ -4,7 +4,7 @@ import { SqlTimeoutLogModel } from "./models/SqlTimeoutLogModel";
 import { QuerySqlTimeoutLogPagedInput } from "./models/QuerySqlTimeoutLogPagedInput";
 
 /**
- * Fast.Center.Service.SqlTimeoutLog.SqlTimeoutLogModelService Sql超时日志服务Api
+ * Fast.Admin.Service.SqlTimeoutLog.SqlTimeoutLogModelService Sql超时日志服务Api
  */
 export const sqlTimeoutLogApi = {
   /**

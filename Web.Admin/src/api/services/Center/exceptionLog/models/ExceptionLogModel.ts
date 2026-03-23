@@ -1,5 +1,5 @@
 /**
- * Fast.CenterLog.Entity.ExceptionLogModel 异常日志Model类
+ * Fast.AdminLog.Entity.ExceptionLogModel 异常日志Model类
  */
 export interface ExceptionLogModel {
   /**
@@ -10,10 +10,6 @@ export interface ExceptionLogModel {
    * 账号Id
    */
   accountId?: number;
-  /**
-   * 账号
-   */
-  account?: string;
   /**
    * 手机
    */
@@ -50,14 +46,6 @@ export interface ExceptionLogModel {
    * 异常时间
    */
   createdTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
   /**
    * 
    */

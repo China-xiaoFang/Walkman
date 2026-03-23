@@ -3,7 +3,7 @@ import { HttpRequestActionEnum } from "@/api/enums/HttpRequestActionEnum";
 import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
 
 /**
- * Fast.Center.Service.RequestLog.Dto.QueryRequestLogPagedInput 获取请求日志分页列表输入
+ * Fast.Admin.Service.RequestLog.Dto.QueryRequestLogPagedInput 获取请求日志分页列表输入
  */
 export interface QueryRequestLogPagedInput extends PagedInput  {
   /**
@@ -22,10 +22,6 @@ export interface QueryRequestLogPagedInput extends PagedInput  {
    * 
    */
   requestMethod?: HttpRequestMethodEnum;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
   /**
    * 
    */

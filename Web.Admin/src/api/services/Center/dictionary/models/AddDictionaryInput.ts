@@ -2,7 +2,7 @@ import { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
 import { AddDictionaryItemInput } from "./AddDictionaryItemInput";
 
 /**
- * Fast.Center.Service.Dictionary.Dto.AddDictionaryInput 添加字典输入
+ * Fast.Admin.Service.Dictionary.Dto.AddDictionaryInput 添加字典输入
  */
 export interface AddDictionaryInput {
   /**

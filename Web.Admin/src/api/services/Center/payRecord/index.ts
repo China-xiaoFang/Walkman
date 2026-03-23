@@ -3,7 +3,7 @@ import { PagedInput, PagedResult } from "fast-element-plus";
 import { PayRecordModel } from "./models/PayRecordModel";
 
 /**
- * Fast.Center.Service.PayRecord.PayRecordService 支付记录服务Api
+ * Fast.Admin.Service.PayRecord.PayRecordService 支付记录服务Api
  */
 export const payRecordApi = {
   /**

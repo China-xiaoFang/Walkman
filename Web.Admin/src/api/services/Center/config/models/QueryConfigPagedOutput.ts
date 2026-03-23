@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Config.Dto.QueryConfigPagedOutput 获取配置分页列表输出
+ * Fast.Admin.Service.Config.Dto.QueryConfigPagedOutput 获取配置分页列表输出
  */
 export interface QueryConfigPagedOutput {
   /**

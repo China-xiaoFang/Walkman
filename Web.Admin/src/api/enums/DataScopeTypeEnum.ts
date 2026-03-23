@@ -1,5 +1,5 @@
 /**
- * Fast.Admin.Enum.DataScopeTypeEnum 数据范围类型枚举
+ * Fast.Shared.DataScopeTypeEnum 数据范围类型枚举
  */
 export enum DataScopeTypeEnum {
   /**

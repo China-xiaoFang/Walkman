@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Enum.ComplaintTypeEnum 投诉类型枚举
+ * Fast.Admin.Enum.ComplaintTypeEnum 投诉类型枚举
  */
 export enum ComplaintTypeEnum {
   /**

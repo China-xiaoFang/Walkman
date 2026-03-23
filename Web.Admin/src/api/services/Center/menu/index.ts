@@ -8,7 +8,7 @@ import { EditMenuInput } from "./models/EditMenuInput";
 import { MenuIdInput } from "./models/MenuIdInput";
 
 /**
- * Fast.Center.Service.Menu.MenuService 菜单服务Api
+ * Fast.Admin.Service.Menu.MenuService 菜单服务Api
  */
 export const menuApi = {
   /**

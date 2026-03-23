@@ -18,10 +18,6 @@ export interface EditSchedulerJobInput {
    */
   oldJobGroup?: SchedulerJobGroupEnum;
   /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
    * 作业名称
    */
   jobName?: string;

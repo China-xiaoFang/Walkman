@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Complaint.Dto.HandleComplaintInput 处理投诉输入
+ * Fast.Admin.Service.Complaint.Dto.HandleComplaintInput 处理投诉输入
  */
 export interface HandleComplaintInput {
   /**

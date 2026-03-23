@@ -1,7 +1,7 @@
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
 
 /**
- * Fast.Center.Service.Dictionary.Dto.AddDictionaryInput.AddDictionaryItemInput 添加字典项输入
+ * Fast.Admin.Service.Dictionary.Dto.AddDictionaryInput.AddDictionaryItemInput 添加字典项输入
  */
 export interface AddDictionaryItemInput {
   /**

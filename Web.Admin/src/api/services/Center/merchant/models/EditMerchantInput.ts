@@ -1,7 +1,7 @@
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 
 /**
- * Fast.Center.Service.Merchant.Dto.EditMerchantInput 编辑商户号输入
+ * Fast.Admin.Service.Merchant.Dto.EditMerchantInput 编辑商户号输入
  */
 export interface EditMerchantInput {
   /**

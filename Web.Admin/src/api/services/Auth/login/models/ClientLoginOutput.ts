@@ -1,9 +1,9 @@
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 
 /**
- * Fast.Center.Service.Login.Dto.WeChatClientLoginOutput 微信客户端登录输出
+ * Fast.Admin.Service.Login.Dto.ClientLoginOutput 客户端登录输出
  */
-export interface WeChatClientLoginOutput {
+export interface ClientLoginOutput {
   /**
    * 
    */

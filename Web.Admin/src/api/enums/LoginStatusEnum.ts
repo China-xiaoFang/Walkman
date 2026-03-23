@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Login.Dto.LoginStatusEnum 登录状态枚举
+ * Fast.Admin.Service.Login.Dto.LoginStatusEnum 登录状态枚举
  */
 export enum LoginStatusEnum {
   /**
@@ -7,15 +7,11 @@ export enum LoginStatusEnum {
    */
   Success = 1,
   /**
-   * 选择租户
-   */
-  SelectTenant = 2,
-  /**
    * 授权过期
    */
-  AuthExpired = 4,
+  AuthExpired = 2,
   /**
    * 无账号
    */
-  NotAccount = 8,
+  NotAccount = 4,
 }

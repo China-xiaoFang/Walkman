@@ -1,7 +1,7 @@
 import { GenderEnum } from "@/api/enums/GenderEnum";
 
 /**
- * Fast.Center.Service.WeChat.Dto.WeChatCode2SessionOutput 换取微信用户身份信息输出
+ * Fast.Admin.Service.WeChat.Dto.WeChatCode2SessionOutput 换取微信用户身份信息输出
  */
 export interface WeChatCode2SessionOutput {
   /**

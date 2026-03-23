@@ -7,7 +7,7 @@ import { EditConfigInput } from "./models/EditConfigInput";
 import { DeleteConfigCacheInput } from "./models/DeleteConfigCacheInput";
 
 /**
- * Fast.Center.Service.Config.ConfigService 配置服务Api
+ * Fast.Admin.Service.Config.ConfigService 配置服务Api
  */
 export const configApi = {
   /**

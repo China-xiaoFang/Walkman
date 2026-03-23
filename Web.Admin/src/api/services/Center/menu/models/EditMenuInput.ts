@@ -1,25 +1,16 @@
-import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditMenuButtonInput } from "./EditMenuButtonInput";
 
 /**
- * Fast.Center.Service.Menu.Dto.EditMenuInput 编辑菜单输入
+ * Fast.Admin.Service.Menu.Dto.EditMenuInput 编辑菜单输入
  */
 export interface EditMenuInput {
   /**
    * 菜单Id
    */
   menuId?: number;
-  /**
-   * 
-   */
-  edition?: EditionEnum;
-  /**
-   * 应用Id
-   */
-  appId?: number;
   /**
    * 菜单编码
    */

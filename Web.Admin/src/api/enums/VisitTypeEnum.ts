@@ -1,5 +1,5 @@
 /**
- * Fast.CenterLog.Enum.VisitTypeEnum 访问类型枚举
+ * Fast.AdminLog.Enum.VisitTypeEnum 访问类型枚举
  */
 export enum VisitTypeEnum {
   /**

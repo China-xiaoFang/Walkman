@@ -1,19 +1,19 @@
 import { axiosUtil } from "@fast-china/axios";
 import { PagedResult } from "fast-element-plus";
-import { TenantOnlineUserModel } from "./models/TenantOnlineUserModel";
+import { OnlineUserModel } from "./models/OnlineUserModel";
 import { QueryTenantOnlineUserPagedInput } from "./models/QueryTenantOnlineUserPagedInput";
 import { ForceOfflineInput } from "./models/ForceOfflineInput";
 
 /**
- * Fast.Center.Service.TenantOnlineUser.TenantOnlineUserService 在线用户服务Api
+ * Fast.Admin.Service.OnlineUser.OnlineUserService 在线用户服务Api
  */
-export const tenantOnlineUserApi = {
+export const onlineUserApi = {
   /**
    * 获取在线用户分页列表
    */
   queryTenantOnlineUserPaged(data: QueryTenantOnlineUserPagedInput) {
-    return axiosUtil.request<PagedResult<TenantOnlineUserModel>>({
-      url: "/tenantOnlineUser/queryTenantOnlineUserPaged",
+    return axiosUtil.request<PagedResult<OnlineUserModel>>({
+      url: "/onlineUser/queryTenantOnlineUserPaged",
       method: "post",
       data,
       requestType: "query",
@@ -24,7 +24,7 @@ export const tenantOnlineUserApi = {
    */
   forceOffline(data: ForceOfflineInput) {
     return axiosUtil.request({
-      url: "/tenantOnlineUser/forceOffline",
+      url: "/onlineUser/forceOffline",
       method: "post",
       data,
       requestType: "query",

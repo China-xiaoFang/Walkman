@@ -3,17 +3,13 @@ import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { GenderEnum } from "@/api/enums/GenderEnum";
 
 /**
- * Fast.Center.Service.Account.Dto.QueryAccountPagedInput 获取账号分页列表输入
+ * Fast.Admin.Service.Account.Dto.QueryAccountPagedInput 获取账号分页列表输入
  */
 export interface QueryAccountPagedInput extends PagedInput  {
   /**
    * 手机
    */
   mobile?: string;
-  /**
-   * 邮箱
-   */
-  email?: string;
   /**
    * 
    */

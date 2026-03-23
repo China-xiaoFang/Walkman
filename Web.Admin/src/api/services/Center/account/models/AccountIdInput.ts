@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Account.Dto.AccountIdInput 账号Id输入
+ * Fast.Admin.Service.Account.Dto.AccountIdInput 账号Id输入
  */
 export interface AccountIdInput {
   /**
