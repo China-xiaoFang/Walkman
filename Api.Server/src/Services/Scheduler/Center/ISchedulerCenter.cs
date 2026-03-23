@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
+using Fast.Admin.Enum;
 
 namespace Fast.Scheduler;
 
@@ -36,95 +36,78 @@ public interface ISchedulerCenter
     Task InitializeScheduler();
 
     /// <summary>
-    /// 同步调度程序
-    /// </summary>
-    /// <returns></returns>
-    Task SyncScheduler();
-
-    /// <summary>
     /// 获取调度器详情
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<QuerySchedulerDetailOutput> QuerySchedulerDetail(long? tenantId = null);
+    Task<QuerySchedulerDetailOutput> QuerySchedulerDetail();
 
     /// <summary>
     /// 启动调度器
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<bool> StartScheduler(long? tenantId = null);
+    Task<bool> StartScheduler();
 
     /// <summary>
     /// 停止调度器
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<bool> StopScheduler(long? tenantId = null);
+    Task<bool> StopScheduler();
 
     /// <summary>
     /// 暂停调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task StopSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null);
+    Task StopSchedulerJob(SchedulerJobKeyInput input);
 
     /// <summary>
     /// 恢复调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task ResumeSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null);
+    Task ResumeSchedulerJob(SchedulerJobKeyInput input);
 
     /// <summary>
     /// 立即执行调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task TriggerSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null);
+    Task TriggerSchedulerJob(SchedulerJobKeyInput input);
 
     /// <summary>
     /// 是否存在调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<bool> ExistsSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null);
+    Task<bool> ExistsSchedulerJob(SchedulerJobKeyInput input);
 
     /// <summary>
     /// 获取调度作业日志
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<List<string>> QuerySchedulerJobLogs(SchedulerJobKeyInput input, long? tenantId = null);
+    Task<List<string>> QuerySchedulerJobLogs(SchedulerJobKeyInput input);
 
     /// <summary>
     /// 获取调度作业运行次数
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<long> QuerySchedulerJobRunNumber(SchedulerJobKeyInput input, long? tenantId = null);
+    Task<long> QuerySchedulerJobRunNumber(SchedulerJobKeyInput input);
 
     /// <summary>
     /// 获取全部调度作业
     /// </summary>
     /// <param name="jobGroup"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<List<QueryAllSchedulerJobOutput>> QueryAllSchedulerJob(SchedulerJobGroupEnum? jobGroup = null, long? tenantId = null);
+    Task<List<QueryAllSchedulerJobOutput>> QueryAllSchedulerJob(SchedulerJobGroupEnum? jobGroup = null);
 
     /// <summary>
     /// 获取调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task<SchedulerJobInfo> QuerySchedulerJob(SchedulerJobKeyInput input, long? tenantId = null);
+    Task<SchedulerJobInfo> QuerySchedulerJob(SchedulerJobKeyInput input);
 
     /// <summary>
     /// 添加调度作业
@@ -145,16 +128,14 @@ public interface ISchedulerCenter
     /// 删除调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task DeleteSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null);
+    Task DeleteSchedulerJob(SchedulerJobKeyInput input);
 
     /// <summary>
     /// 移除调度作业异常信息
     /// </summary>
     /// <remarks>因为只能在 IJob 持久化操作 JobDataMap，所以这里直接暴力操作数据库</remarks>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    Task DeleteSchedulerJobException(SchedulerJobKeyInput input, long? tenantId = null);
+    Task DeleteSchedulerJobException(SchedulerJobKeyInput input);
 }

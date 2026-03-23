@@ -21,7 +21,7 @@
 // ------------------------------------------------------------------------
 
 using System.Collections;
-using Fast.Center.Enum;
+using Fast.Admin.Enum;
 
 namespace Fast.Admin.Service.Auth.Dto;
 

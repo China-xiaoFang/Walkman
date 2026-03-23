@@ -43,27 +43,12 @@ public class AuthUserInfo
     /// </summary>
     public virtual string ConnectionId { get; set; }
 
-    /// <summary>
-    /// 应用编号
-    /// </summary>
-    public virtual string AppNo { get; set; }
-
-    /// <summary>
-    /// 应用名称
-    /// </summary>
-    public virtual string AppName { get; set; }
-
     #region 账号
 
     /// <summary>
     /// 账号Id
     /// </summary>
     public virtual long AccountId { get; set; }
-
-    /// <summary>
-    /// 账号Key
-    /// </summary>
-    public virtual string AccountKey { get; set; }
 
     /// <summary>
     /// 手机
@@ -95,35 +80,6 @@ public class AuthUserInfo
     public virtual string WeChatOpenId { get; set; }
 
     #endregion
-
-    #region 租户
-
-    /// <summary>
-    /// 租户Id
-    /// </summary>
-    public virtual long TenantId { get; set; }
-
-    /// <summary>
-    /// 租户编号
-    /// </summary>
-    public virtual string TenantNo { get; set; }
-
-    /// <summary>
-    /// 租户名称
-    /// </summary>
-    public virtual string TenantName { get; set; }
-
-    /// <summary>
-    /// 租户编码
-    /// </summary>
-    public virtual string TenantCode { get; set; }
-
-    #endregion
-
-    /// <summary>
-    /// 用户Key
-    /// </summary>
-    public virtual string UserKey { get; set; }
 
     /// <summary>
     /// 职员Id

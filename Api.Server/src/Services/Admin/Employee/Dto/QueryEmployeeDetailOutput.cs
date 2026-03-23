@@ -71,11 +71,6 @@ public class QueryEmployeeDetailOutput
     public string IdPhoto { get; set; }
 
     /// <summary>
-    /// 初次工作日期
-    /// </summary>
-    public DateTime FirstWorkDate { get; set; }
-
-    /// <summary>
     /// 入职日期
     /// </summary>
     public DateTime EntryDate { get; set; }

@@ -21,9 +21,8 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.Admin.Service.Auth.Dto;
-using Fast.Center.Entity;
-using Fast.Center.Enum;
 using Fast.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,41 +54,18 @@ public class AuthService : IDynamicApplication
     [AllowForbidden, DisabledRequestLog]
     public async Task<GetLoginUserInfoOutput> GetLoginUserInfo()
     {
-        // 查询应用信息
-        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
-
-        if (applicationModel.AppType != GlobalContext.DeviceType)
-        {
-            throw new UserFriendlyException("应用类型不匹配！");
-        }
-
         var hasDesktop = (GlobalContext.DeviceType
                           & (AppEnvironmentEnum.Windows | AppEnvironmentEnum.Mac | AppEnvironmentEnum.Linux))
                          != 0;
         var hasWeb = (GlobalContext.DeviceType & AppEnvironmentEnum.Web) != 0;
         var hasMobile = GlobalContext.IsMobile;
 
-        // 查询租户信息
-        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
-
-        if (tenantModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("租户已被禁用！");
-        }
-
         var result = new GetLoginUserInfoOutput
         {
             AccountId = _user.AccountId,
-            AccountKey = _user.AccountKey,
             Mobile = _user.Mobile,
             NickName = _user.NickName,
             Avatar = _user.Avatar,
-            TenantNo = _user.TenantNo,
-            TenantName = _user.TenantName,
-            ShortName = tenantModel.ShortName,
-            TenantCode = _user.TenantCode,
-            LogoUrl = tenantModel.LogoUrl,
-            UserKey = _user.UserKey,
             EmployeeId = _user.EmployeeId,
             EmployeeNo = _user.EmployeeNo,
             EmployeeName = _user.EmployeeName,
@@ -124,10 +100,8 @@ public class AuthService : IDynamicApplication
             .ToList();
 
         var menuQueryable = _repository.Queryable<MenuModel>()
-            .Where(wh => wh.AppId == applicationModel.AppId)
             .Where(wh => wh.Status == CommonStatusEnum.Enable)
             .Where(wh => wh.MenuType != MenuTypeEnum.Catalog)
-            .Where(wh => tenantModel.Edition >= wh.Edition)
             .WhereIF(hasDesktop, wh => wh.HasDesktop)
             .WhereIF(hasWeb, wh => wh.HasWeb)
             .WhereIF(hasMobile, wh => wh.HasMobile);
@@ -187,9 +161,7 @@ public class AuthService : IDynamicApplication
             .ToList();
 
         var parentMenuList = await _repository.Queryable<MenuModel>()
-            .Where(wh => wh.AppId == applicationModel.AppId)
             .Where(wh => wh.Status == CommonStatusEnum.Enable)
-            .Where(wh => tenantModel.Edition >= wh.Edition)
             .WhereIF(hasDesktop, wh => wh.HasDesktop)
             .WhereIF(hasWeb, wh => wh.HasWeb)
             .WhereIF(hasMobile, wh => wh.HasMobile)
@@ -228,9 +200,7 @@ public class AuthService : IDynamicApplication
         if (!_user.IsSuperAdmin)
         {
             var buttonQueryable = _repository.Queryable<ButtonModel>()
-                .Where(wh => wh.AppId == applicationModel.AppId)
                 .Where(wh => wh.Status == CommonStatusEnum.Enable)
-                .Where(wh => tenantModel.Edition >= wh.Edition)
                 .WhereIF(hasDesktop, wh => wh.HasDesktop)
                 .WhereIF(hasWeb, wh => wh.HasWeb)
                 .WhereIF(hasMobile, wh => wh.HasMobile);
@@ -254,8 +224,6 @@ public class AuthService : IDynamicApplication
         await _user.RefreshAuth(new RefreshAuthDto
         {
             DeviceType = _user.DeviceType,
-            AppNo = _user.AppNo,
-            TenantNo = _user.TenantNo,
             EmployeeNo = _user.EmployeeNo,
             RoleIdList = roleList.Select(sl => sl.RoleId)
                 .ToList(),

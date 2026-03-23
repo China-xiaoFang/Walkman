@@ -2,11 +2,11 @@
   // 数据库连接字符串
   "ConnectionSettings": {
     // 默认库服务器Ip
-    "ServiceIp": "47.120.33.12",
+    "ServiceIp": "127.0.0.1",
     // 默认库端口号
-    "Port": 28333,
+    "Port": 1433,
     // 默认库数据库名称
-    "DbName": "WMCenter_Dev",
+    "DbName": "WMAdmin",
     // 默认库数据库用户
     "DbUser": "admin",
     // 默认库数据库密码

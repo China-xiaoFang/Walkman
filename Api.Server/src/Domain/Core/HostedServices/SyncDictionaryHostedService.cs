@@ -22,8 +22,8 @@
 
 using System.Reflection;
 using System.Text;
-using Fast.Center.Entity;
-using Fast.Center.Enum;
+using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.SqlSugar;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -35,7 +35,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="SyncDictionaryHostedService"/> 同步字典托管服务
 /// </summary>
-[Order(105)]
+[Order(104)]
 public class SyncDictionaryHostedService : IHostedService
 {
     /// <summary>

@@ -33,11 +33,6 @@ public class GetLoginUserInfoOutput
     public long AccountId { get; set; }
 
     /// <summary>
-    /// 账号Key
-    /// </summary>
-    public string AccountKey { get; set; }
-
-    /// <summary>
     /// 手机
     /// </summary>
     public string Mobile { get; set; }
@@ -51,36 +46,6 @@ public class GetLoginUserInfoOutput
     /// 头像
     /// </summary>
     public string Avatar { get; set; }
-
-    /// <summary>
-    /// 租户编号
-    /// </summary>
-    public string TenantNo { get; set; }
-
-    /// <summary>
-    /// 租户名称
-    /// </summary>
-    public string TenantName { get; set; }
-
-    /// <summary>
-    /// 租户简称
-    /// </summary>
-    public string ShortName { get; set; }
-
-    /// <summary>
-    /// 租户编码
-    /// </summary>
-    public string TenantCode { get; set; }
-
-    /// <summary>
-    /// 租户LogoUrl
-    /// </summary>
-    public string LogoUrl { get; set; }
-
-    /// <summary>
-    /// 用户Key
-    /// </summary>
-    public string UserKey { get; set; }
 
     /// <summary>
     /// 职员Id

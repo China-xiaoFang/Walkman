@@ -23,7 +23,6 @@
 using Fast.Admin.Entity;
 using Fast.Admin.Service.Department.Dto;
 using Fast.AdminLog.Enum;
-using Fast.Center.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,14 +36,11 @@ public class DepartmentService : IDynamicApplication
 {
     private readonly IUser _user;
     private readonly ISqlSugarRepository<DepartmentModel> _repository;
-    private readonly ISqlSugarRepository<TenantUserModel> _tenantUserRepository;
 
-    public DepartmentService(IUser user, ISqlSugarRepository<DepartmentModel> repository,
-        ISqlSugarRepository<TenantUserModel> tenantUserRepository)
+    public DepartmentService(IUser user, ISqlSugarRepository<DepartmentModel> repository)
     {
         _user = user;
         _repository = repository;
-        _tenantUserRepository = tenantUserRepository;
     }
 
     /// <summary>
@@ -435,11 +431,6 @@ public class DepartmentService : IDynamicApplication
                 DepartmentName = departmentModel.DepartmentName,
                 DepartmentNames = new List<string>(departmentModel.ParentNames) {departmentModel.DepartmentName}
             })
-            .Where(wh => wh.DepartmentId == departmentModel.DepartmentId)
-            .ExecuteCommandAsync();
-
-        await _tenantUserRepository.Updateable<TenantUserModel>()
-            .SetColumns(_ => new TenantUserModel {DepartmentName = departmentModel.DepartmentName})
             .Where(wh => wh.DepartmentId == departmentModel.DepartmentId)
             .ExecuteCommandAsync();
 

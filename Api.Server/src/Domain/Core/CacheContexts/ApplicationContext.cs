@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
+using Fast.Admin.Entity;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
 
@@ -71,7 +71,6 @@ public class ApplicationContext
             var repository = FastContext.GetService<ISqlSugarClient>();
 
             var result = repository.Queryable<ApplicationOpenIdModel>()
-                .Includes(e => e.Application)
                 .Where(wh => wh.OpenId == openId)
                 .Single();
 
@@ -124,7 +123,6 @@ public class ApplicationContext
             var repository = FastContext.GetService<ISqlSugarClient>();
 
             var result = await repository.Queryable<ApplicationOpenIdModel>()
-                .Includes(e => e.Application)
                 .Where(wh => wh.OpenId == openId)
                 .SingleAsync();
 

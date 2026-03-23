@@ -135,9 +135,10 @@ public class UnifyResponseProvider : IUnifyResponseProvider
 
         if (responseEncipherAttribute == null)
         {
-            // 获取应用信息
-            var applicationOpenIdModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
-            responseEncipher = applicationOpenIdModel.RequestEncipher;
+            // 获取配置
+            var requestEncryptionStr = await ConfigContext.GetConfig(ConfigConst.RequestEncryption);
+            var requestEncryption = bool.TryParse(requestEncryptionStr, out var flag) && flag;
+            responseEncipher = requestEncryption;
         }
         else if (responseEncipherAttribute.Enable)
         {

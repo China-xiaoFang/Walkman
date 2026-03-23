@@ -25,19 +25,30 @@ namespace Fast.Admin.Entity;
 /// <summary>
 /// <see cref="EmployeeModel"/> 职员表Model类
 /// </summary>
-/// <remarks>这里的主键Id 和 Center 库 TenantUser 表主键Id 一致</remarks>
 [SugarTable("Employee", "职员表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
 [SugarIndex($"IX_{{table}}_{nameof(EmployeeNo)}", nameof(EmployeeNo), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(AccountId)}", nameof(AccountId), OrderByType.Asc, true)]
 public class EmployeeModel : IUpdateVersion
 {
     /// <summary>
     /// 职员Id
     /// </summary>
-    /// <remarks>绑定 Center 库 TenantUser 表主键Id</remarks>
     [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 账号Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "账号Id")]
+    public long AccountId { get; set; }
+
+    /// <summary>
+    /// 用户类型
+    /// </summary>
+    [SugarColumn(ColumnDescription = "用户类型")]
+    public UserTypeEnum UserType { get; set; }
 
     /// <summary>
     /// 工号
@@ -83,12 +94,6 @@ public class EmployeeModel : IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "证件照", Length = 200)]
     public string IdPhoto { get; set; }
-
-    /// <summary>
-    /// 初次工作日期
-    /// </summary>
-    [SugarColumn(ColumnDescription = "初次工作日期")]
-    public DateTime FirstWorkDate { get; set; }
 
     /// <summary>
     /// 入职日期

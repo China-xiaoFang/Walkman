@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
+using Fast.Admin.Entity;
 
 namespace Fast.Core;
 
@@ -47,7 +47,7 @@ public interface IChatClient
     /// </summary>
     /// <param name="onlineUser"></param>
     /// <returns></returns>
-    Task ElsewhereLogin(TenantOnlineUserModel onlineUser);
+    Task ElsewhereLogin(OnlineUserModel onlineUser);
 
     /// <summary>
     /// 强制下线

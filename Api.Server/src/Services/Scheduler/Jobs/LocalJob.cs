@@ -21,7 +21,7 @@
 // ------------------------------------------------------------------------
 
 using System.Web;
-using Fast.Center.Enum;
+using Fast.Admin.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -81,10 +81,6 @@ internal class LocalJob : JobBase<SchedulerJobLogInfo>
                 InfoLog = InfoLog,
                 WarnLog = WarnLog,
                 ErrorLog = ErrorLog,
-                TenantId = _logInfo.TenantId,
-                TenantName = _logInfo.TenantName,
-                TenantNo = _logInfo.TenantNo,
-                TenantCode = _logInfo.TenantCode,
                 RobotInfo = _logInfo.RobotInfo
             });
 

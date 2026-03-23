@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
+using Fast.Admin.Enum;
 using Fast.Core;
 using Fast.DynamicApplication;
 using Microsoft.AspNetCore.Authorization;
@@ -84,139 +84,128 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 获取调度器详情
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取调度器详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Detail)]
-    public async Task<QuerySchedulerDetailOutput> QuerySchedulerDetail(long? tenantId = null)
+    public async Task<QuerySchedulerDetailOutput> QuerySchedulerDetail()
     {
-        return await _schedulerCenter.QuerySchedulerDetail(tenantId);
+        return await _schedulerCenter.QuerySchedulerDetail();
     }
 
     /// <summary>
     /// 启动调度器
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("启动调度器", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.Start)]
-    public async Task StartScheduler(long? tenantId = null)
+    public async Task StartScheduler()
     {
-        await _schedulerCenter.StartScheduler(tenantId);
+        await _schedulerCenter.StartScheduler();
     }
 
     /// <summary>
     /// 停止调度器
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("停止调度器", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.Stop)]
-    public async Task StopScheduler(long? tenantId = null)
+    public async Task StopScheduler()
     {
-        await _schedulerCenter.StopScheduler(tenantId);
+        await _schedulerCenter.StopScheduler();
     }
 
     /// <summary>
     /// 暂停调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("暂停调度作业", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.StopJob)]
-    public async Task StopSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task StopSchedulerJob(SchedulerJobKeyInput input)
     {
-        await _schedulerCenter.StopSchedulerJob(input, tenantId);
+        await _schedulerCenter.StopSchedulerJob(input);
     }
 
     /// <summary>
     /// 恢复调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("恢复调度作业", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.ResumeJob)]
-    public async Task ResumeSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task ResumeSchedulerJob(SchedulerJobKeyInput input)
     {
-        await _schedulerCenter.ResumeSchedulerJob(input, tenantId);
+        await _schedulerCenter.ResumeSchedulerJob(input);
     }
 
     /// <summary>
     /// 立即执行调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("立即执行调度作业", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.Trigger)]
-    public async Task TriggerSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task TriggerSchedulerJob(SchedulerJobKeyInput input)
     {
-        await _schedulerCenter.TriggerSchedulerJob(input, tenantId);
+        await _schedulerCenter.TriggerSchedulerJob(input);
     }
 
     /// <summary>
     /// 获取调度作业日志
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取调度作业日志", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Detail)]
-    public async Task<List<string>> QuerySchedulerJobLogs(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task<List<string>> QuerySchedulerJobLogs(SchedulerJobKeyInput input)
     {
-        return await _schedulerCenter.QuerySchedulerJobLogs(input, tenantId);
+        return await _schedulerCenter.QuerySchedulerJobLogs(input);
     }
 
     /// <summary>
     /// 获取调度作业运行次数
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取调度作业运行次数", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Detail)]
-    public async Task<long> QuerySchedulerJobRunNumber(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task<long> QuerySchedulerJobRunNumber(SchedulerJobKeyInput input)
     {
-        return await _schedulerCenter.QuerySchedulerJobRunNumber(input, tenantId);
+        return await _schedulerCenter.QuerySchedulerJobRunNumber(input);
     }
 
     /// <summary>
     /// 获取全部调度作业
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <param name="jobGroup"></param>
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取全部调度作业", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Paged)]
-    public async Task<List<QueryAllSchedulerJobOutput>> QueryAllSchedulerJob(SchedulerJobGroupEnum? jobGroup = null,
-        long? tenantId = null)
+    public async Task<List<QueryAllSchedulerJobOutput>> QueryAllSchedulerJob(SchedulerJobGroupEnum? jobGroup = null)
     {
-        return await _schedulerCenter.QueryAllSchedulerJob(jobGroup, tenantId);
+        return await _schedulerCenter.QueryAllSchedulerJob(jobGroup);
     }
 
     /// <summary>
     /// 获取调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取调度作业", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Detail)]
-    public async Task<SchedulerJobInfo> QuerySchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task<SchedulerJobInfo> QuerySchedulerJob(SchedulerJobKeyInput input)
     {
-        return await _schedulerCenter.QuerySchedulerJob(input, tenantId);
+        return await _schedulerCenter.QuerySchedulerJob(input);
     }
 
     /// <summary>
@@ -249,27 +238,25 @@ public class SchedulerApplication : IDynamicApplication
     /// 删除调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除调度作业", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Scheduler.Delete)]
-    public async Task DeleteSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task DeleteSchedulerJob(SchedulerJobKeyInput input)
     {
-        await _schedulerCenter.DeleteSchedulerJob(input, tenantId);
+        await _schedulerCenter.DeleteSchedulerJob(input);
     }
 
     /// <summary>
     /// 移除调度作业异常信息
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("移除调度作业异常信息", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Scheduler.Delete)]
-    public async Task DeleteSchedulerJobException(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task DeleteSchedulerJobException(SchedulerJobKeyInput input)
     {
-        await _schedulerCenter.DeleteSchedulerJobException(input, tenantId);
+        await _schedulerCenter.DeleteSchedulerJobException(input);
     }
 }

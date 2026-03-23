@@ -22,7 +22,7 @@
 
 using System.Diagnostics;
 using System.Reflection;
-using Fast.CenterLog.Entity;
+using Fast.AdminLog.Entity;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -40,11 +40,6 @@ namespace Fast.Core;
 public class RequestActionFilter : IAsyncActionFilter
 {
     /// <summary>
-    /// SqlSugar实体服务
-    /// </summary>
-    private readonly ISqlSugarEntityService _sqlSugarEntityService;
-
-    /// <summary>
     /// 日志
     /// </summary>
     private readonly ILogger _logger;
@@ -52,11 +47,9 @@ public class RequestActionFilter : IAsyncActionFilter
     /// <summary>
     /// <see cref="RequestActionFilter"/> 请求日志拦截
     /// </summary>
-    /// <param name="sqlSugarEntityService"><see cref="ISqlSugarEntityService"/> SqlSugar实体服务</param>
     /// <param name="logger"><see cref="ILogger"/> 日志</param>
-    public RequestActionFilter(ISqlSugarEntityService sqlSugarEntityService, ILogger<IAsyncActionFilter> logger)
+    public RequestActionFilter(ILogger<IAsyncActionFilter> logger)
     {
-        _sqlSugarEntityService = sqlSugarEntityService;
         _logger = logger;
     }
 
@@ -94,9 +87,7 @@ public class RequestActionFilter : IAsyncActionFilter
         }
 
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
         var requestLogModel = new RequestLogModel
         {
@@ -120,9 +111,7 @@ public class RequestActionFilter : IAsyncActionFilter
             DepartmentName = _user?.DepartmentName,
             CreatedUserId = _user?.EmployeeId,
             CreatedUserName = _user?.EmployeeName,
-            CreatedTime = dateTime,
-            TenantId = _user?.TenantId,
-            TenantName = _user?.TenantName
+            CreatedTime = dateTime
         };
         requestLogModel.RecordCreate(httpContext);
 

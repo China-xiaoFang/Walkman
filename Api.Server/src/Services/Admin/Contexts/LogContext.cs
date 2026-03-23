@@ -44,12 +44,8 @@ public class LogContext
         try
         {
             var _user = FastContext.HttpContext.RequestServices.GetService<IUser>();
-            var _sqlSugarEntityService = FastContext.HttpContext.RequestServices.GetService<ISqlSugarEntityService>();
-
             // 获取 AdminLog 库的连接字符串配置
-            var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId,
-                _user.TenantNo, DatabaseTypeEnum.AdminLog);
-            var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+            var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
             // 组装数据
             var operateLogModel = new OperateLogModel

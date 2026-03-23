@@ -68,12 +68,6 @@ public class EditEmployeeInput : UpdateVersionInput
     public string IdPhoto { get; set; }
 
     /// <summary>
-    /// 初次工作日期
-    /// </summary>
-    [DateTimeRequired(ErrorMessage = "初次工作日期不能为空")]
-    public DateTime FirstWorkDate { get; set; }
-
-    /// <summary>
     /// 入职日期
     /// </summary>
     [DateTimeRequired(ErrorMessage = "入职日期不能为空")]

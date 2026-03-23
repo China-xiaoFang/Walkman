@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
+using Fast.Admin.Enum;
 
 namespace Fast.Scheduler;
 
@@ -29,11 +29,6 @@ namespace Fast.Scheduler;
 /// </summary>
 public class AddSchedulerJobInput
 {
-    /// <summary>
-    /// 租户Id
-    /// </summary>
-    public long? TenantId { get; set; }
-
     /// <summary>
     /// 作业名称
     /// </summary>

@@ -20,7 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
 using SqlSugar;
 
 namespace Fast.Core;
@@ -49,15 +48,14 @@ internal static partial class MenuSeedData
     /// 默认菜单种子数据
     /// </summary>
     /// <param name="db"></param>
-    /// <param name="applicationModel"><see cref="ApplicationModel"/> 应用</param>
     /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
     /// <returns></returns>
-    public static async Task DefaultMenuSeedData(ISqlSugarClient db, ApplicationModel applicationModel, DateTime dateTime)
+    public static async Task DefaultMenuSeedData(ISqlSugarClient db, DateTime dateTime)
     {
         // 系统模块
-        await SystemModuleSeedData(db, applicationModel, dateTime);
+        await SystemModuleSeedData(db, dateTime);
 
         // 开发模块
-        await DevModuleSeedData(db, applicationModel, dateTime);
+        await DevModuleSeedData(db, dateTime);
     }
 }

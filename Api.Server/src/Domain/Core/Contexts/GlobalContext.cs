@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.SqlSugar;
+
 namespace Fast.Core;
 
 /// <summary>
@@ -28,6 +30,25 @@ namespace Fast.Core;
 [SuppressSniffer]
 public class GlobalContext
 {
+    /// <summary>
+    /// 日志库连接字符串配置
+    /// </summary>
+    public static ConnectionSettingsOptions LogConnectionSettings =>
+        new()
+        {
+            ConnectionId = $"{SqlSugarContext.ConnectionSettings.ConnectionId}_Log",
+            DbType = SqlSugarContext.ConnectionSettings.DbType,
+            CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut,
+            SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
+            DiffLog = false,
+            DisableAop = true,
+            ServiceIp = SqlSugarContext.ConnectionSettings.ServiceIp,
+            Port = SqlSugarContext.ConnectionSettings.Port,
+            DbName = $"{SqlSugarContext.ConnectionSettings.DbName}_Log",
+            DbUser = SqlSugarContext.ConnectionSettings.DbUser,
+            DbPwd = SqlSugarContext.ConnectionSettings.DbPwd
+        };
+
     /// <summary>
     /// 来源
     /// </summary>

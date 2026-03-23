@@ -43,27 +43,12 @@ public interface IUser
     /// </summary>
     string ConnectionId { get; set; }
 
-    /// <summary>
-    /// 应用编号
-    /// </summary>
-    string AppNo { get; set; }
-
-    /// <summary>
-    /// 应用名称
-    /// </summary>
-    string AppName { get; set; }
-
     #region 账号
 
     /// <summary>
     /// 账号Id
     /// </summary>
     long AccountId { get; set; }
-
-    /// <summary>
-    /// 账号Key
-    /// </summary>
-    string AccountKey { get; set; }
 
     /// <summary>
     /// 手机
@@ -95,35 +80,6 @@ public interface IUser
     string WeChatOpenId { get; set; }
 
     #endregion
-
-    #region 租户
-
-    /// <summary>
-    /// 租户Id
-    /// </summary>
-    long TenantId { get; set; }
-
-    /// <summary>
-    /// 租户编号
-    /// </summary>
-    string TenantNo { get; set; }
-
-    /// <summary>
-    /// 租户名称
-    /// </summary>
-    string TenantName { get; set; }
-
-    /// <summary>
-    /// 租户编码
-    /// </summary>
-    string TenantCode { get; set; }
-
-    #endregion
-
-    /// <summary>
-    /// 用户Key
-    /// </summary>
-    string UserKey { get; set; }
 
     /// <summary>
     /// 职员Id
@@ -237,11 +193,9 @@ public interface IUser
     /// 从缓存中获取授权用户信息
     /// </summary>
     /// <param name="deviceType"><see cref="AppEnvironmentEnum"/> 设备类型</param>
-    /// <param name="appNo"><see cref="string"/> 应用编号</param>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
     /// <param name="employeeNo"><see cref="string"/> 工号</param>
     /// <returns></returns>
-    Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType, string appNo, string tenantNo, string employeeNo);
+    Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType, string employeeNo);
 
     /// <summary>
     /// 统一登录
@@ -256,13 +210,6 @@ public interface IUser
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
     /// <returns></returns>
     Task ClientLogin(AuthUserInfo authUserInfo);
-
-    /// <summary>
-    /// 机器人登录
-    /// </summary>
-    /// <remarks>非调度作业请勿使用</remarks>
-    /// <returns></returns>
-    Task<string> RobotLogin();
 
     /// <summary>
     /// 刷新授权信息

@@ -23,7 +23,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using Fast.CenterLog.Entity;
+using Fast.AdminLog.Entity;
 using Fast.SqlSugar;
 using Fast.UnifyResult;
 using Microsoft.AspNetCore.Connections;
@@ -41,11 +41,6 @@ namespace Fast.Core;
 public class GlobalExceptionHandler : IGlobalExceptionHandler
 {
     /// <summary>
-    /// SqlSugar实体服务
-    /// </summary>
-    private readonly ISqlSugarEntityService _sqlSugarEntityService;
-
-    /// <summary>
     /// 日志
     /// </summary>
     private readonly ILogger _logger;
@@ -53,11 +48,9 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
     /// <summary>
     /// <see cref="GlobalExceptionHandler"/> 全局异常处理
     /// </summary>
-    /// <param name="sqlSugarEntityService"><see cref="ISqlSugarEntityService"/> SqlSugar实体服务</param>
     /// <param name="logger"><see cref="ILogger"/> 日志</param>
-    public GlobalExceptionHandler(ISqlSugarEntityService sqlSugarEntityService, ILogger<IGlobalExceptionHandler> logger)
+    public GlobalExceptionHandler(ILogger<IGlobalExceptionHandler> logger)
     {
-        _sqlSugarEntityService = sqlSugarEntityService;
         _logger = logger;
     }
 
@@ -174,9 +167,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                 methodName = groupCollection[1].Value;
 
             // 获取 CenterLog 库的连接字符串配置
-            var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-                CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-            var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+            var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
             var _user = httpContext.RequestServices.GetService<IUser>();
             var exceptionLogModel = new ExceptionLogModel
@@ -201,9 +192,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                 DepartmentName = _user?.DepartmentName,
                 CreatedUserId = _user?.EmployeeId,
                 CreatedUserName = _user?.EmployeeName,
-                CreatedTime = DateTime.Now,
-                TenantId = _user?.TenantId,
-                TenantName = _user?.TenantName
+                CreatedTime = DateTime.Now
             };
             exceptionLogModel.RecordCreate(httpContext);
 

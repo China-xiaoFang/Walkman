@@ -20,8 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.CenterLog.Entity;
-using Fast.CenterLog.Enum;
+using Fast.AdminLog.Entity;
+using Fast.AdminLog.Enum;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -41,11 +41,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     private readonly IUser _user;
 
     /// <summary>
-    /// SqlSugar实体服务
-    /// </summary>
-    private readonly ISqlSugarEntityService _sqlSugarEntityService;
-
-    /// <summary>
     /// 请求上下文
     /// </summary>
     private readonly HttpContext _httpContext;
@@ -59,14 +54,11 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     /// <see cref="SqlSugarEntityHandler"/> Sugar实体处理
     /// </summary>
     /// <param name="user"><see cref="IUser"/> 授权用户</param>
-    /// <param name="sqlSugarEntityService"><see cref="ISqlSugarEntityService"/> SqlSugar实体服务</param>
     /// <param name="httpContextAccessor"><see cref="IHttpContextAccessor"/> 请求上下文访问器</param>
     /// <param name="logger"><see cref="ILogger"/> 日志</param>
-    public SqlSugarEntityHandler(IUser user, ISqlSugarEntityService sqlSugarEntityService,
-        IHttpContextAccessor httpContextAccessor, ILogger<ISqlSugarEntityHandler> logger)
+    public SqlSugarEntityHandler(IUser user, IHttpContextAccessor httpContextAccessor, ILogger<ISqlSugarEntityHandler> logger)
     {
         _user = user;
-        _sqlSugarEntityService = sqlSugarEntityService;
         _httpContext = httpContextAccessor.HttpContext;
         _logger = logger;
     }
@@ -88,16 +80,10 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
 
         switch (databaseType)
         {
-            case DatabaseTypeEnum.Center:
-                return SqlSugarContext.ConnectionSettings;
-            case DatabaseTypeEnum.CenterLog:
-            case DatabaseTypeEnum.Gateway:
-            case DatabaseTypeEnum.Deploy:
-                return await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-                    CommonConst.Default.TenantNo, databaseType);
             case DatabaseTypeEnum.Admin:
+                return SqlSugarContext.ConnectionSettings;
             case DatabaseTypeEnum.AdminLog:
-                return await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, databaseType);
+                return GlobalContext.LogConnectionSettings;
             default:
                 throw new SqlSugarException("未知的 Database 类型！");
         }
@@ -112,12 +98,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     public async Task ExecuteAsync(string rawSql, SugarParameter[] parameters, TimeSpan executeTime, string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-        var tenantId = _user.TenantId;
-        var tenantNo = _user.TenantNo;
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
         // 组装数据
         var sqlExecutionLogModel = new SqlExecutionLogModel
@@ -132,9 +113,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             DepartmentName = _user.DepartmentName,
             CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
-            CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId,
-            TenantName = _user.TenantName
+            CreatedTime = DateTime.Now
         };
         sqlExecutionLogModel.RecordCreate(_httpContext);
 
@@ -152,7 +131,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"TenantId：{tenantId}；TenantNo：{tenantNo}；SqlSugar Aop 执行Sql，保存失败；{ex.Message}");
+                _logger.LogError(ex, $"SqlSugar Aop 执行Sql，保存失败；{ex.Message}");
             }
         });
 
@@ -173,12 +152,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         SugarParameter[] parameters, TimeSpan executeTime, string handlerSql, string message)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-        var tenantId = _user.TenantId;
-        var tenantNo = _user.TenantNo;
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
         // 组装数据
         var sqlTimeoutLogModel = new SqlTimeoutLogModel
@@ -196,9 +170,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             DepartmentName = _user.DepartmentName,
             CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
-            CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId,
-            TenantName = _user.TenantName
+            CreatedTime = DateTime.Now
         };
         sqlTimeoutLogModel.RecordCreate(_httpContext);
 
@@ -215,7 +187,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"TenantId：{tenantId}；TenantNo：{tenantNo}；SqlSugar Aop 执行Sql超时，保存失败；{ex.Message}");
+                _logger.LogError(ex, $"SqlSugar Aop 执行Sql超时，保存失败；{ex.Message}");
             }
         });
 
@@ -239,12 +211,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         SugarParameter[] parameters, TimeSpan? executeTime, string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-        var tenantId = _user.TenantId;
-        var tenantNo = _user.TenantNo;
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
         var diffLogType = diffType switch
         {
@@ -272,9 +239,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             DepartmentName = _user.DepartmentName,
             CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
-            CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId,
-            TenantName = _user.TenantName
+            CreatedTime = DateTime.Now
         };
         sqlDiffLogModel.RecordCreate(_httpContext);
 
@@ -292,7 +257,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"TenantId：{tenantId}；TenantNo：{tenantNo}；SqlSugar Aop 执行Sql差异，保存失败；{ex.Message}");
+                _logger.LogError(ex, $"SqlSugar Aop 执行Sql差异，保存失败；{ex.Message}");
             }
         });
 
@@ -312,12 +277,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         SugarParameter[] parameters, string handlerSql, SqlSugarException exception)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-        var tenantId = _user.TenantId;
-        var tenantNo = _user.TenantNo;
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
         // 组装数据
         var sqlExceptionLogModel = new SqlExceptionLogModel
@@ -337,9 +297,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             DepartmentName = _user.DepartmentName,
             CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
-            CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId,
-            TenantName = _user.TenantName
+            CreatedTime = DateTime.Now
         };
         sqlExceptionLogModel.RecordCreate(_httpContext);
 
@@ -356,7 +314,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"TenantId：{tenantId}；TenantNo：{tenantNo}；SqlSugar Aop 执行Sql错误，保存失败；{ex.Message}");
+                _logger.LogError(ex, $"SqlSugar Aop 执行Sql错误，保存失败；{ex.Message}");
             }
         });
 
@@ -381,7 +339,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     /// <returns></returns>
     public long? AssignTenantId()
     {
-        return _user.TenantId;
+        return null;
     }
 
     /// <summary>指派部门Id</summary>

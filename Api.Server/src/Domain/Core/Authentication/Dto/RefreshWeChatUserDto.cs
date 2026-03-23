@@ -33,11 +33,6 @@ public class RefreshWeChatUserDto
     public virtual AppEnvironmentEnum DeviceType { get; set; }
 
     /// <summary>
-    /// 应用编号
-    /// </summary>
-    public virtual string AppNo { get; set; }
-
-    /// <summary>
     /// 手机
     /// </summary>
     public virtual string Mobile { get; set; }
@@ -51,11 +46,6 @@ public class RefreshWeChatUserDto
     /// 头像
     /// </summary>
     public virtual string Avatar { get; set; }
-
-    /// <summary>
-    /// 租户编号
-    /// </summary>
-    public virtual string TenantNo { get; set; }
 
     /// <summary>
     /// 微信唯一用户标识

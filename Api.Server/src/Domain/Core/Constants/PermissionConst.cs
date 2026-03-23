@@ -27,7 +27,7 @@ namespace Fast.Core;
 /// </summary>
 /// <remarks>所有权限都在这里</remarks>
 [SuppressSniffer]
-public partial class PermissionConst
+public class PermissionConst
 {
     /// <summary>客户端服务</summary>
     public const string ClientService = "ClientService";
@@ -76,20 +76,20 @@ public partial class PermissionConst
         public const string Status = "Menu:Status";
     }
 
-    /// <summary><see cref="SysSerial"/> 系统序号</summary>
-    public class SysSerial
+    /// <summary><see cref="Serial"/> 序号</summary>
+    public class Serial
     {
-        /// <summary>系统序号列表</summary>
-        public const string Paged = "SysSerial:Paged";
+        /// <summary>序号列表</summary>
+        public const string Paged = "Serial:Paged";
 
-        /// <summary>系统序号详情</summary>
-        public const string Detail = "SysSerial:Detail";
+        /// <summary>序号详情</summary>
+        public const string Detail = "Serial:Detail";
 
-        /// <summary>系统序号新增</summary>
-        public const string Add = "SysSerial:Add";
+        /// <summary>序号新增</summary>
+        public const string Add = "Serial:Add";
 
-        /// <summary>系统序号编辑</summary>
-        public const string Edit = "SysSerial:Edit";
+        /// <summary>序号编辑</summary>
+        public const string Edit = "Serial:Edit";
     }
 
     /// <summary><see cref="Dictionary"/> 字典</summary>
@@ -189,82 +189,6 @@ public partial class PermissionConst
     /// <summary>文件列表</summary>
     public const string FilePaged = "File:Paged";
 
-    /// <summary><see cref="Tenant"/> 租户</summary>
-    public class Tenant
-    {
-        /// <summary>租户列表</summary>
-        public const string Paged = "Tenant:Paged";
-
-        /// <summary>租户详情</summary>
-        public const string Detail = "Tenant:Detail";
-
-        /// <summary>租户新增</summary>
-        public const string Add = "Tenant:Add";
-
-        /// <summary>租户编辑</summary>
-        public const string Edit = "Tenant:Edit";
-
-        /// <summary>租户状态更改</summary>
-        public const string Status = "Tenant:Status";
-    }
-
-    /// <summary><see cref="Database"/> 数据库</summary>
-    public class Database
-    {
-        /// <summary>数据库列表</summary>
-        public const string Paged = "Database:Paged";
-
-        /// <summary>数据库详情</summary>
-        public const string Detail = "Database:Detail";
-
-        /// <summary>数据库新增</summary>
-        public const string Add = "Database:Add";
-
-        /// <summary>数据库编辑</summary>
-        public const string Edit = "Database:Edit";
-
-        /// <summary>数据库删除</summary>
-        public const string Delete = "Database:Delete";
-    }
-
-    /// <summary><see cref="App"/> 应用</summary>
-    public class App
-    {
-        /// <summary>应用列表</summary>
-        public const string Paged = "App:Paged";
-
-        /// <summary>应用详情</summary>
-        public const string Detail = "App:Detail";
-
-        /// <summary>应用新增</summary>
-        public const string Add = "App:Add";
-
-        /// <summary>应用编辑</summary>
-        public const string Edit = "App:Edit";
-
-        /// <summary>应用删除</summary>
-        public const string Delete = "App:Delete";
-    }
-
-    /// <summary><see cref="AppOpenId"/> 应用标识</summary>
-    public class AppOpenId
-    {
-        /// <summary>应用标识列表</summary>
-        public const string Paged = "AppOpenId:Paged";
-
-        /// <summary>应用标识详情</summary>
-        public const string Detail = "AppOpenId:Detail";
-
-        /// <summary>应用标识新增</summary>
-        public const string Add = "AppOpenId:Add";
-
-        /// <summary>应用标识编辑</summary>
-        public const string Edit = "AppOpenId:Edit";
-
-        /// <summary>应用标识删除</summary>
-        public const string Delete = "AppOpenId:Delete";
-    }
-
     /// <summary><see cref="Account"/> 账号</summary>
     public class Account
     {
@@ -284,20 +208,23 @@ public partial class PermissionConst
         public const string Status = "Account:Status";
     }
 
-    /// <summary><see cref="Serial"/> 序号</summary>
-    public class Serial
+    /// <summary><see cref="AppOpenId"/> 应用标识</summary>
+    public class AppOpenId
     {
-        /// <summary>序号列表</summary>
-        public const string Paged = "Serial:Paged";
+        /// <summary>应用标识列表</summary>
+        public const string Paged = "AppOpenId:Paged";
 
-        /// <summary>序号详情</summary>
-        public const string Detail = "Serial:Detail";
+        /// <summary>应用标识详情</summary>
+        public const string Detail = "AppOpenId:Detail";
 
-        /// <summary>序号新增</summary>
-        public const string Add = "Serial:Add";
+        /// <summary>应用标识新增</summary>
+        public const string Add = "AppOpenId:Add";
 
-        /// <summary>序号编辑</summary>
-        public const string Edit = "Serial:Edit";
+        /// <summary>应用标识编辑</summary>
+        public const string Edit = "AppOpenId:Edit";
+
+        /// <summary>应用标识删除</summary>
+        public const string Delete = "AppOpenId:Delete";
     }
 
     /// <summary><see cref="Position"/> 职位</summary>
@@ -395,14 +322,14 @@ public partial class PermissionConst
         public const string Status = "Employee:Status";
     }
 
-    /// <summary><see cref="TenantOnlineUser"/> 在线用户</summary>
-    public class TenantOnlineUser
+    /// <summary><see cref="OnlineUser"/> 在线用户</summary>
+    public class OnlineUser
     {
         /// <summary>在线用户列表</summary>
-        public const string Paged = "TenantOnlineUser:Paged";
+        public const string Paged = "OnlineUser:Paged";
 
         /// <summary>强制下线</summary>
-        public const string ForceOffline = "TenantOnlineUser:ForceOffline";
+        public const string ForceOffline = "OnlineUser:ForceOffline";
     }
 
     /// <summary><see cref="Merchant"/> 商户号</summary>
@@ -448,15 +375,6 @@ public partial class PermissionConst
 
         /// <summary>处理投诉工单</summary>
         public const string Handle = "Complaint:Handle";
-
-        /// <summary>用户投诉列表</summary>
-        public const string TenantPaged = "Complaint:TenantPaged";
-
-        /// <summary>用户投诉详情</summary>
-        public const string TenantDetail = "Complaint:TenantDetail";
-
-        /// <summary>处理用户投诉</summary>
-        public const string TenantHandle = "Complaint:TenantHandle";
     }
 
     /// <summary>访问日志列表</summary>

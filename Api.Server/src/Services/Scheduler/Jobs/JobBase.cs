@@ -21,11 +21,10 @@
 // ------------------------------------------------------------------------
 
 using System.Diagnostics;
-using System.Reflection;
 using System.Web;
+using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.Cache;
-using Fast.Center.Entity;
-using Fast.Center.Enum;
 using Fast.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -237,88 +236,25 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         // 邮件消息
         MailMessage = context.JobDetail.JobDataMap.GetNullableEnum<MailMessageEnum>(nameof(SchedulerJobInfo.MailMessage))
                       ?? MailMessageEnum.None;
+        // 解析服务
+        var centerCache = scope.ServiceProvider.GetService<ICache<CenterCCL>>();
 
-        // 租户Id
-        _logInfo.TenantId = context.JobDetail.JobDataMap.GetNullableLong(nameof(SchedulerJobInfo.TenantId));
-
-        // 数据库连接字符串处理
-        if (_logInfo.TenantId != null)
+        // 获取机器人信息
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Rabot);
+        var robotInfo = await centerCache.GetAndSetAsync(cacheKey, async () =>
         {
-            var (tenantName, tenantNo, tenantCode, deviceId) =
-                SchedulerContext.SchedulerTenantList.GetValueOrDefault(_logInfo.TenantId.Value);
-            _logInfo.TenantName = tenantName;
-            _logInfo.TenantNo = tenantNo;
-            _logInfo.TenantCode = tenantCode;
+            var result = await db.Queryable<EmployeeModel>()
+                .Where(wh => wh.UserType == UserTypeEnum.Robot)
+                .SingleAsync();
 
-            // 解析服务
-            var centerCache = scope.ServiceProvider.GetService<ICache<CenterCCL>>();
-
-            // 获取机器人信息
-            var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Rabot, tenantNo);
-            var robotInfo = await centerCache.GetAndSetAsync(cacheKey, async () =>
+            if (result == null)
             {
-                var result = await db.Queryable<TenantUserModel>()
-                    .Where(wh => wh.TenantId == _logInfo.TenantId.Value)
-                    .Where(wh => wh.UserType == UserTypeEnum.Robot)
-                    .SingleAsync();
-
-                if (result == null)
-                {
-                    await ErrorLog(_logInfo.JobName, null, $"<pre class='error'>未能找到对应租户【{tenantNo}】机器人信息！</pre>");
-                }
-
-                return result;
-            });
-            _logInfo.RobotInfo = robotInfo;
-
-            // 注入 IUser
-            var _user = scope.ServiceProvider.GetService<IUser>();
-            // 设置授权用户
-            _user.SetAuthUser(new AuthUserInfo
-            {
-                DeviceType = AppEnvironmentEnum.Api,
-                DeviceId = deviceId,
-                AppNo = "Scheduler",
-                AppName = "调度程序",
-                NickName = robotInfo.EmployeeName,
-                Avatar = robotInfo.IdPhoto,
-                TenantId = _logInfo.TenantId.Value,
-                TenantNo = tenantNo,
-                TenantName = tenantName,
-                TenantCode = tenantCode,
-                EmployeeId = robotInfo.EmployeeId,
-                EmployeeNo = robotInfo.EmployeeNo,
-                EmployeeName = robotInfo.EmployeeName,
-                DepartmentId = robotInfo.DepartmentId,
-                DepartmentName = robotInfo.DepartmentName,
-                IsSuperAdmin = false,
-                IsAdmin = true,
-                LastLoginIp = MetadataContext.MetadataInfo.PublicIp,
-                LastLoginTime = DateTime.Now
-            });
-
-            // 判断是否是全部租户的，如果是则随机等待 500 ~ 5000 毫秒
-            var isAllTenant = context.JobDetail.JobDataMap.GetNullableBoolean(nameof(SchedulerJobInfo.IsAllTenant)) ?? false;
-            if (isAllTenant)
-            {
-                // 尝试获取本地调度作业的实现类
-                var localSchedulerJobType =
-                    SchedulerContext.LocalSchedulerJobTypes.GetValueOrDefault(
-                        new JobKey(context.JobDetail.Key.Name, context.JobDetail.Key.Group).ToString());
-
-                if (localSchedulerJobType?.GetCustomAttribute<DisableWaitAttribute>() == null)
-                {
-                    var random = new Random();
-                    var delay = random.Next(500, 5001);
-
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"All tenant job randomly wait {delay} milliseconds.");
-                    Console.ResetColor();
-
-                    await Task.Delay(delay);
-                }
+                await ErrorLog(_logInfo.JobName, null, "<pre class='error'>未能找到机器人信息！</pre>");
             }
-        }
+
+            return result;
+        });
+        _logInfo.RobotInfo = robotInfo;
 
         // 警告秒数
         var warnTime = context.JobDetail.JobDataMap.GetNullableInt(nameof(SchedulerJobInfo.WarnTime)) ?? _warnTime;

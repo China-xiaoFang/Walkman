@@ -21,8 +21,7 @@
 // ------------------------------------------------------------------------
 
 using System.Text;
-using Fast.Center.Entity;
-using Fast.Center.Enum;
+using Fast.Admin.Enum;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -82,8 +81,6 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// <param name="jobInfo"></param>
     private void SchedulerJobVerify(SchedulerJobInfo jobInfo)
     {
-        jobInfo.IsSystem = jobInfo.TenantId == null;
-
         if (string.IsNullOrWhiteSpace(jobInfo.JobName))
         {
             throw new UserFriendlyException("调度作业名称不能为空！");
@@ -375,7 +372,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         SchedulerJobVerify(jobInfo);
 
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(jobInfo.TenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         // 获取调度作业Key
         var jobKey = new JobKey(jobInfo.JobName, jobInfo.JobGroup.ToString());
@@ -394,12 +391,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 添加本地作业
     /// </summary>
     /// <param name="localJob"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    private async Task AddLocalJob(SchedulerLocalJobInfo localJob, long? tenantId = null)
+    private async Task AddLocalJob(SchedulerLocalJobInfo localJob)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         // 作业Key
         var jobKey = new JobKey(localJob.JobName, localJob.JobGroup.ToString());
@@ -427,7 +423,6 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         // 添加本地作业
         await AddSchedulerJob(new SchedulerJobInfo
         {
-            TenantId = tenantId,
             JobName = localJob.JobName,
             JobGroup = localJob.JobGroup,
             JobType = SchedulerJobTypeEnum.Local,
@@ -445,7 +440,6 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             RetryMillisecond = localJob.RetryMillisecond,
             MailMessage = localJob.MailMessage,
             Description = localJob.Description,
-            IsAllTenant = localJob.IsAllTenant,
             RunNumber = runNumber,
             Exception = exception,
             Logs = logs
@@ -495,8 +489,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 }
             }
 
-            foreach (var localJobEntity in allLocalJobList.Where(wh => !wh.IsAllTenant)
-                         .ToList())
+            foreach (var localJobEntity in allLocalJobList)
             {
                 // 添加本地作业
                 await AddLocalJob(localJobEntity);
@@ -504,32 +497,6 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
 
             // 启动核心调度器
             await StartScheduler();
-
-            var tenantList = await db.Queryable<TenantModel>()
-                // 数据库已经初始化的
-                .LeftJoin<MainDatabaseModel>((t1, t2) => t1.TenantId == t2.TenantId && t2.DatabaseType == DatabaseTypeEnum.Admin)
-                .Where((t1, t2) => t2.IsInitialized)
-                .Where(t1 => t1.Status == CommonStatusEnum.Enable)
-                .Select(t1 => new {t1.TenantId, t1.TenantNo, t1.TenantCode, t1.TenantName})
-                .ToListAsync();
-
-            foreach (var item in tenantList)
-            {
-                // 启动租户调度器
-                await StartScheduler(item.TenantId);
-                // 放入租户调度器缓存中
-                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, item.TenantCode, Guid
-                    .NewGuid()
-                    .ToString()));
-
-                // 循环租户本地作业
-                foreach (var localJobEntity in allLocalJobList.Where(wh => wh.IsAllTenant)
-                             .ToList())
-                {
-                    // 添加本地作业
-                    await AddLocalJob(localJobEntity, item.TenantId);
-                }
-            }
 
             // 调度程序初始化完成
             SchedulerContext.Initialized = true;
@@ -544,66 +511,12 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     }
 
     /// <summary>
-    /// 同步调度程序
-    /// </summary>
-    /// <returns></returns>
-    public async Task SyncScheduler()
-    {
-        // 获取锁
-        await semaphoreSlim.WaitAsync()
-            .ConfigureAwait(false);
-        try
-        {
-            // 获取未设置调度器的TenantId
-            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-            // 加载Aop
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
-
-            var tenantList = await db.Queryable<TenantModel>()
-                // 数据库已经初始化的
-                .LeftJoin<MainDatabaseModel>((t1, t2) => t1.TenantId == t2.TenantId && t2.DatabaseType == DatabaseTypeEnum.Admin)
-                .Where((t1, t2) => t2.IsInitialized)
-                .Where(t1 => t1.Status == CommonStatusEnum.Enable)
-                .Where(t1 => !SchedulerContext.SchedulerTenantList.Keys.ToList()
-                    .Contains(t1.TenantId))
-                .Select(t1 => new {t1.TenantId, t1.TenantNo, t1.TenantCode, t1.TenantName})
-                .ToListAsync();
-
-            foreach (var item in tenantList)
-            {
-                // 启动租户调度器
-                await StartScheduler(item.TenantId);
-                // 放入租户调度器缓存中
-                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, item.TenantCode, Guid
-                    .NewGuid()
-                    .ToString()));
-
-                // 循环租户本地作业
-                foreach (var localJobEntity in SchedulerContext.LocalSchedulerJobList.Where(wh => wh.IsAllTenant)
-                             .ToList())
-                {
-                    // 添加本地作业
-                    await AddLocalJob(localJobEntity, item.TenantId);
-                }
-            }
-
-            _logger.LogInformation($"Sync schedule. Add {tenantList.Count} new schedule.");
-        }
-        finally
-        {
-            // 释放锁
-            semaphoreSlim.Release();
-        }
-    }
-
-    /// <summary>
     /// 获取调度器详情
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<QuerySchedulerDetailOutput> QuerySchedulerDetail(long? tenantId = null)
+    public async Task<QuerySchedulerDetailOutput> QuerySchedulerDetail()
     {
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
         var metaData = await scheduler.GetMetaData();
 
         return new QuerySchedulerDetailOutput
@@ -639,12 +552,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// <summary>
     /// 启动调度器
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<bool> StartScheduler(long? tenantId = null)
+    public async Task<bool> StartScheduler()
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         // 判断调度器是否处于待机模式
         if (scheduler.InStandbyMode)
@@ -659,12 +571,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// <summary>
     /// 停止调度器
     /// </summary>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<bool> StopScheduler(long? tenantId = null)
+    public async Task<bool> StopScheduler()
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         // 判断调度器是否已经关闭
         if (!scheduler.InStandbyMode)
@@ -680,12 +591,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 暂停调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task StopSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task StopSchedulerJob(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         await scheduler.PauseJob(new JobKey(input.JobName, input.JobGroup.ToString()));
     }
@@ -694,12 +604,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 恢复调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task ResumeSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task ResumeSchedulerJob(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         var jobKey = new JobKey(input.JobName, input.JobGroup.ToString());
 
@@ -727,12 +636,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 立即执行调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task TriggerSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task TriggerSchedulerJob(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         await scheduler.TriggerJob(new JobKey(input.JobName, input.JobGroup.ToString()));
     }
@@ -741,12 +649,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 是否存在调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<bool> ExistsSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task<bool> ExistsSchedulerJob(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         return await scheduler.CheckExists(new JobKey(input.JobName, input.JobGroup.ToString()));
     }
@@ -755,12 +662,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 获取调度作业日志
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<List<string>> QuerySchedulerJobLogs(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task<List<string>> QuerySchedulerJobLogs(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         var jobKey = new JobKey(input.JobName, input.JobGroup.ToString());
 
@@ -783,12 +689,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 获取调度作业运行次数
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<long> QuerySchedulerJobRunNumber(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task<long> QuerySchedulerJobRunNumber(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         var jobKey = new JobKey(input.JobName, input.JobGroup.ToString());
 
@@ -808,15 +713,13 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 获取全部调度作业
     /// </summary>
     /// <param name="jobGroup"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<List<QueryAllSchedulerJobOutput>> QueryAllSchedulerJob(SchedulerJobGroupEnum? jobGroup = null,
-        long? tenantId = null)
+    public async Task<List<QueryAllSchedulerJobOutput>> QueryAllSchedulerJob(SchedulerJobGroupEnum? jobGroup = null)
     {
         var result = new List<QueryAllSchedulerJobOutput>();
 
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         // 获取调度器所有作业分组名称
         var jobGroupNames = await scheduler.GetJobGroupNames();
@@ -918,12 +821,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 获取调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task<SchedulerJobInfo> QuerySchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task<SchedulerJobInfo> QuerySchedulerJob(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         var jobKey = new JobKey(input.JobName, input.JobGroup.ToString());
 
@@ -988,18 +890,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             throw new UserFriendlyException("触发器类型不正确！");
         }
 
-        // 是否为系统作业
-        var isSystem = jobDetail!.JobDataMap.GetBoolean(nameof(SchedulerJobInfo.IsSystem));
-        // 租户ID，系统作业百分百不存在 TenantId
-        long? localTenantId = isSystem ? null : jobDetail.JobDataMap.GetLong(nameof(SchedulerJobInfo.TenantId));
-
         var result = new SchedulerJobInfo
         {
-            IsSystem = isSystem,
-            TenantId = localTenantId,
             JobName = jobKey.Name,
             JobGroup = Enum.Parse<SchedulerJobGroupEnum>(jobKey.Group),
-            JobType = jobDetail.JobDataMap.GetEnum<SchedulerJobTypeEnum>(nameof(SchedulerJobInfo.JobType)),
+            JobType = jobDetail!.JobDataMap.GetEnum<SchedulerJobTypeEnum>(nameof(SchedulerJobInfo.JobType)),
             BeginTime = trigger.StartTimeUtc.LocalDateTime,
             EndTime =
                 trigger.EndTimeUtc?.LocalDateTime ?? jobDetail.JobDataMap.GetNullableDateTime(nameof(SchedulerJobInfo.EndTime)),
@@ -1039,8 +934,6 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     {
         await AddSchedulerJob(new SchedulerJobInfo
         {
-            IsSystem = input.TenantId == null,
-            TenantId = input.TenantId,
             JobName = input.JobName,
             JobGroup = input.JobGroup,
             JobType = input.JobType,
@@ -1062,8 +955,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             RequestMethod = input.RequestMethod,
             RequestTimeout = input.RequestTimeout,
             RequestParams = input.RequestParams,
-            RequestHeader = input.RequestHeader,
-            IsAllTenant = false
+            RequestHeader = input.RequestHeader
         });
     }
 
@@ -1081,7 +973,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         }
 
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(input.TenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         // 获取旧的调度作业Key
         var oldJobKey = new JobKey(input.OldJobName, input.OldJobGroup.ToString());
@@ -1102,8 +994,6 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         // 组装新的添加实体
         var newJobEntity = new SchedulerJobInfo
         {
-            IsSystem = input.TenantId == null,
-            TenantId = input.TenantId,
             JobName = input.JobName,
             JobGroup = input.JobGroup,
             JobType = input.JobType,
@@ -1126,7 +1016,6 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             RequestTimeout = input.RequestTimeout,
             RequestParams = input.RequestParams,
             RequestHeader = input.RequestHeader,
-            IsAllTenant = oldJobDetail.JobDataMap.GetNullableBoolean(nameof(SchedulerJobInfo.IsAllTenant)) ?? false,
             // 触发器状态
             TriggerState = await scheduler.GetTriggerState(oldTrigger.Key),
             RunNumber = oldJobDetail.JobDataMap.GetLong(nameof(SchedulerJobInfo.RunNumber)),
@@ -1172,12 +1061,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 删除调度作业
     /// </summary>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task DeleteSchedulerJob(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task DeleteSchedulerJob(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         var jobKey = new JobKey(input.JobName, input.JobGroup.ToString());
 
@@ -1200,12 +1088,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// </summary>
     /// <remarks>因为只能在 IJob 持久化操作 JobDataMap，所以这里直接暴力操作数据库</remarks>
     /// <param name="input"></param>
-    /// <param name="tenantId"></param>
     /// <returns></returns>
-    public async Task DeleteSchedulerJobException(SchedulerJobKeyInput input, long? tenantId = null)
+    public async Task DeleteSchedulerJobException(SchedulerJobKeyInput input)
     {
         // 获取调度器
-        var scheduler = await _schedulerFactory.GetScheduler(tenantId);
+        var scheduler = await _schedulerFactory.GetScheduler();
 
         var jobKey = new JobKey(input.JobName, input.JobGroup.ToString());
 

@@ -22,10 +22,9 @@
 
 using System.Net.Http.Headers;
 using System.Web;
-using Fast.Center.Enum;
+using Fast.Admin.Enum;
 using Fast.Serialization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz;
@@ -97,24 +96,6 @@ internal class UrlJob : JobBase<SchedulerJobUrlLogInfo>
 
         // 请求Url
         var requestUrl = context.JobDetail.JobDataMap.GetString(nameof(SchedulerJobInfo.RequestUrl));
-
-        if (_logInfo.TenantId != null)
-        {
-            var user = serviceProvider.GetService<IUser>();
-
-            requestHeader.TryAdd(HttpHeaderConst.DeviceType, user.DeviceType.ToString());
-            requestHeader.TryAdd(HttpHeaderConst.DeviceId, user.DeviceId);
-
-            // 重新赋值请求参数
-            _logInfo.RequestHeader = $"<span class='headers'>{HttpUtility.HtmlEncode(requestHeader.ToJsonString())}</span>";
-
-            // 安全期间，只有内网才添加授权信息
-            if (jobType == SchedulerJobTypeEnum.IntranetUrl)
-            {
-                var accessToken = await user.RobotLogin();
-                requestHeader.TryAdd("Authorization", accessToken);
-            }
-        }
 
         _logInfo.RequestUrl = $"<span class='url'>{requestUrl}</span>";
 

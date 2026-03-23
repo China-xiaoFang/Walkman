@@ -29,9 +29,9 @@ namespace Fast.Core;
 public class ConfigConst
 {
     /// <summary>
-    /// 单租户自动登录
+    /// 请求加密
     /// </summary>
-    public const string SingleTenantWhenAutoLogin = "SINGLE_TENANT_WHEN_AUTO_LOGIN";
+    public const string RequestEncryption = "REQUEST_ENCRYPTION";
 
     /// <summary>
     /// 单点登录
@@ -44,7 +44,7 @@ public class ConfigConst
     public const string LoginCaptchaOpen = "LOGIN_CAPTCHA_OPEN";
 
     /// <summary>
-    /// 高德地图Key
+    /// 日志保留天数
     /// </summary>
-    public const string GaoDeMapKey = "GAO_DE_MAP_KEY";
+    public const string LogRetentionDays = "LOG_RETENTION_DAYS";
 }

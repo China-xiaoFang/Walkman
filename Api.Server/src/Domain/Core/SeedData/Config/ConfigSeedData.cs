@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
+using Fast.Admin.Entity;
 using SqlSugar;
 using Yitter.IdGenerator;
 
@@ -44,10 +44,10 @@ internal static class ConfigSeedData
                 new()
                 {
                     ConfigId = YitIdHelper.NextId(),
-                    ConfigCode = ConfigConst.SingleTenantWhenAutoLogin,
-                    ConfigName = "单租户自动登录",
-                    ConfigValue = "True",
-                    Remark = "True：打开（如果只有一个租户，则默认当前租户自动登录）；False：关闭；",
+                    ConfigCode = ConfigConst.RequestEncryption,
+                    ConfigName = "请求加密",
+                    ConfigValue = "False",
+                    Remark = "True：开启请求加密；False：关闭（默认）；",
                     CreatedTime = dateTime
                 },
                 new()
@@ -71,10 +71,10 @@ internal static class ConfigSeedData
                 new()
                 {
                     ConfigId = YitIdHelper.NextId(),
-                    ConfigCode = ConfigConst.GaoDeMapKey,
-                    ConfigName = "高德地图Key",
+                    ConfigCode = ConfigConst.LogRetentionDays,
+                    ConfigName = "日志保留天数",
                     ConfigValue = "",
-                    Remark = null,
+                    Remark = "超过此天数的日志将自动删除",
                     CreatedTime = dateTime
                 }
             })

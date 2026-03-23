@@ -33,16 +33,6 @@ public class RefreshEmployeeDto
     public virtual AppEnvironmentEnum DeviceType { get; set; }
 
     /// <summary>
-    /// 应用编号
-    /// </summary>
-    public virtual string AppNo { get; set; }
-
-    /// <summary>
-    /// 租户编号
-    /// </summary>
-    public virtual string TenantNo { get; set; }
-
-    /// <summary>
     /// 工号
     /// </summary>
     public virtual string EmployeeNo { get; set; }

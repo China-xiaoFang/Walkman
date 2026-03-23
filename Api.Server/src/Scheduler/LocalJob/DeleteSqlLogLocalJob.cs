@@ -20,12 +20,10 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.Text;
-using Fast.Center.Enum;
-using Fast.CenterLog.Entity;
+using Fast.Admin.Enum;
+using Fast.AdminLog.Entity;
 using Fast.Core;
 using Fast.NET.Core;
-using Fast.Shared;
 using Fast.SqlSugar;
 using SqlSugar;
 
@@ -75,43 +73,12 @@ public class DeleteSqlLogLocalJob : ISchedulerJob
         // 进入方法的一瞬间记录时间
         var dateTime = DateTime.Now;
 
-        // 解析服务
-        var _sqlSugarEntityService = serviceProvider.GetService<ISqlSugarEntityService>();
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
-        // 这里不能使用Aop
         var logDb = new SqlSugarClient(connectionConfig);
-        logDb.Aop.OnLogExecuted = (rawSql, pars) =>
-        {
-            if (FastContext.HostEnvironment.IsDevelopment())
-            {
-                var handleSql = UtilMethods.GetSqlString(logDb.CurrentConnectionConfig.DbType, rawSql, pars);
-
-                var useColor = !Console.IsOutputRedirected;
-                var logSb = new StringBuilder();
-                if (useColor)
-                    logSb.Append("\u001b[40m\u001b[90m");
-                logSb.Append("fsql");
-                if (useColor)
-                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                logSb.Append(": ");
-                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-                logSb.Append(Environment.NewLine);
-                if (useColor)
-                    logSb.Append("\u001b[40m\u001b[90m");
-                logSb.Append("      ");
-                logSb.Append($"Time: {logDb.Ado.SqlExecutionTime}");
-                logSb.Append(Environment.NewLine);
-                logSb.Append("      ");
-                logSb.Append(handleSql);
-                if (useColor)
-                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                Console.WriteLine(logSb.ToString());
-            }
-        };
+        // 加载Aop
+        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), logDb);
 
         var expireDate = dateTime.Date.AddDays(-90);
 

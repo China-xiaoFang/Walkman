@@ -20,13 +20,10 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.Text.RegularExpressions;
 using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 using Fast.Admin.Service.Employee.Dto;
 using Fast.AdminLog.Enum;
-using Fast.Center.Entity;
-using Fast.Center.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -43,13 +40,11 @@ public class EmployeeService : IDynamicApplication
 {
     private readonly IUser _user;
     private readonly ISqlSugarRepository<EmployeeModel> _repository;
-    private readonly ISqlSugarClient _centerRepository;
 
-    public EmployeeService(IUser user, ISqlSugarRepository<EmployeeModel> repository, ISqlSugarClient centerRepository)
+    public EmployeeService(IUser user, ISqlSugarRepository<EmployeeModel> repository)
     {
         _user = user;
         _repository = repository;
-        _centerRepository = centerRepository;
     }
 
     /// <summary>
@@ -99,6 +94,7 @@ public class EmployeeService : IDynamicApplication
     {
         var result = await _repository.Entities
             .LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary)
+            .LeftJoin<AccountModel>((t1, t2, t3) => t1.AccountId == t3.AccountId)
             .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
             .WhereIF(input.Sex != null, t1 => t1.Sex == input.Sex)
             .WhereIF(input.Nation != null, t1 => t1.Nation == input.Nation)
@@ -111,7 +107,7 @@ public class EmployeeService : IDynamicApplication
             .WhereIF(input.AcademicSystem != null, t1 => t1.AcademicSystem == input.AcademicSystem)
             .WhereIF(input.Degree != null, t1 => t1.Degree == input.Degree)
             .WhereIF(input.DepartmentId != null, (t1, t2) => t2.DepartmentId == input.DepartmentId)
-            .SelectMergeTable((t1, t2) => new QueryEmployeePagedOutput
+            .SelectMergeTable((t1, t2, t3) => new QueryEmployeePagedOutput
             {
                 EmployeeId = t1.EmployeeId,
                 EmployeeNo = t1.EmployeeNo,
@@ -148,7 +144,11 @@ public class EmployeeService : IDynamicApplication
                 PositionName = t2.PositionName,
                 JobLevelId = t2.JobLevelId,
                 JobLevelName = t2.JobLevelName,
-                IsPrincipal = t2.IsPrincipal
+                IsPrincipal = t2.IsPrincipal,
+                AccountStatus = t3.Status,
+                AccountMobile = t3.Mobile,
+                AccountNickName = t3.NickName,
+                LastLoginTime = t3.LastLoginTime
             })
             .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .DataScope(e => e.DepartmentId, e => e.EmployeeId)
@@ -157,36 +157,12 @@ public class EmployeeService : IDynamicApplication
         var employeeIds = result.Rows.Select(sl => sl.EmployeeId)
             .ToList();
 
-        var userList = await _centerRepository.Queryable<TenantUserModel>()
-            .LeftJoin<AccountModel>((t1, t2) => t1.AccountId == t2.AccountId)
-            .Where(t1 => employeeIds.Contains(t1.EmployeeId))
-            .Select((t1, t2) => new
-            {
-                t1.EmployeeId,
-                t1.Status,
-                t2.Mobile,
-                t2.Email,
-                t2.NickName,
-                t2.LastLoginTime
-            })
-            .ToListAsync();
-
         var roleList = await _repository.Queryable<EmployeeRoleModel>()
             .Where(wh => employeeIds.Contains(wh.EmployeeId))
             .ToListAsync();
 
         foreach (var item in result.Rows)
         {
-            var userInfo = userList.SingleOrDefault(s => s.EmployeeId == item.EmployeeId);
-            if (userInfo != null)
-            {
-                item.AccountStatus = userInfo.Status;
-                item.AccountMobile = userInfo.Mobile;
-                item.AccountEmail = userInfo.Email;
-                item.AccountNickName = userInfo.NickName;
-                item.LastLoginTime = userInfo.LastLoginTime;
-            }
-
             item.RoleNames = string.Join(",", roleList.Where(wh => wh.EmployeeId == item.EmployeeId)
                 .OrderBy(ob => ob.RoleName)
                 .Select(sl => sl.RoleName)
@@ -217,7 +193,6 @@ public class EmployeeService : IDynamicApplication
                 Email = sl.Email,
                 Sex = sl.Sex,
                 IdPhoto = sl.IdPhoto,
-                FirstWorkDate = sl.FirstWorkDate,
                 EntryDate = sl.EntryDate,
                 ResignDate = sl.ResignDate,
                 ResignReason = sl.ResignReason,
@@ -336,9 +311,22 @@ public class EmployeeService : IDynamicApplication
             }
         }
 
+        var accountModel = await _repository.Queryable<AccountModel>()
+            .Where(wh => wh.Mobile == input.Mobile)
+            .SingleAsync();
+        if (accountModel != null)
+        {
+            if (await _repository.Queryable<EmployeeModel>()
+                    .AnyAsync(a => a.AccountId == accountModel.AccountId))
+            {
+                throw new UserFriendlyException("手机号已存在职员！");
+            }
+        }
+
         var employeeModel = new EmployeeModel
         {
             EmployeeId = YitIdHelper.NextId(),
+            UserType = UserTypeEnum.None,
             EmployeeName = input.EmployeeName,
             Mobile = input.Mobile,
             // 新增默认正式员工
@@ -346,7 +334,6 @@ public class EmployeeService : IDynamicApplication
             Email = input.Email,
             Sex = input.Sex,
             IdPhoto = input.IdPhoto,
-            FirstWorkDate = input.FirstWorkDate,
             EntryDate = input.EntryDate,
             ResignDate = null,
             ResignReason = null,
@@ -398,11 +385,45 @@ public class EmployeeService : IDynamicApplication
             });
         }
 
-        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
-
         await _repository.Ado.UseTranAsync(async () =>
         {
-            var employeeNo = SerialContext.GenEmployeeNo(_repository, tenantModel.TenantCode);
+            if (accountModel == null)
+            {
+                accountModel = new AccountModel
+                {
+                    AccountId = YitIdHelper.NextId(),
+                    Mobile = input.Mobile,
+                    Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password),
+                    Status = CommonStatusEnum.Enable,
+                    NickName = employeeModel.EmployeeName,
+                    Avatar = employeeModel.IdPhoto,
+                    Sex = GenderEnum.Unknown
+                };
+                await _repository.Insertable(accountModel)
+                    .ExecuteCommandAsync();
+
+                #region PasswordRecordModel
+
+                // 初始化密码记录表
+                await _repository.Insertable(new List<PasswordRecordModel>
+                    {
+                        new()
+                        {
+                            AccountId = accountModel.AccountId,
+                            OperationType = PasswordOperationTypeEnum.Create,
+                            Type = PasswordTypeEnum.SHA1,
+                            Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
+                                .ToUpper()
+                        }
+                    })
+                    .ExecuteCommandAsync();
+
+                #endregion
+            }
+
+            employeeModel.AccountId = accountModel.AccountId;
+
+            var employeeNo = SerialContext.GenEmployeeNo(_repository);
             employeeModel.EmployeeNo = employeeNo;
             await _repository.InsertAsync(employeeModel);
 
@@ -476,35 +497,7 @@ public class EmployeeService : IDynamicApplication
         employeeModel.EmergencyPhone = input.EmergencyPhone;
         employeeModel.EmergencyAddress = input.EmergencyAddress;
 
-        // 开启事务
-        await _repository.Ado.BeginTranAsync();
-        await _centerRepository.Ado.BeginTranAsync();
-        try
-        {
-            var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
-                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-                .SingleAsync();
-            if (tenantUserModel != null)
-            {
-                tenantUserModel.EmployeeName = employeeModel.EmployeeName;
-                tenantUserModel.IdPhoto = employeeModel.IdPhoto;
-                await _centerRepository.Updateable(tenantUserModel)
-                    .ExecuteCommandAsync();
-            }
-
-            await _repository.UpdateAsync(employeeModel);
-
-            // 提交事务
-            await _repository.Ado.CommitTranAsync();
-            await _centerRepository.Ado.CommitTranAsync();
-        }
-        catch
-        {
-            // 回滚事务
-            await _repository.Ado.RollbackTranAsync();
-            await _centerRepository.Ado.RollbackTranAsync();
-            throw;
-        }
+        await _repository.UpdateAsync(employeeModel);
 
         // 操作日志
         LogContext.OperateLog(new OperateLogDto
@@ -656,7 +649,6 @@ public class EmployeeService : IDynamicApplication
         var employeeRoleList = new List<EmployeeRoleModel>();
         if (employeeModel.EmployeeId != _user.EmployeeId)
         {
-            employeeModel.FirstWorkDate = input.FirstWorkDate;
             employeeModel.EntryDate = input.EntryDate;
             employeeModel.EducationLevel = input.EducationLevel;
             employeeModel.PoliticalStatus = input.PoliticalStatus;
@@ -701,20 +693,8 @@ public class EmployeeService : IDynamicApplication
             }
         }
 
-        // 开启事务
-        await _repository.Ado.BeginTranAsync();
-        await _centerRepository.Ado.BeginTranAsync();
-        try
+        await _repository.Ado.UseTranAsync(async () =>
         {
-            var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
-                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-                .SingleAsync();
-            if (tenantUserModel != null)
-            {
-                tenantUserModel.EmployeeName = employeeModel.EmployeeName;
-                tenantUserModel.IdPhoto = employeeModel.IdPhoto;
-            }
-
             if (employeeModel.EmployeeId != _user.EmployeeId)
             {
                 // 删除旧的部门数据
@@ -742,35 +722,10 @@ public class EmployeeService : IDynamicApplication
                     .ExecuteCommandAsync();
                 await _repository.Insertable(employeeRoleList)
                     .ExecuteCommandAsync();
-
-                if (tenantUserModel != null)
-                {
-                    tenantUserModel.DepartmentId = employeeOrgList.Single(s => s.IsPrimary)
-                        .DepartmentId;
-                    tenantUserModel.DepartmentName = employeeOrgList.Single(s => s.IsPrimary)
-                        .DepartmentName;
-                }
-            }
-
-            if (tenantUserModel != null)
-            {
-                await _centerRepository.Updateable(tenantUserModel)
-                    .ExecuteCommandAsync();
             }
 
             await _repository.UpdateAsync(employeeModel);
-
-            // 提交事务
-            await _repository.Ado.CommitTranAsync();
-            await _centerRepository.Ado.CommitTranAsync();
-        }
-        catch
-        {
-            // 回滚事务
-            await _repository.Ado.RollbackTranAsync();
-            await _centerRepository.Ado.RollbackTranAsync();
-            throw;
-        }
+        }, ex => throw ex);
 
         // 操作日志
         LogContext.OperateLog(new OperateLogDto
@@ -813,7 +768,19 @@ public class EmployeeService : IDynamicApplication
         employeeModel.Status = input.Status;
         employeeModel.RowVersion = input.RowVersion;
 
-        await _repository.UpdateAsync(employeeModel);
+        await _repository.Ado.UseTranAsync(async () =>
+        {
+            var accountModel = await _repository.Queryable<AccountModel>()
+                .SingleAsync(s => s.AccountId == employeeModel.AccountId);
+            if (accountModel != null)
+            {
+                accountModel.Status = CommonStatusEnum.Enable;
+                await _repository.Updateable(accountModel)
+                    .ExecuteCommandAsync();
+            }
+
+            await _repository.UpdateAsync(employeeModel);
+        }, ex => throw ex);
 
         // 操作日志
         LogContext.OperateLog(new OperateLogDto
@@ -842,38 +809,46 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        // 开启事务
-        await _repository.Ado.BeginTranAsync();
-        await _centerRepository.Ado.BeginTranAsync();
-        try
+        employeeModel.Status = EmployeeStatusEnum.Resigned;
+        employeeModel.ResignDate = input.ResignDate;
+        employeeModel.ResignReason = input.ResignReason;
+        employeeModel.RowVersion = input.RowVersion;
+
+        await _repository.Ado.UseTranAsync(async () =>
         {
-            var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
-                .InSingleAsync(employeeModel.EmployeeId);
-            if (tenantUserModel != null)
+            var accountModel = await _repository.Queryable<AccountModel>()
+                .SingleAsync(s => s.AccountId == employeeModel.AccountId);
+            if (accountModel != null)
             {
-                tenantUserModel.Status = CommonStatusEnum.Disable;
-                await _centerRepository.Updateable(tenantUserModel)
+                accountModel.Status = CommonStatusEnum.Disable;
+                await _repository.Updateable(accountModel)
                     .ExecuteCommandAsync();
+
+                // 强制下线在线用户
+                var _hubContext = FastContext.HttpContext.RequestServices.GetService<IHubContext<ChatHub, IChatClient>>();
+
+                var connectionId = await _repository.Queryable<OnlineUserModel>()
+                    .Where(wh => wh.IsOnline)
+                    .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
+                    .Select(sl => sl.ConnectionId)
+                    .SingleAsync();
+
+                if (!string.IsNullOrWhiteSpace(connectionId))
+                {
+                    await _hubContext.Clients.Clients(connectionId)
+                        .ForceOffline(new ForceOfflineOutput
+                        {
+                            IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,
+                            NickName = _user.NickName,
+                            EmployeeNo = _user.EmployeeNo,
+                            OfflineTime = DateTime.Now,
+                            Message = "账号已被禁用"
+                        });
+                }
             }
 
-            employeeModel.Status = EmployeeStatusEnum.Resigned;
-            employeeModel.ResignDate = input.ResignDate;
-            employeeModel.ResignReason = input.ResignReason;
-            employeeModel.RowVersion = input.RowVersion;
-
             await _repository.UpdateAsync(employeeModel);
-
-            // 提交事务
-            await _repository.Ado.CommitTranAsync();
-            await _centerRepository.Ado.CommitTranAsync();
-        }
-        catch
-        {
-            // 回滚事务
-            await _repository.Ado.RollbackTranAsync();
-            await _centerRepository.Ado.RollbackTranAsync();
-            throw;
-        }
+        }, ex => throw ex);
 
         // 操作日志
         LogContext.OperateLog(new OperateLogDto
@@ -883,214 +858,6 @@ public class EmployeeService : IDynamicApplication
             BizId = employeeModel.EmployeeId,
             BizNo = employeeModel.EmployeeNo,
             Description = $"职员：{employeeModel.EmployeeName}，离职 -> {employeeModel.ResignDate:yyyy-MM-dd HH:mm:ss}"
-        });
-    }
-
-    /// <summary>
-    /// 绑定登录账号
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("绑定登录账号", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Employee.Edit)]
-    public async Task BindLoginAccount(BindLoginAccountInput input)
-    {
-        if (!new Regex(RegexConst.Mobile).IsMatch(input.Mobile))
-        {
-            throw new UserFriendlyException("手机号码不正确！");
-        }
-
-        var employeeModel = await _repository.SingleOrDefaultAsync(input.EmployeeId);
-        if (employeeModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        if (await _centerRepository.Queryable<TenantUserModel>()
-                .AnyAsync(a => a.EmployeeId == employeeModel.EmployeeId))
-        {
-            throw new UserFriendlyException("已存在登录账号！");
-        }
-
-        var employeeOrgModel = await _repository.Queryable<EmployeeOrgModel>()
-            .SingleAsync(s => s.EmployeeId == employeeModel.EmployeeId && s.IsPrimary);
-
-        if (string.IsNullOrWhiteSpace(employeeModel.Email))
-        {
-            employeeModel.Email = input.Email;
-        }
-
-        employeeModel.RowVersion = input.RowVersion;
-
-        // 开启事务
-        await _repository.Ado.BeginTranAsync();
-        await _centerRepository.Ado.BeginTranAsync();
-        try
-        {
-            var accountModel = await _centerRepository.Queryable<AccountModel>()
-                .Where(wh => wh.Mobile == input.Mobile)
-                .SingleAsync();
-            if (accountModel == null)
-            {
-                if (await _centerRepository.Queryable<AccountModel>()
-                        .AnyAsync(a => a.Email == input.Email))
-                {
-                    throw new UserFriendlyException("邮箱已存在账号信息！");
-                }
-
-                var accountId = YitIdHelper.NextId();
-                accountModel = new AccountModel
-                {
-                    AccountId = accountId,
-                    AccountKey = NumberUtil.IdToCodeByLong(accountId),
-                    Mobile = input.Mobile,
-                    Email = input.Email,
-                    Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password),
-                    Status = CommonStatusEnum.Enable,
-                    NickName = employeeModel.EmployeeName,
-                    Avatar = employeeModel.IdPhoto,
-                    Sex = GenderEnum.Unknown
-                };
-                await _centerRepository.Insertable(accountModel)
-                    .ExecuteCommandAsync();
-
-                #region PasswordRecordModel
-
-                // 初始化密码记录表
-                await _centerRepository.Insertable(new List<PasswordRecordModel>
-                    {
-                        new()
-                        {
-                            AccountId = accountModel.AccountId,
-                            OperationType = PasswordOperationTypeEnum.Create,
-                            Type = PasswordTypeEnum.SHA1,
-                            Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                                .ToUpper()
-                        }
-                    })
-                    .ExecuteCommandAsync();
-
-                #endregion
-            }
-
-            var tenantUserModel = new TenantUserModel
-            {
-                EmployeeId = employeeModel.EmployeeId,
-                UserKey = NumberUtil.IdToCodeByLong(employeeModel.EmployeeId),
-                AccountId = accountModel.AccountId,
-                EmployeeNo = employeeModel.EmployeeNo,
-                EmployeeName = employeeModel.EmployeeName,
-                IdPhoto = employeeModel.IdPhoto,
-                DepartmentId = employeeOrgModel?.DepartmentId,
-                DepartmentName = employeeOrgModel?.DepartmentName,
-                UserType = UserTypeEnum.None,
-                Status = CommonStatusEnum.Enable
-            };
-            await _centerRepository.Insertable(tenantUserModel)
-                .ExecuteCommandAsync();
-
-            await _repository.UpdateAsync(employeeModel);
-
-            // 提交事务
-            await _repository.Ado.CommitTranAsync();
-            await _centerRepository.Ado.CommitTranAsync();
-        }
-        catch
-        {
-            // 回滚事务
-            await _repository.Ado.RollbackTranAsync();
-            await _centerRepository.Ado.RollbackTranAsync();
-            throw;
-        }
-
-        // 操作日志
-        LogContext.OperateLog(new OperateLogDto
-        {
-            Title = "职员绑定登录账号",
-            OperateType = OperateLogTypeEnum.Organization,
-            BizId = employeeModel.EmployeeId,
-            BizNo = employeeModel.EmployeeNo,
-            Description = $"职员：{employeeModel.EmployeeName}，手机：{input.Mobile}，邮箱：{input.Email}"
-        });
-    }
-
-    /// <summary>
-    /// 更改登录状态
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("更改登录状态", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Employee.Status)]
-    public async Task ChangeLoginStatus(EmployeeIdInput input)
-    {
-        var employeeModel = await _repository.SingleOrDefaultAsync(input.EmployeeId);
-        if (employeeModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        if (employeeModel.Status == EmployeeStatusEnum.Resigned)
-        {
-            throw new UserFriendlyException("禁止操作已离职的职员！");
-        }
-
-        var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
-            .InSingleAsync(employeeModel.EmployeeId);
-        if (tenantUserModel == null)
-        {
-            throw new UserFriendlyException("未绑定登录账号！");
-        }
-
-        if (_user.AccountId == tenantUserModel.AccountId)
-        {
-            throw new UserFriendlyException("禁止更改当前登录账号状态！");
-        }
-
-        tenantUserModel.Status = tenantUserModel.Status switch
-        {
-            CommonStatusEnum.Enable => CommonStatusEnum.Disable,
-            CommonStatusEnum.Disable => CommonStatusEnum.Enable,
-            _ => tenantUserModel.Status
-        };
-
-        await _centerRepository.Updateable(tenantUserModel)
-            .ExecuteCommandAsync();
-
-        if (tenantUserModel.Status == CommonStatusEnum.Disable)
-        {
-            // 强制下线在线用户
-            var _hubContext = FastContext.HttpContext.RequestServices.GetService<IHubContext<ChatHub, IChatClient>>();
-
-            var connectionId = await _centerRepository.Queryable<TenantOnlineUserModel>()
-                .Where(wh => wh.IsOnline)
-                .Where(wh => wh.EmployeeId == tenantUserModel.EmployeeId)
-                .Select(sl => sl.ConnectionId)
-                .SingleAsync();
-
-            if (!string.IsNullOrWhiteSpace(connectionId))
-            {
-                await _hubContext.Clients.Clients(connectionId)
-                    .ForceOffline(new ForceOfflineOutput
-                    {
-                        IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,
-                        NickName = _user.NickName,
-                        EmployeeNo = _user.EmployeeNo,
-                        OfflineTime = DateTime.Now,
-                        Message = "账号已被禁用"
-                    });
-            }
-        }
-
-        // 操作日志
-        LogContext.OperateLog(new OperateLogDto
-        {
-            Title = "职员更改登录账号",
-            OperateType = OperateLogTypeEnum.Organization,
-            BizId = employeeModel.EmployeeId,
-            BizNo = employeeModel.EmployeeNo,
-            Description = $"职员：{employeeModel.EmployeeName}，{tenantUserModel.Status.GetDescription()}登录账号"
         });
     }
 }

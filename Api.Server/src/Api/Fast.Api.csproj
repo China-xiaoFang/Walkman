@@ -10,7 +10,6 @@
 
     <ItemGroup>
         <ProjectReference Include="$(SolutionDir)src\Services\Admin\Fast.Admin.Service.csproj" />
-        <ProjectReference Include="$(SolutionDir)src\Services\Center\Fast.Center.Service.csproj" />
     </ItemGroup>
 
     <ItemGroup>

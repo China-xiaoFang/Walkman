@@ -36,7 +36,7 @@ public class CommonConst
         /// <summary>
         /// 管理员密码
         /// </summary>
-        public const string AdminPassword = "fast.2025";
+        public const string AdminPassword = "fastdotnet";
 
         /// <summary>
         /// 密码
@@ -47,15 +47,5 @@ public class CommonConst
         /// 超级管理员账户Id
         /// </summary>
         public const long SuperAdminAccountId = 10086;
-
-        /// <summary>
-        /// 租户Id
-        /// </summary>
-        public const long TenantId = 18080;
-
-        /// <summary>
-        /// 租户编号
-        /// </summary>
-        public const string TenantNo = "Fast2018";
     }
 }

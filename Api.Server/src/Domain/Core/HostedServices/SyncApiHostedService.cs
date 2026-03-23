@@ -22,7 +22,7 @@
 
 using System.Reflection;
 using System.Text;
-using Fast.Center.Entity;
+using Fast.Admin.Entity;
 using Fast.DynamicApplication;
 using Fast.JwtBearer;
 using Fast.SqlSugar;
@@ -41,7 +41,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="SyncApiHostedService"/> 同步 Api 托管服务
 /// </summary>
-[Order(104)]
+[Order(103)]
 public class SyncApiHostedService : IHostedService
 {
     /// <summary>

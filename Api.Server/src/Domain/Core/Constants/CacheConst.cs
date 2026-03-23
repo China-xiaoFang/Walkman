@@ -42,8 +42,8 @@ public class CacheConst
     /// <summary>
     /// 授权用户
     /// </summary>
-    /// <remarks>{0}应用编号, {1}租户编号, {2}登录环境，{3}工号</remarks>
-    public const string AuthUser = "{0}:{1}:Auth:{2}:{3}";
+    /// <remarks>{0}登录环境，{1}工号</remarks>
+    public const string AuthUser = "Auth:{0}:{1}";
 
     /// <summary>
     /// <see cref="Center"/> 管理后台
@@ -51,28 +51,15 @@ public class CacheConst
     public class Center
     {
         /// <summary>
-        /// 数据库
-        /// </summary>
-        /// <remarks>{0}租户编号，{1}数据库名类型</remarks>
-        public const string Database = "Database:{0}:{1}";
-
-        /// <summary>
         /// 配置
         /// </summary>
         /// <remarks>{0}配置编码</remarks>
         public const string Config = "Config:{0}";
 
         /// <summary>
-        /// 租户
-        /// </summary>
-        /// <remarks>{0}租户编号</remarks>
-        public const string Tenant = "Tenant:{0}";
-
-        /// <summary>
         /// 机器人
         /// </summary>
-        /// <remarks>{0}租户编号</remarks>
-        public const string Rabot = "Rabot:{0}";
+        public const string Rabot = "Rabot";
 
         /// <summary>
         /// 应用
@@ -100,8 +87,8 @@ public class CacheConst
         /// <summary>
         /// 用户表格配置缓存
         /// </summary>
-        /// <remarks>{0}表格Key，{1}租户编号, {2}工号</remarks>
-        public const string UserTableConfigCache = "TableConfig:{0}:{1}:{2}";
+        /// <remarks>{0}表格Key，{1}工号</remarks>
+        public const string UserTableConfigCache = "TableConfig:{0}:{1}";
 
         /// <summary>
         /// 地区

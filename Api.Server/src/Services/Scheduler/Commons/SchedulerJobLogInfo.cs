@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
+using Fast.Admin.Entity;
 
 namespace Fast.Scheduler;
 
@@ -31,29 +31,9 @@ namespace Fast.Scheduler;
 public class SchedulerJobLogInfo
 {
     /// <summary>
-    /// 租户Id
-    /// </summary>
-    public long? TenantId { get; set; }
-
-    /// <summary>
-    /// 租户名称
-    /// </summary>
-    public string TenantName { get; set; }
-
-    /// <summary>
-    /// 租户编号
-    /// </summary>
-    public string TenantNo { get; set; }
-
-    /// <summary>
-    /// 租户编码
-    /// </summary>
-    public string TenantCode { get; set; }
-
-    /// <summary>
     /// 机器人信息
     /// </summary>
-    public TenantUserModel RobotInfo { get; set; }
+    public EmployeeModel RobotInfo { get; set; }
 
     /// <summary>
     /// 开始执行时间

@@ -21,7 +21,7 @@
 // ------------------------------------------------------------------------
 
 using System.Text;
-using Fast.CenterLog.Entity;
+using Fast.AdminLog.Entity;
 using Fast.SqlSugar;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -36,11 +36,6 @@ namespace Fast.Core;
 public class InitLogDatabaseHostedService : IHostedService
 {
     /// <summary>
-    /// SqlSugar实体服务
-    /// </summary>
-    private readonly ISqlSugarEntityService _sqlSugarEntityService;
-
-    /// <summary>
     /// 日志
     /// </summary>
     private readonly ILogger _logger;
@@ -48,12 +43,9 @@ public class InitLogDatabaseHostedService : IHostedService
     /// <summary>
     /// <see cref="InitLogDatabaseHostedService"/> 初始化日志 Database 托管服务
     /// </summary>
-    /// <param name="sqlSugarEntityService"><see cref="ISqlSugarEntityService"/> SqlSugar实体服务</param>
     /// <param name="logger"><see cref="ILogger"/> 日志</param>
-    public InitLogDatabaseHostedService(ISqlSugarEntityService sqlSugarEntityService,
-        ILogger<InitLogDatabaseHostedService> logger)
+    public InitLogDatabaseHostedService(ILogger<InitLogDatabaseHostedService> logger)
     {
-        _sqlSugarEntityService = sqlSugarEntityService;
         _logger = logger;
     }
 
@@ -67,10 +59,7 @@ public class InitLogDatabaseHostedService : IHostedService
         try
         {
             // 获取 CenterLog 库连接字符串
-            var connectionSettings = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-                CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-
-            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(connectionSettings));
+            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings));
 
             // 创建库
             db.DbMaintenance.CreateDatabase();
@@ -99,12 +88,12 @@ public class InitLogDatabaseHostedService : IHostedService
 
             // 获取所有不分表的Model类型
             var tableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
-                .Where(wh => (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.CenterLog)
+                .Where(wh => (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.AdminLog)
                 .Select(sl => sl.EntityType)
                 .ToArray();
             // 获取所有分表的Model类型
             var splitTableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => wh.IsSplitTable)
-                .Where(wh => (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.CenterLog)
+                .Where(wh => (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.AdminLog)
                 .Select(sl => sl.EntityType)
                 .ToArray();
 

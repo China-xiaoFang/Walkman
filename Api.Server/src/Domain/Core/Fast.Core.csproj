@@ -41,8 +41,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="$(SolutionDir)src\Domain\Center\Entity\Fast.Center.Entity.csproj" />
-        <ProjectReference Include="$(SolutionDir)src\Domain\CenterLog\Entity\Fast.CenterLog.Entity.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Domain\Admin\Entity\Fast.Admin.Entity.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Domain\AdminLog\Entity\Fast.AdminLog.Entity.csproj" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -20,12 +20,11 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.CenterLog.Entity;
-using Fast.CenterLog.Enum;
+using Fast.AdminLog.Entity;
+using Fast.AdminLog.Enum;
 using Fast.JwtBearer;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using SqlSugar;
 using Yitter.IdGenerator;
 
@@ -84,12 +83,8 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         DeviceType = authUserInfo.DeviceType;
         DeviceId = authUserInfo.DeviceId;
 
-        AppNo = authUserInfo.AppNo;
-        AppName = authUserInfo.AppName;
-
         // 账号
         AccountId = authUserInfo.AccountId;
-        AccountKey = authUserInfo.AccountKey;
         Mobile = authUserInfo.Mobile;
         NickName = authUserInfo.NickName;
         Avatar = authUserInfo.Avatar;
@@ -98,13 +93,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         WeChatId = authUserInfo.WeChatId;
         WeChatOpenId = authUserInfo.WeChatOpenId;
 
-        // 租户
-        TenantId = authUserInfo.TenantId;
-        TenantNo = authUserInfo.TenantNo;
-        TenantName = authUserInfo.TenantName;
-        TenantCode = authUserInfo.TenantCode;
-
-        UserKey = authUserInfo.UserKey;
         EmployeeId = authUserInfo.EmployeeId;
         EmployeeNo = authUserInfo.EmployeeNo;
         EmployeeName = authUserInfo.EmployeeName;
@@ -132,15 +120,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// 从缓存中获取授权用户信息
     /// </summary>
     /// <param name="deviceType"><see cref="AppEnvironmentEnum"/> 设备类型</param>
-    /// <param name="appNo"><see cref="string"/> 应用编号</param>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
     /// <param name="employeeNo"><see cref="string"/> 工号</param>
     /// <returns></returns>
-    public async Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType, string appNo, string tenantNo,
-        string employeeNo)
+    public async Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType, string employeeNo)
     {
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType.ToString(), employeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, deviceType.ToString(), employeeNo);
 
         return await _authCache.GetAsync<AuthUserInfo>(cacheKey);
     }
@@ -162,16 +147,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("未知的设备！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
-        {
-            throw new UnauthorizedAccessException("未知的应用！");
-        }
-
-        if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
-        {
-            throw new UnauthorizedAccessException("租户信息不存在！");
-        }
-
         if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
         {
             throw new UnauthorizedAccessException("员工信息不存在！");
@@ -186,8 +161,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             {
                 {nameof(DeviceType), authUserInfo.DeviceType.ToString()},
                 {nameof(DeviceId), authUserInfo.DeviceId},
-                {nameof(AppNo), authUserInfo.AppNo},
-                {nameof(TenantNo), authUserInfo.TenantNo},
                 {nameof(EmployeeNo), authUserInfo.EmployeeNo},
                 {nameof(LastLoginIp), authUserInfo.LastLoginIp},
                 {nameof(LastLoginTime), authUserInfo.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
@@ -203,7 +176,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             var refreshToken = JwtBearerUtil.GenerateRefreshToken(accessToken);
 
             // 获取缓存Key
-            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
+            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
                 authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
 
             // 设置缓存信息
@@ -241,16 +214,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("未知的设备！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
-        {
-            throw new UnauthorizedAccessException("未知的应用！");
-        }
-
-        if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
-        {
-            throw new UnauthorizedAccessException("租户信息不存在！");
-        }
-
         if (string.IsNullOrWhiteSpace(authUserInfo.WeChatOpenId))
         {
             throw new UnauthorizedAccessException("用户信息不存在！");
@@ -265,8 +228,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             {
                 {nameof(DeviceType), authUserInfo.DeviceType.ToString()},
                 {nameof(DeviceId), authUserInfo.DeviceId},
-                {nameof(AppNo), authUserInfo.AppNo},
-                {nameof(TenantNo), authUserInfo.TenantNo},
                 {nameof(EmployeeNo), authUserInfo.WeChatOpenId},
                 {nameof(LastLoginIp), authUserInfo.LastLoginIp},
                 {nameof(LastLoginTime), authUserInfo.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
@@ -282,8 +243,8 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             var refreshToken = JwtBearerUtil.GenerateRefreshToken(accessToken);
 
             // 获取缓存Key
-            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.WeChatOpenId);
+            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.DeviceType.ToString(),
+                authUserInfo.WeChatOpenId);
 
             // 设置缓存信息
             await _authCache.SetAsync(cacheKey, authUserInfo);
@@ -304,55 +265,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     }
 
     /// <summary>
-    /// 机器人登录
-    /// </summary>
-    /// <remarks>非调度作业请勿使用</remarks>
-    /// <returns></returns>
-    public async Task<string> RobotLogin()
-    {
-        var payload = new Dictionary<string, string>
-        {
-            {nameof(DeviceType), DeviceType.ToString()},
-            {nameof(DeviceId), DeviceId},
-            {nameof(AppNo), "Scheduler"},
-            {nameof(TenantNo), TenantNo},
-            {nameof(EmployeeNo), EmployeeNo},
-            {nameof(LastLoginIp), LastLoginIp},
-            {nameof(LastLoginTime), LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
-        };
-
-        var data = payload.ToJsonString()
-            .ToBase64();
-
-        // 生成 AccessToken，机器人使用默认1分钟过期
-        var accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}}, 1);
-
-        // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, AppNo, TenantNo, DeviceType.ToString(), EmployeeNo);
-
-        // 设置缓存信息
-        await _authCache.SetAsync(cacheKey, this);
-
-        return accessToken;
-    }
-
-    /// <summary>
     /// 刷新授权信息
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     public async Task RefreshAuth(RefreshAuthDto input)
     {
-        if (string.IsNullOrWhiteSpace(input.AppNo))
-        {
-            throw new UnauthorizedAccessException("未知的应用！");
-        }
-
-        if (string.IsNullOrWhiteSpace(input.TenantNo))
-        {
-            throw new UnauthorizedAccessException("租户信息不存在！");
-        }
-
         if (string.IsNullOrWhiteSpace(input.EmployeeNo))
         {
             throw new UnauthorizedAccessException("员工信息不存在！");
@@ -367,8 +285,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         ButtonCodeList = input.ButtonCodeList;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.DeviceType.ToString(), input.EmployeeNo);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -386,16 +303,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("账号信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(input.AppNo))
-        {
-            throw new UnauthorizedAccessException("未知的应用！");
-        }
-
-        if (string.IsNullOrWhiteSpace(input.TenantNo))
-        {
-            throw new UnauthorizedAccessException("租户信息不存在！");
-        }
-
         if (string.IsNullOrWhiteSpace(input.EmployeeNo))
         {
             throw new UnauthorizedAccessException("员工信息不存在！");
@@ -407,8 +314,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         Avatar = input.Avatar;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.DeviceType.ToString(), input.EmployeeNo);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -421,16 +327,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <returns></returns>
     public async Task RefreshWeChatUser(RefreshWeChatUserDto input)
     {
-        if (string.IsNullOrWhiteSpace(input.AppNo))
-        {
-            throw new UnauthorizedAccessException("未知的应用！");
-        }
-
-        if (string.IsNullOrWhiteSpace(input.TenantNo))
-        {
-            throw new UnauthorizedAccessException("租户信息不存在！");
-        }
-
         if (string.IsNullOrWhiteSpace(input.WeChatOpenId))
         {
             throw new UnauthorizedAccessException("用户信息不存在！");
@@ -442,8 +338,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         Avatar = input.Avatar;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.WeChatOpenId);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.DeviceType.ToString(), input.WeChatOpenId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -456,16 +351,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <returns></returns>
     public async Task RefreshEmployee(RefreshEmployeeDto input)
     {
-        if (string.IsNullOrWhiteSpace(input.AppNo))
-        {
-            throw new UnauthorizedAccessException("未知的应用！");
-        }
-
-        if (string.IsNullOrWhiteSpace(input.TenantNo))
-        {
-            throw new UnauthorizedAccessException("租户信息不存在！");
-        }
-
         if (string.IsNullOrWhiteSpace(input.EmployeeNo))
         {
             throw new UnauthorizedAccessException("员工信息不存在！");
@@ -481,8 +366,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         DataScopeType = input.DataScopeType;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.DeviceType.ToString(), input.EmployeeNo);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -519,12 +403,10 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                 // 从 payload 中读取 DeviceType,DeviceId,AppNo,TenantNo,EmployeeNo
                 if (payload.TryGetValue(nameof(DeviceType), out var deviceType)
                     && payload.TryGetValue(nameof(DeviceId), out var deviceId)
-                    && payload.TryGetValue(nameof(AppNo), out var appNo)
-                    && payload.TryGetValue(nameof(TenantNo), out var tenantNo)
                     && payload.TryGetValue(nameof(EmployeeNo), out var employeeNo))
                 {
                     // 尝试获取缓存
-                    var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType, employeeNo);
+                    var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, deviceType, employeeNo);
                     var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
                     if (authUserInfo != null)
                     {
@@ -540,17 +422,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                             DepartmentName = authUserInfo.DepartmentName,
                             CreatedUserId = authUserInfo.EmployeeId,
                             CreatedUserName = authUserInfo.EmployeeName,
-                            CreatedTime = DateTime.Now,
-                            TenantId = authUserInfo.TenantId,
-                            TenantName = authUserInfo.TenantName
+                            CreatedTime = DateTime.Now
                         };
                         visitLogModel.RecordCreate(_httpContext);
 
                         // 获取 CenterLog 库的连接字符串配置
-                        var connectionSetting = await _httpContext.RequestServices.GetService<ISqlSugarEntityService>()
-                            .GetConnectionSetting(CommonConst.Default.TenantId, CommonConst.Default.TenantNo,
-                                DatabaseTypeEnum.CenterLog);
-                        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+                        var connectionConfig = SqlSugarContext.GetConnectionConfig(GlobalContext.LogConnectionSettings);
 
                         // 这里不能使用Aop
                         var db = new SqlSugarClient(connectionConfig);

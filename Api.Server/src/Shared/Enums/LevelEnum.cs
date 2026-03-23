@@ -44,13 +44,6 @@ public enum LevelEnum : byte
     System = 1,
 
     /// <summary>
-    /// 租户级
-    /// </summary>
-    [TagType(TagTypeEnum.Warning)]
-    [Description("租户级")]
-    Tenant = 2,
-
-    /// <summary>
     /// 自定义级
     /// </summary>
     [TagType(TagTypeEnum.Danger)]

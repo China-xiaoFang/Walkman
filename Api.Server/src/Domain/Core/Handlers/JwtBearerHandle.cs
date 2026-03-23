@@ -52,13 +52,10 @@ public class JwtBearerHandle : IJwtBearerHandle
             .ToObject<Dictionary<string, string>>();
         // 从 payload 中读取 DeviceType,AppNo,TenantNo,EmployeeNo
         if (payload.TryGetValue(nameof(AuthUserInfo.DeviceType), out var deviceType)
-            && payload.TryGetValue(nameof(AuthUserInfo.AppNo), out var appNo)
-            && payload.TryGetValue(nameof(AuthUserInfo.TenantNo), out var tenantNo)
             && payload.TryGetValue(nameof(AuthUserInfo.EmployeeNo), out var employeeNo))
         {
             // 获取授权用户信息
-            var authUserInfo =
-                await _user.GetAuthUserInfo(Enum.Parse<AppEnvironmentEnum>(deviceType, true), appNo, tenantNo, employeeNo);
+            var authUserInfo = await _user.GetAuthUserInfo(Enum.Parse<AppEnvironmentEnum>(deviceType, true), employeeNo);
 
             if (authUserInfo == null)
                 return false;

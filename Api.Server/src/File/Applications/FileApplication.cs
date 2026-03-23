@@ -22,7 +22,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
-using Fast.Center.Entity;
+using Fast.Admin.Entity;
 using Fast.Core;
 using Fast.DynamicApplication;
 using Fast.File.Applications.Dto;
@@ -358,11 +358,6 @@ public class FileApplication : IDynamicApplication
 
         // 本地文件路径
         var filePath = fileInfoSettings.Path;
-
-        if (!string.IsNullOrWhiteSpace(_user?.TenantNo))
-        {
-            filePath = Path.Combine(filePath, _user.TenantNo);
-        }
 
         // 判断是否启用类型文件夹
         if (fileInfoSettings.UseTypeFolder)

@@ -21,8 +21,8 @@
 // ------------------------------------------------------------------------
 
 using System.Text;
-using Fast.Center.Entity;
-using Fast.Center.Enum;
+using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.SqlSugar;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -88,12 +88,12 @@ public class InitDatabaseHostedService : IHostedService
 
             // 获取所有不分表的Model类型
             var tableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
-                .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.Center)
+                .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.Admin)
                 .Select(sl => sl.EntityType)
                 .ToArray();
             // 获取所有分表的Model类型
             var splitTableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => wh.IsSplitTable)
-                .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.Center)
+                .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.Admin)
                 .Select(sl => sl.EntityType)
                 .ToArray();
 
@@ -104,39 +104,12 @@ public class InitDatabaseHostedService : IHostedService
 
             var dateTime = new DateTime(2025, 01, 01);
 
-            // 初始化系统租户
-            var systemTenantModel = new TenantModel
-            {
-                TenantId = CommonConst.Default.TenantId,
-                TenantNo = CommonConst.Default.TenantNo,
-                TenantCode = "Fa",
-                Status = CommonStatusEnum.Enable,
-                TenantName = "FastDotNet工作室",
-                ShortName = "Fast",
-                SpellName = "fast dotnet gong zuo shi",
-                Edition = EditionEnum.Internal,
-                AdminAccountId = CommonConst.Default.SuperAdminAccountId,
-                AdminName = "超级管理员",
-                AdminMobile = "15580001115",
-                AdminEmail = "2875616188@qq.com",
-                AdminPhone = null,
-                RobotName = "机器人",
-                TenantType = TenantTypeEnum.System,
-                LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
-                AllowDeleteData = true,
-                CreatedTime = dateTime
-            };
-            systemTenantModel = await db.Insertable(systemTenantModel)
-                .ExecuteReturnEntityAsync();
-
             #region 超级管理员
 
             var superAdminAccountModel = new AccountModel
             {
                 AccountId = CommonConst.Default.SuperAdminAccountId,
-                AccountKey = NumberUtil.IdToCodeByLong(CommonConst.Default.SuperAdminAccountId),
                 Mobile = "15580001115",
-                Email = "2875616188@qq.com",
                 Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
                     .ToUpper(),
                 NickName = "小方",
@@ -149,36 +122,68 @@ public class InitDatabaseHostedService : IHostedService
             superAdminAccountModel = await db.Insertable(superAdminAccountModel)
                 .ExecuteReturnEntityAsync();
 
+            var adminAccountModel = new AccountModel
+            {
+                AccountId = YitIdHelper.NextId(),
+                Mobile = "15580001111",
+                Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
+                    .ToUpper(),
+                NickName = "管理员",
+                Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                Status = CommonStatusEnum.Enable,
+                Sex = GenderEnum.Unknown,
+                Birthday = new DateTime(1998, 01, 01),
+                CreatedTime = dateTime
+            };
+            adminAccountModel = await db.Insertable(adminAccountModel)
+                .ExecuteReturnEntityAsync();
+
             var superAdminUserId = YitIdHelper.NextId();
+            var adminUserId = YitIdHelper.NextId();
             var robotUserId = YitIdHelper.NextId();
-            await db.Insertable(new List<TenantUserModel>
+            await db.Insertable(new List<EmployeeModel>
                 {
                     new()
                     {
                         EmployeeId = superAdminUserId,
-                        UserKey = NumberUtil.IdToCodeByLong(superAdminUserId),
                         AccountId = superAdminAccountModel.AccountId,
+                        UserType = UserTypeEnum.SuperAdmin,
                         EmployeeNo = "SuperAdmin",
                         EmployeeName = "超级管理员",
+                        Mobile = "15580001115",
+                        Status = EmployeeStatusEnum.Formal,
+                        Sex = GenderEnum.Man,
                         IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
-                        DepartmentId = null,
-                        DepartmentName = null,
-                        UserType = UserTypeEnum.SuperAdmin,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedTime = dateTime,
-                        TenantId = systemTenantModel.TenantId
+                        EntryDate = new DateTime(2000, 1, 1),
+                        CreatedTime = dateTime
+                    },
+                    new()
+                    {
+                        EmployeeId = adminUserId,
+                        AccountId = adminAccountModel.AccountId,
+                        UserType = UserTypeEnum.Admin,
+                        EmployeeNo = "Admin",
+                        EmployeeName = "管理员",
+                        Mobile = "15580001111",
+                        Status = EmployeeStatusEnum.Formal,
+                        Sex = GenderEnum.Man,
+                        IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                        EntryDate = new DateTime(2000, 1, 1),
+                        CreatedTime = dateTime
                     },
                     new()
                     {
                         EmployeeId = robotUserId,
-                        UserKey = NumberUtil.IdToCodeByLong(robotUserId),
                         AccountId = -99,
-                        EmployeeNo = $"{systemTenantModel.TenantCode}_Robot",
-                        EmployeeName = systemTenantModel.RobotName,
                         UserType = UserTypeEnum.Robot,
-                        Status = CommonStatusEnum.Disable,
-                        CreatedTime = dateTime,
-                        TenantId = systemTenantModel.TenantId
+                        EmployeeNo = "Robot",
+                        EmployeeName = "机器人",
+                        Mobile = "",
+                        Status = EmployeeStatusEnum.Resigned,
+                        Sex = GenderEnum.Unknown,
+                        IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                        EntryDate = new DateTime(2000, 1, 1),
+                        CreatedTime = dateTime
                     }
                 })
                 .ExecuteCommandAsync(cancellationToken);
@@ -198,26 +203,62 @@ public class InitDatabaseHostedService : IHostedService
                         Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
                             .ToUpper(),
                         CreatedTime = dateTime
+                    },
+                    new()
+                    {
+                        AccountId = adminAccountModel.AccountId,
+                        OperationType = PasswordOperationTypeEnum.Create,
+                        Type = PasswordTypeEnum.SHA1,
+                        Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
+                            .ToUpper(),
+                        CreatedTime = dateTime
                     }
                 })
                 .ExecuteCommandAsync(cancellationToken);
 
             #endregion
 
-            // 系统数据库
-            await DatabaseSeedData.SystemDatabaseSeedData(db, systemTenantModel.TenantId, systemTenantModel.TenantCode, dateTime);
+            // 初始化公司（组织架构）
+            await db.Insertable(new OrganizationModel
+                {
+                    OrgId = YitIdHelper.NextId(),
+                    ParentId = 0,
+                    ParentIds = [0],
+                    ParentNames = [],
+                    OrgName = "FastDotNet工作室",
+                    OrgCode = "fa_hq",
+                    Contacts = "超级管理员",
+                    Phone = "15580001115",
+                    Email = "2875616188@qq.com",
+                    Sort = 1,
+                    DataPublic = false,
+                    Remark = null
+                })
+                .ExecuteCommandAsync(cancellationToken);
+
+            // 初始化管理员角色
+            await db.Insertable(new RoleModel
+                {
+                    RoleId = YitIdHelper.NextId(),
+                    RoleType = RoleTypeEnum.Admin,
+                    IsSystemMenu = true,
+                    RoleName = "管理员",
+                    RoleCode = "manager_role",
+                    Sort = 1,
+                    DataScopeType = DataScopeTypeEnum.All,
+                    AssignableRoleIds = [],
+                    Remark = null
+                })
+                .ExecuteCommandAsync(cancellationToken);
 
             // 配置
             await ConfigSeedData.SystemConfigSeedData(db, dateTime);
 
             // 系统序号规则
-            await SysSerialSeedData.SeedData(db);
-
-            // 应用
-            var applicationModel = await ApplicationSeedData.SeedData(db, dateTime);
+            await SerialSeedData.SeedData(db);
 
             // 菜单
-            await MenuSeedData.DefaultMenuSeedData(db, applicationModel, dateTime);
+            await MenuSeedData.DefaultMenuSeedData(db, dateTime);
 
             {
                 var logSb = new StringBuilder();

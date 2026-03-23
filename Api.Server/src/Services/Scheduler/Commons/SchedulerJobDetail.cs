@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
+using Fast.Admin.Enum;
 using Quartz;
 
 namespace Fast.Scheduler;
@@ -31,17 +31,6 @@ namespace Fast.Scheduler;
 [SuppressSniffer]
 public class SchedulerJobInfo
 {
-    /// <summary>
-    /// 是否系统默认作业
-    /// </summary>
-    /// <remarks>根据 TenantId 自动赋值</remarks>
-    public bool IsSystem { get; set; }
-
-    /// <summary>
-    /// 租户ID
-    /// </summary>
-    public long? TenantId { get; set; }
-
     /// <summary>
     /// 作业名称
     /// </summary>
@@ -159,12 +148,6 @@ public class SchedulerJobInfo
     #endregion
 
     #region 自动处理的属性
-
-    /// <summary>
-    /// 是否全部租户作业
-    /// </summary>
-    /// <remarks>如果为 True 则所有调度器都会创建此作业</remarks>
-    public bool IsAllTenant { get; set; } = false;
 
     /// <summary>
     /// 触发器状态

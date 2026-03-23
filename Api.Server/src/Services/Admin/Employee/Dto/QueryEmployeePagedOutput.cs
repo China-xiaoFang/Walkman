@@ -231,11 +231,6 @@ public class QueryEmployeePagedOutput
     public string AccountMobile { get; set; }
 
     /// <summary>
-    /// 账号邮箱
-    /// </summary>
-    public string AccountEmail { get; set; }
-
-    /// <summary>
     /// 账号昵称
     /// </summary>
     public string AccountNickName { get; set; }

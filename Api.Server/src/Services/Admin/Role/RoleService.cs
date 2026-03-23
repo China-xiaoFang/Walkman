@@ -22,10 +22,9 @@
 
 using Dm.util;
 using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.Admin.Service.Role.Dto;
 using Fast.AdminLog.Enum;
-using Fast.Center.Entity;
-using Fast.Center.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,13 +38,11 @@ public class RoleService : IDynamicApplication
 {
     private readonly IUser _user;
     private readonly ISqlSugarRepository<RoleModel> _repository;
-    private readonly ISqlSugarClient _centerRepository;
 
-    public RoleService(IUser user, ISqlSugarRepository<RoleModel> repository, ISqlSugarClient centerRepository)
+    public RoleService(IUser user, ISqlSugarRepository<RoleModel> repository)
     {
         _user = user;
         _repository = repository;
-        _centerRepository = centerRepository;
     }
 
     /// <summary>
@@ -322,7 +319,7 @@ public class RoleService : IDynamicApplication
         var menuIds = input.MenuIds ?? [];
         if (menuIds.Any())
         {
-            if (await _centerRepository.Queryable<MenuModel>()
+            if (await _repository.Queryable<MenuModel>()
                     .Where(wh => menuIds.Contains(wh.MenuId))
                     .Select(sl => sl.MenuId)
                     .CountAsync()
@@ -336,7 +333,7 @@ public class RoleService : IDynamicApplication
         var buttonIds = input.ButtonIds ?? [];
         if (buttonIds.Any())
         {
-            var existButtonIds = await _centerRepository.Queryable<ButtonModel>()
+            var existButtonIds = await _repository.Queryable<ButtonModel>()
                 .Where(wh => buttonIds.Contains(wh.ButtonId))
                 .Select(sl => sl.ButtonId)
                 .ToListAsync();
@@ -440,9 +437,6 @@ public class RoleService : IDynamicApplication
             throw new UserFriendlyException("应用类型不匹配！");
         }
 
-        // 查询租户信息
-        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
-
         // 查询角色
         var roleIds = _user.RoleIdList ?? [];
         var roleList = await _repository.Queryable<RoleModel>()
@@ -458,16 +452,12 @@ public class RoleService : IDynamicApplication
             .Select(sl => sl.RoleId)
             .ToList();
 
-        var menuQueryable = _centerRepository.Queryable<MenuModel>()
-            .Where(wh => wh.AppId == applicationModel.AppId)
+        var menuQueryable = _repository.Queryable<MenuModel>()
             .Where(wh => wh.Status == CommonStatusEnum.Enable)
-            .Where(wh => tenantModel.Edition >= wh.Edition)
             .Where(wh => wh.MenuType != MenuTypeEnum.Catalog);
 
-        var buttonQueryable = _centerRepository.Queryable<ButtonModel>()
-            .Where(wh => wh.AppId == applicationModel.AppId)
-            .Where(wh => wh.Status == CommonStatusEnum.Enable)
-            .Where(wh => tenantModel.Edition >= wh.Edition);
+        var buttonQueryable = _repository.Queryable<ButtonModel>()
+            .Where(wh => wh.Status == CommonStatusEnum.Enable);
 
         if (!_user.IsSuperAdmin && !_user.IsAdmin)
         {
