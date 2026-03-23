@@ -28,7 +28,6 @@ namespace Fast.Center.Entity;
 [SugarTable("Account", "账号信息表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(Email)}", nameof(Email), OrderByType.Asc, true)]
 public class AccountModel : IUpdateVersion
 {
     /// <summary>
@@ -38,25 +37,11 @@ public class AccountModel : IUpdateVersion
     public long AccountId { get; set; }
 
     /// <summary>
-    /// 账号Key
-    /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "账号Key", Length = 12)]
-    public string AccountKey { get; set; }
-
-    /// <summary>
     /// 手机
     /// </summary>
     [Required]
     [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
-
-    /// <summary>
-    /// 邮箱
-    /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "邮箱", Length = 50)]
-    public string Email { get; set; }
 
     /// <summary>
     /// 微信用户Id
@@ -109,12 +94,6 @@ public class AccountModel : IUpdateVersion
     public DateTime? Birthday { get; set; }
 
     /// <summary>
-    /// 初次登录租户
-    /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录租户")]
-    public long? FirstLoginTenantId { get; set; }
-
-    /// <summary>
     /// 初次登录设备
     /// </summary>
     [SugarColumn(ColumnDescription = "初次登录设备", Length = 50)]
@@ -155,12 +134,6 @@ public class AccountModel : IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "初次登录时间")]
     public DateTime? FirstLoginTime { get; set; }
-
-    /// <summary>
-    /// 最后登录租户
-    /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录租户")]
-    public long? LastLoginTenantId { get; set; }
 
     /// <summary>
     /// 最后登录设备

@@ -127,18 +127,6 @@ public class ComplaintModel : IUpdateVersion
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
-    /// 租户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
-    public long? TenantId { get; set; }
-
-    /// <summary>
-    /// 租户名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "租户名称", Length = 30)]
-    public string TenantName { get; set; }
-
-    /// <summary>
     /// 更新版本控制字段
     /// </summary>
     [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]

@@ -28,8 +28,7 @@ namespace Fast.Center.Entity;
 [SugarTable("TenantOnlineUser", "租户在线用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(DeviceId)}", nameof(DeviceId), OrderByType.Asc)]
-[SugarIndex($"IX_{{table}}_{nameof(AppNo)}", nameof(AppNo), OrderByType.Asc)]
-public class TenantOnlineUserModel : IBaseTEntity
+public class TenantOnlineUserModel : IDatabaseEntity
 {
     /// <summary>
     /// 连接Id
@@ -49,19 +48,6 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "设备Id", Length = 36)]
     public string DeviceId { get; set; }
-
-    /// <summary>
-    /// 应用编号
-    /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "应用编号", Length = 11)]
-    public string AppNo { get; set; }
-
-    /// <summary>
-    /// 应用名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", Length = 30)]
-    public string AppName { get; set; }
 
     /// <summary>
     /// 账号Id
@@ -185,10 +171,4 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "下线时间")]
     public DateTime? OfflineTime { get; set; }
-
-    /// <summary>
-    /// 租户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
-    public long TenantId { get; set; }
 }

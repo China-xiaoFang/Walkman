@@ -8,8 +8,4 @@
         <PackageReference Include="Fast.SqlSugar" Version="3.5.57" />
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="$(SolutionDir)src\Domain\Center\Enum\Fast.Center.Enum.csproj" />
-    </ItemGroup>
-
 </Project>
