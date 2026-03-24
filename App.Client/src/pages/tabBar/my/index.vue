@@ -1,8 +1,10 @@
 <template>
+	<!-- 'background-image': configStore.layout.isDark ? '' : `url(${appStore.statusBarImageUrl})`, -->
+
 	<view
 		class="page"
 		:style="{
-			'background-image': configStore.layout.isDark ? '' : `url(${appStore.statusBarImageUrl})`,
+			'background-image': configStore.layout.isDark ? '' : `url(${topImage})`,
 		}"
 	>
 		<view
@@ -135,6 +137,7 @@ import { useRouter } from "uni-mini-router";
 import { useMessage } from "wot-design-uni";
 import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
+import topImage from "@/static/images/topImage.png";
 import defaultLogo from "@/static/logo.png";
 import { useApp, useConfig, useUserInfo } from "@/stores";
 
