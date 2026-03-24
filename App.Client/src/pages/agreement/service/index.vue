@@ -1,12 +1,10 @@
 <template>
 	<view class="page">
-		<rich-text :nodes="appStore.serviceAgreement" />
+		<rich-text :nodes="serviceAgreement" />
 	</view>
 </template>
 
 <script setup lang="ts">
-import { useApp } from "@/stores";
-
 definePage({
 	name: "ServiceAgreement",
 	layout: "layout",
@@ -17,7 +15,7 @@ definePage({
 	},
 });
 
-const appStore = useApp();
+const serviceAgreement = "";
 </script>
 
 <style scoped lang="scss">

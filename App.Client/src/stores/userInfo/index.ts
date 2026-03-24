@@ -7,8 +7,8 @@ import { CommonRoute } from "@/common";
 import { useToast } from "@/hooks";
 import { closeWebSocket } from "@/signalR";
 import { useApp } from "../app";
+import type { ClientLoginOutput } from "@/api/services/Auth/login/models/ClientLoginOutput";
 import type { WeChatClientLoginInput } from "@/api/services/Auth/login/models/WeChatClientLoginInput";
-import type { WeChatClientLoginOutput } from "@/api/services/Auth/login/models/WeChatClientLoginOutput";
 import type { AxiosResponse } from "axios";
 
 type IState = {
@@ -25,7 +25,7 @@ type IState = {
 export const useUserInfo = defineStore(
 	"userInfo",
 	() => {
-		const state = reactive<IState & Required<Omit<WeChatClientLoginOutput, "status" | "message">>>({
+		const state = reactive<IState & Required<Omit<ClientLoginOutput, "status" | "message">>>({
 			token: "",
 			refreshToken: "",
 			activeTabBar: CommonRoute.Home,
@@ -57,7 +57,7 @@ export const useUserInfo = defineStore(
 		]);
 
 		/** 设置用户信息 */
-		const setUserInfo = (uInfo: WeChatClientLoginOutput): void => {
+		const setUserInfo = (uInfo: ClientLoginOutput): void => {
 			Object.keys(uInfo).forEach((key) => {
 				state[key] = uInfo[key];
 			});

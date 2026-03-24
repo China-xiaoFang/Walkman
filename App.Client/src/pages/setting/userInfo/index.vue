@@ -56,12 +56,12 @@
 import { onLoad } from "@dcloudio/uni-app";
 import { reactive } from "vue";
 import { clickUtil, consoleLog, withDefineType } from "@fast-china/utils";
-import { weChatApi } from "@/api/services/Center/weChat";
+import { weChatApi } from "@/api/services/Admin/weChat";
 import { fileApi } from "@/api/services/File";
 import { RegExps } from "@/constants";
 import { useMessageBox, useToast } from "@/hooks";
 import { useApp, useUserInfo } from "@/stores";
-import type { QueryWeChatUserDetailOutput } from "@/api/services/Center/weChat/models/QueryWeChatUserDetailOutput";
+import type { QueryWeChatUserDetailOutput } from "@/api/services/Admin/weChat/models/QueryWeChatUserDetailOutput";
 import type { MessageOptions } from "wot-design-uni/components/wd-message-box/types";
 
 definePage({

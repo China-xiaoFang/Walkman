@@ -1,12 +1,10 @@
 <template>
 	<view class="page">
-		<rich-text :nodes="appStore.privacyAgreement" />
+		<rich-text :nodes="privacyAgreement" />
 	</view>
 </template>
 
 <script setup lang="ts">
-import { useApp } from "@/stores";
-
 definePage({
 	name: "PrivacyAgreement",
 	layout: "layout",
@@ -17,7 +15,7 @@ definePage({
 	},
 });
 
-const appStore = useApp();
+const privacyAgreement = "";
 </script>
 
 <style scoped lang="scss">

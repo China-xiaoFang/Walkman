@@ -62,11 +62,11 @@
 import { reactive, ref } from "vue";
 import { clickUtil, withDefineType } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
-import { complaintApi } from "@/api/services/Center/complaint";
+import { complaintApi } from "@/api/services/Admin/complaint";
 import { fileApi } from "@/api/services/File";
 import { useLoading, useToast } from "@/hooks";
 import { useApp } from "@/stores";
-import type { AddComplaintInput } from "@/api/services/Center/complaint/models/AddComplaintInput";
+import type { AddComplaintInput } from "@/api/services/Admin/complaint/models/AddComplaintInput";
 import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
 import type { UploadFile, UploadMethod } from "wot-design-uni/components/wd-upload/types";
 

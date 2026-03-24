@@ -1,14 +1,8 @@
 import { reactive, ref, toRefs } from "vue";
-import { useFastAxios } from "@fast-china/axios";
-import { Local, consoleError, consoleLog, useIdentity } from "@fast-china/utils";
+import { Local, consoleError, useIdentity } from "@fast-china/utils";
 import { defineStore } from "pinia";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
-import { EditionEnum } from "@/api/enums/EditionEnum";
-import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
-import { appApi } from "@/api/services/Center/app";
-import { dictionaryApi } from "@/api/services/Center/dictionary";
-import { useToast } from "@/hooks";
-import type { LaunchOutput } from "@/api/services/Center/app/models/LaunchOutput";
+import { dictionaryApi } from "@/api/services/Admin/dictionary";
 
 export type ILoginComponent = "ClassicLogin";
 
@@ -46,37 +40,12 @@ type IState = {
 		/** 网络类型 */
 		networkType: INetworkType;
 	};
-	/** 是否存在 Launch 数据 */
-	hasLaunch: boolean;
 };
 
 export const useApp = defineStore(
 	"app",
 	() => {
-		const state = reactive<IState & LaunchOutput>({
-			edition: EditionEnum.None,
-			appNo: "",
-			appName: "Fast.App",
-			logoUrl: "",
-			themeColor: "#409EFF",
-			icpSecurityCode: "",
-			publicSecurityCode: "",
-			userAgreement: "",
-			privacyAgreement: "",
-			serviceAgreement: "",
-			appType: AppEnvironmentEnum.MobileThree,
-			environmentType: EnvironmentTypeEnum.Development,
-			loginComponent: "",
-			webSocketUrl: "",
-			requestTimeout: 6000,
-			requestEncipher: true,
-			statusBarImageUrl: "",
-			contactPhone: "",
-			latitude: null,
-			longitude: null,
-			address: null,
-			bannerImages: [],
-			tenantName: "",
+		const state = reactive<IState>({
 			env: "production",
 			deviceType: AppEnvironmentEnum.MobileThree,
 			appId: "",
@@ -91,21 +60,13 @@ export const useApp = defineStore(
 				onLine: false,
 				networkType: "none",
 			},
-			hasLaunch: false,
 		});
 
 		/** 字典 */
 		const dictionary = ref<Map<string, FaTableEnumColumnCtx[]>>(new Map());
 
-		/** 设置App名称 */
-		const setAppName = (appName: string): void => {
-			state.appName = appName;
-		};
-
 		/** 设置字典 */
 		const setDictionary = async (): Promise<void> => {
-			// 判断是否存在 Launch 数据
-			if (!state.hasLaunch) return;
 			try {
 				dictionary.value.clear();
 				// 处理数据字典
@@ -115,36 +76,6 @@ export const useApp = defineStore(
 				});
 			} catch {
 				consoleError("App", "字典加载失败");
-			}
-		};
-
-		/** 设置 FastAxios */
-		const setFastAxios = (): void => {
-			// 判断是否存在 Launch 数据
-			if (!state.hasLaunch) return;
-			const fastAxios = useFastAxios();
-			fastAxios.setOptions({
-				timeout: state.requestTimeout,
-				requestCipher: state.requestEncipher,
-			});
-		};
-
-		/** Launch */
-		const launch = async (): Promise<void> => {
-			try {
-				const apiRes = await appApi.launch();
-				consoleLog("App", "Launch", apiRes);
-				Object.assign(state, apiRes);
-				state.hasLaunch = true;
-			} finally {
-				if (!state.loginComponent) {
-					state.loginComponent = "ClassicLogin";
-				}
-
-				setFastAxios();
-
-				// 处理数据字典
-				await setDictionary();
 			}
 		};
 
@@ -167,34 +98,6 @@ export const useApp = defineStore(
 			return result;
 		};
 
-		/** 拨打电话 */
-		const makePhoneCall = (): void => {
-			if (!state.contactPhone) {
-				useToast.warning("未配置联系电话");
-				return;
-			}
-			uni.makePhoneCall({
-				phoneNumber: state.contactPhone,
-			});
-		};
-
-		/** 打开位置 */
-		const openLocation = (): void => {
-			if (!state.latitude && !state.longitude) {
-				useToast.warning("未配置位置信息");
-				return;
-			}
-			uni.openLocation({
-				latitude: state.latitude,
-				longitude: state.longitude,
-				name: state.appName,
-				address: state.address,
-				fail: () => {
-					useToast.warning("无法打开位置");
-				},
-			});
-		};
-
 		/** 清除 App 缓存 */
 		const clearAppCache = (): void => {
 			// 获取设备Id，这里按理来说不应该不存在的
@@ -207,13 +110,8 @@ export const useApp = defineStore(
 
 		return {
 			...toRefs(state),
-			setAppName,
 			setDictionary,
-			setFastAxios,
-			launch,
 			getDictionary,
-			makePhoneCall,
-			openLocation,
 			clearAppCache,
 		};
 	},

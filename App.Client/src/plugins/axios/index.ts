@@ -54,7 +54,8 @@ export function loadFastAxios(): void {
 			"Fast-Device-Type": Object.keys(AppEnvironmentEnum).find((f) => AppEnvironmentEnum[f] === appStore.deviceType),
 			"Fast-Device-Id": useIdentity().deviceId,
 		},
-		requestCipher: true,
+		timeout: import.meta.env.VITE_AXIOS_REQUEST_TIMEOUT,
+		requestCipher: import.meta.env.VITE_AXIOS_REQUEST_ENCIPHER === "true",
 	});
 
 	fastAxios.loading.show.use((text) => {

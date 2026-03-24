@@ -31,9 +31,9 @@
 					</template>
 
 					<template v-else>
-						<FaImage width="120rpx" height="120rpx" round :hideImage="false" :src="appStore.logoUrl" />
+						<FaImage width="120rpx" height="120rpx" round :hideImage="false" :src="defaultLogo" />
 						<view class="user__info">
-							<view class="nickName">{{ appStore.appName }} 用户</view>
+							<view class="nickName">Fast随身听 用户</view>
 							<view class="mobile">登录后体验更多功能</view>
 						</view>
 					</template>
@@ -74,7 +74,7 @@
 		<view class="mb30 data-card">
 			<wd-cell customClass="card__cell" title="我的功能" />
 			<view class="card__content">
-				<view class="card__item" @click="appStore.makePhoneCall">
+				<view class="card__item" @click="makePhoneCall">
 					<FaIcon name="call" />
 					<text>联系我们</text>
 				</view>
@@ -90,10 +90,7 @@
 			<!-- #ifdef APP-PLUS -->
 			<wd-cell title="热更新版本" :value="`v${appStore.appVersion}`" />
 			<!-- #endif -->
-			<template v-if="appStore.tenantName">
-				<wd-cell title="系统服务商" :value="appStore.tenantName" />
-				<wd-cell title="服务有效期" value="2029-12-31 23:59:59" />
-			</template>
+			<wd-cell title="服务有效期" value="2029-12-31 23:59:59" />
 		</wd-cell-group>
 
 		<wd-cell-group border>
@@ -136,9 +133,9 @@ import { computed, reactive, ref } from "vue";
 import { clickUtil, consoleError, consoleLog } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
 import { useMessage } from "wot-design-uni";
-import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
+import defaultLogo from "@/static/logo.png";
 import { useApp, useConfig, useUserInfo } from "@/stores";
 
 definePage({
@@ -168,27 +165,18 @@ const storageInfo = ref<Partial<UniNamespace.GetStorageInfoSuccess>>({});
 
 const appVersion = computed(() => {
 	let envName = "";
-	switch (appStore.environmentType) {
-		case EnvironmentTypeEnum.Production:
+	switch (appStore.env) {
+		case "production":
 			envName = "生产版";
 			break;
-		case EnvironmentTypeEnum.Development:
+		case "development":
 			envName = "开发版";
 			break;
-		case EnvironmentTypeEnum.Test:
+		case "test":
 			envName = "测试版";
 			break;
-		case EnvironmentTypeEnum.UAT:
-			envName = "验收版";
-			break;
-		case EnvironmentTypeEnum.PreProduction:
-			envName = "预生产版";
-			break;
-		case EnvironmentTypeEnum.GrayDeployment:
-			envName = "灰度测试版";
-			break;
-		case EnvironmentTypeEnum.StressTest:
-			envName = "压测版";
+		case "staging":
+			envName = "预览版";
 			break;
 	}
 	return `${envName} v${appStore.appBaseInfo.appVersion}`;
@@ -243,6 +231,13 @@ const checkMiniAppVersion = () => {
 		} else {
 			useToast.success("小程序已是最新版本");
 		}
+	});
+};
+
+/** 拨打电话 */
+const makePhoneCall = (): void => {
+	uni.makePhoneCall({
+		phoneNumber: "",
 	});
 };
 

@@ -26,8 +26,7 @@
 			<view class="pop__auth-warp">
 				<view class="auth-body">
 					<view class="auth-title">
-						<image v-if="appStore.logoUrl" class="auth-logo" :src="appStore.logoUrl" @error="state.logoUrl = defaultLogo" />
-						<image v-else class="auth-logo" :src="defaultLogo" />
+						<image class="auth-logo" :src="defaultLogo" />
 						<view>手机号授权</view>
 					</view>
 					<view class="auth-content">
@@ -107,8 +106,6 @@ const state = reactive({
 	lightBackgroundImage: withDefineType<string>(),
 	/** 深色背景图片 */
 	darkBackgroundImage: withDefineType<string>(),
-	/** Logo 图片 */
-	logoUrl: appStore.logoUrl,
 	/** 渲染结束 */
 	rendered: false,
 });

@@ -9,21 +9,13 @@
 			@clear="handleSearch"
 			@search="handleSearch"
 		/>
-		<wd-swiper
-			v-if="appStore.bannerImages?.length > 0"
-			customClass="mb20"
-			:list="appStore.bannerImages"
-			autoplay
-			v-model:current="state.swiperCurrent"
-			:indicator="{ type: 'dots-bar' }"
-		/>
 	</view>
 </template>
 
 <script setup lang="ts">
 import { onLoad, onPullDownRefresh, onShow } from "@dcloudio/uni-app";
 import { reactive, watch } from "vue";
-import { useApp, useUserInfo } from "@/stores";
+import { useUserInfo } from "@/stores";
 
 definePage({
 	name: "Home",
@@ -35,11 +27,9 @@ definePage({
 	},
 });
 
-const appStore = useApp();
 const userInfoStore = useUserInfo();
 
 const state = reactive({
-	swiperCurrent: 0,
 	/** 搜素值 */
 	searchValue: "",
 });
@@ -56,19 +46,6 @@ const loadPage = async () => {};
 const loadRefresh = async () => {};
 
 onLoad(async () => {
-	watch(
-		() => appStore.appName,
-		(newVal) => {
-			if (newVal) {
-				uni.setNavigationBarTitle({
-					title: appStore.appName,
-				});
-			}
-		},
-		{
-			immediate: true,
-		}
-	);
 	watch(
 		() => userInfoStore.hasUserInfo,
 		async (newVal) => {

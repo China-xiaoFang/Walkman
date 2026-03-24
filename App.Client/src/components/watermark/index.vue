@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { computed, reactive } from "vue";
-import { useApp, useConfig, useUserInfo } from "@/stores";
+import { useConfig, useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "Watermark",
@@ -15,7 +15,6 @@ defineOptions({
 	},
 });
 
-const appStore = useApp();
 const configStore = useConfig();
 const userInfoStore = useUserInfo();
 
@@ -27,7 +26,7 @@ const watermarkProps = reactive({
 	size: 14,
 	color: computed(() => (configStore.layout.isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)")),
 	content: computed(() => {
-		let watermarkContent = appStore.appName;
+		let watermarkContent = "Fast随身听";
 		if (userInfoStore.hasUserInfo) {
 			watermarkContent += ` - ${userInfoStore.nickName}`;
 		}

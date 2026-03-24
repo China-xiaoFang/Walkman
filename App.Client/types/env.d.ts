@@ -11,6 +11,14 @@ declare interface ImportMetaEnv {
 	 */
 	readonly VITE_AXIOS_REQUEST_URL: string;
 	/**
+	 * 接口请求时间
+	 */
+	readonly VITE_AXIOS_REQUEST_TIMEOUT: number;
+	/**
+	 * 接口请求加密
+	 */
+	readonly VITE_AXIOS_REQUEST_ENCIPHER: "true" | "false";
+	/**
 	 * 接口版本
 	 */
 	readonly VITE_AXIOS_API_VERSION: string;
