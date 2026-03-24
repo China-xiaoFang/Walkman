@@ -19,10 +19,6 @@ declare interface ImportMetaEnv {
 	 */
 	readonly VITE_BASE_PATH: string;
 	/**
-	 * CDN 地址
-	 */
-	readonly VITE_CDN_URL: string;
-	/**
 	 * 打包输出路径
 	 */
 	readonly VITE_OUT_DIR: string;

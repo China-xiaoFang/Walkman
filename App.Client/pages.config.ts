@@ -4,7 +4,7 @@ export default defineUniPages({
 	pages: [],
 	subPackages: [],
 	globalStyle: {
-		navigationBarTitleText: "Fast.App",
+		navigationBarTitleText: "Fast随身听",
 		navigationBarBackgroundColor: "@navigationBarBackgroundColor",
 		navigationBarTextStyle: "@navigationBarTextStyle",
 		backgroundColor: "@backgroundColor",

@@ -168,23 +168,11 @@ onLaunch(async () => {
 	plus.nativeUI.setUIStyle("auto");
 	// #endif
 
-	// 设置应用名称
-	appStore.setAppName(appStore.appBaseInfo.appName);
-
 	// 初始化主题
 	configStore.initTheme();
 
 	// Launch
-	appStore
-		.launch()
-		.catch((error) => {
-			consoleError("Launcher", "launch接口异常");
-			consoleError("Launcher", error);
-		})
-		.finally(() => {
-			const configStore = useConfig();
-			configStore.setTheme(appStore.themeColor);
-		});
+	appStore.setDictionary();
 
 	// #ifdef MP-WEIXIN
 	checkMiniAppVersion();
