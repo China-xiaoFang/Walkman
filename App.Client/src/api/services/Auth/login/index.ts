@@ -1,16 +1,12 @@
 import { axiosUtil } from "@fast-china/axios";
 import { LoginOutput } from "./models/LoginOutput";
 import { LoginInput } from "./models/LoginInput";
-import { LoginTenantOutput } from "./models/LoginTenantOutput";
-import { TenantLoginInput } from "./models/TenantLoginInput";
-import { WeChatLoginInput } from "./models/WeChatLoginInput";
-import { WeChatAuthLoginInput } from "./models/WeChatAuthLoginInput";
-import { TryLoginInput } from "./models/TryLoginInput";
-import { WeChatClientLoginOutput } from "./models/WeChatClientLoginOutput";
+import { ClientRegisterInput } from "./models/ClientRegisterInput";
+import { ClientLoginOutput } from "./models/ClientLoginOutput";
 import { WeChatClientLoginInput } from "./models/WeChatClientLoginInput";
 
 /**
- * Fast.Center.Service.Login.LoginService 登录服务Api
+ * Fast.Admin.Service.Login.LoginService 登录服务Api
  */
 export const loginApi = {
   /**
@@ -27,34 +23,22 @@ export const loginApi = {
     });
   },
   /**
-   * 获取登录用户
+   * 客户端注册
    */
-  queryLoginUser() {
-    return axiosUtil.request<LoginTenantOutput[]>({
-      url: "/queryLoginUser",
-      method: "get",
-      requestType: "query",
-    });
-  },
-  /**
-   * 租户登录
-   */
-  tenantLogin(data: TenantLoginInput) {
-    return axiosUtil.request<LoginOutput>({
-      url: "/tenantLogin",
+  clientRegister(data: ClientRegisterInput) {
+    return axiosUtil.request({
+      url: "/clientRegister",
       method: "post",
       data,
       requestType: "auth",
-			loading: true,
-			loadingText: "租户登录中...",
     });
   },
   /**
-   * 微信登录
+   * 客户端登录
    */
-  weChatLogin(data: WeChatLoginInput) {
-    return axiosUtil.request<LoginOutput>({
-      url: "/weChatLogin",
+  clientLogin(data: LoginInput) {
+    return axiosUtil.request<ClientLoginOutput>({
+      url: "/clientLogin",
       method: "post",
       data,
       requestType: "auth",
@@ -63,28 +47,16 @@ export const loginApi = {
     });
   },
   /**
-   * 微信授权登录
+   * 微信客户端登录
    */
-  weChatAuthLogin(data: WeChatAuthLoginInput) {
-    return axiosUtil.request<LoginOutput>({
-      url: "/weChatAuthLogin",
+  weChatClientLogin(data: WeChatClientLoginInput) {
+    return axiosUtil.request<ClientLoginOutput>({
+      url: "/weChatClientLogin",
       method: "post",
       data,
       requestType: "auth",
 			loading: true,
 			loadingText: "登录中...",
-    });
-  },
-  /**
-   * 尝试登录
-   */
-  tryLogin(data: TryLoginInput) {
-    return axiosUtil.request<LoginOutput>({
-      url: "/tryLogin",
-      method: "post",
-      data,
-      requestType: "auth",
-			showCodeMessage: false,
     });
   },
   /**
@@ -96,19 +68,6 @@ export const loginApi = {
       method: "post",
       requestType: "auth",
 			loading: true,
-    });
-  },
-  /**
-   * 微信客户端登录
-   */
-  weChatClientLogin(data: WeChatClientLoginInput) {
-    return axiosUtil.request<WeChatClientLoginOutput>({
-      url: "/weChatClientLogin",
-      method: "post",
-      data,
-      requestType: "auth",
-			loading: true,
-			loadingText: "登录中...",
     });
   },
 };

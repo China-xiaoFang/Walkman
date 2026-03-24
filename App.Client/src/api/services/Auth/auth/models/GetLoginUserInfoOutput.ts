@@ -11,10 +11,6 @@ export interface GetLoginUserInfoOutput {
    */
   accountId?: number;
   /**
-   * 账号Key
-   */
-  accountKey?: string;
-  /**
    * 手机
    */
   mobile?: string;
@@ -26,30 +22,6 @@ export interface GetLoginUserInfoOutput {
    * 头像
    */
   avatar?: string;
-  /**
-   * 租户编号
-   */
-  tenantNo?: string;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
-  /**
-   * 租户简称
-   */
-  shortName?: string;
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-  /**
-   * 租户LogoUrl
-   */
-  logoUrl?: string;
-  /**
-   * 用户Key
-   */
-  userKey?: string;
   /**
    * 职员Id
    */

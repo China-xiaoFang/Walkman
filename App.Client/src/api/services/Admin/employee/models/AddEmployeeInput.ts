@@ -33,10 +33,6 @@ export interface AddEmployeeInput {
    */
   idPhoto?: string;
   /**
-   * 初次工作日期
-   */
-  firstWorkDate?: Date;
-  /**
    * 入职日期
    */
   entryDate?: Date;

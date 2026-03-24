@@ -1,3 +1,4 @@
+import { UserTypeEnum } from "@/api/enums/UserTypeEnum";
 import { EmployeeStatusEnum } from "@/api/enums/EmployeeStatusEnum";
 import { GenderEnum } from "@/api/enums/GenderEnum";
 import { NationEnum } from "@/api/enums/NationEnum";
@@ -16,6 +17,10 @@ export interface QueryEmployeePagedOutput {
    * 职员Id
    */
   employeeId?: number;
+  /**
+   * 
+   */
+  userType?: UserTypeEnum;
   /**
    * 工号
    */
@@ -168,10 +173,6 @@ export interface QueryEmployeePagedOutput {
    * 账号手机
    */
   accountMobile?: string;
-  /**
-   * 账号邮箱
-   */
-  accountEmail?: string;
   /**
    * 账号昵称
    */

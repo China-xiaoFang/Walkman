@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Enum.MenuTypeEnum 菜单类型枚举
+ * Fast.Admin.Enum.MenuTypeEnum 菜单类型枚举
  */
 export enum MenuTypeEnum {
   /**

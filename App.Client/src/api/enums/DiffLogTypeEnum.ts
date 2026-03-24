@@ -1,5 +1,5 @@
 /**
- * Fast.CenterLog.Enum.DiffLogTypeEnum 差异日志类型枚举
+ * Fast.AdminLog.Enum.DiffLogTypeEnum 差异日志类型枚举
  */
 export enum DiffLogTypeEnum {
   /**

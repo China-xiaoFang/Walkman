@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.File.Dto.DownloadFileInput 下载文件输入
+ * Fast.File.Applications.Dto.DownloadFileInput 下载文件输入
  */
 export interface DownloadFileInput {
   /**

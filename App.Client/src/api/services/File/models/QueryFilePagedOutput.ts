@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.File.Dto.QueryFilePagedOutput 获取文件分页列表输出
+ * Fast.Admin.Service.File.Dto.QueryFilePagedOutput 获取文件分页列表输出
  */
 export interface QueryFilePagedOutput {
   /**
@@ -70,9 +70,5 @@ export interface QueryFilePagedOutput {
    * 创建时间
    */
   createdTime?: Date;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
 }
 

@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Enum.PasswordTypeEnum 密码类型枚举
+ * Fast.Admin.Enum.PasswordTypeEnum 密码类型枚举
  */
 export enum PasswordTypeEnum {
   /**

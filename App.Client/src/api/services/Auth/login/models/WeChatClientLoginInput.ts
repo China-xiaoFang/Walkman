@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Login.Dto.WeChatClientLoginInput 微信客户端登录输入
+ * Fast.Admin.Service.Login.Dto.WeChatClientLoginInput 微信客户端登录输入
  */
 export interface WeChatClientLoginInput {
   /**

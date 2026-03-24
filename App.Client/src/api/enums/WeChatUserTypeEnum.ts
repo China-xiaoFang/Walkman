@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Enum.WeChatUserTypeEnum 微信用户类型枚举
+ * Fast.Admin.Enum.WeChatUserTypeEnum 微信用户类型枚举
  */
 export enum WeChatUserTypeEnum {
   /**
