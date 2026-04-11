@@ -23,7 +23,7 @@
 namespace Fast.Admin.Entity;
 
 /// <summary>
-/// <see cref="VolumeModel"/> 教材表Model类
+/// <see cref="VolumeModel"/> 册表Model类
 /// </summary>
 [SugarTable("Volume", "册表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
@@ -34,6 +34,12 @@ public class VolumeModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "册Id", IsPrimaryKey = true)]
     public long VolumeId { get; set; }
+
+    /// <summary>
+    /// 教材Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "教材Id")]
+    public long TextbookId { get; set; }
 
     /// <summary>
     /// 册名称

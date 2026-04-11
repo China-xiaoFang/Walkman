@@ -23,63 +23,49 @@
 namespace Fast.Admin.Entity;
 
 /// <summary>
-/// <see cref="LessonModel"/> 课程表Model类
+/// <see cref="PlayProgressModel"/> 播放进度表Model类
 /// </summary>
-[SugarTable("Lesson", "课程表")]
+[SugarTable("PlayProgress", "播放进度表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-public class LessonModel : BaseEntity, IUpdateVersion
+[SugarIndex($"IX_{{table}}_{nameof(WeChatId)}_{nameof(LessonId)}", nameof(WeChatId), OrderByType.Asc, nameof(LessonId),
+    OrderByType.Asc, true)]
+public class PlayProgressModel : IUpdateVersion
 {
+    /// <summary>
+    /// 播放进度Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "播放进度Id", IsPrimaryKey = true)]
+    public long PlayProgressId { get; set; }
+
+    /// <summary>
+    /// 微信Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "微信Id", IsPrimaryKey = true)]
+    public long WeChatId { get; set; }
+
     /// <summary>
     /// 课程Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "课程Id", IsPrimaryKey = true)]
+    [SugarColumn(ColumnDescription = "课程Id")]
     public long LessonId { get; set; }
 
     /// <summary>
-    /// 教材Id
+    /// 播放进度（秒）
     /// </summary>
-    [SugarColumn(ColumnDescription = "教材Id")]
-    public long TextbookId { get; set; }
+    [SugarColumn(ColumnDescription = "播放进度（秒）")]
+    public int Progress { get; set; }
 
     /// <summary>
-    /// 册Id
+    /// 创建时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "册Id")]
-    public long VolumeId { get; set; }
+    [Required, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public virtual DateTime? CreatedTime { get; set; }
 
     /// <summary>
-    /// 课程名称
+    /// 更新时间
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "课程名称", Length = 100)]
-    public string LessonName { get; set; }
-
-    // TODO:增加中文翻译字段，比如 Excuse me! 对应的是 打扰一下！
-    // TODO:增加课程图片，用于列表显示
-
-    /// <summary>
-    /// 音频类型
-    /// </summary>
-    [SugarColumn(ColumnDescription = "音频类型")]
-    public AudioTypeEnum AudioType { get; set; }
-
-    /// <summary>
-    /// 音频地址
-    /// </summary>
-    [SugarColumn(ColumnDescription = "音频地址", Length = 500)]
-    public string AudioUrl { get; set; }
-
-    /// <summary>
-    /// 歌词地址
-    /// </summary>
-    [SugarColumn(ColumnDescription = "歌词地址", Length = 500)]
-    public string LyricUrl { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 200)]
-    public string Remark { get; set; }
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
+    public virtual DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
