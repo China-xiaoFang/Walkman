@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Fast.DynamicApplication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -117,6 +118,8 @@ public class HealthApplication : IDynamicApplication
         return new JsonResult(new
         {
             Status = isHealthy ? "Healthy" : "Unhealthy",
+            // 运行时版本
+            RuntimeVersion = RuntimeInformation.FrameworkDescription,
             // 当前时间
             CurrentTime = DateTime.Now,
             // 运行时间

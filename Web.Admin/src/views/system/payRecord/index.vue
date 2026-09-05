@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable table-key="1D1K9GNFPT" row-key="recordId" :request-api="payRecordApi.queryPayRecordPaged" stripe>
+		<FastTable table-key="1D1K9GNFPT" row-key="recordId" :request-api="payRecordApi.queryPayRecordPaged">
 			<template #mobile="{ row }: { row?: PayRecordModel }">
 				<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
 				<br />

@@ -1,6 +1,7 @@
 <template>
 	<el-config-provider v-bind="elConfigProviderProps">
 		<RouterView></RouterView>
+		<IdentityVerification />
 	</el-config-provider>
 </template>
 

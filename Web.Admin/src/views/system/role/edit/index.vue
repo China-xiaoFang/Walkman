@@ -68,7 +68,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditRoleInput & AddRoleInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditRoleInput & AddRoleInput>>({
 		roleName: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
 		roleCode: [{ required: true, message: "请输入角色编码", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
@@ -135,7 +135,6 @@ const edit = (roleId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

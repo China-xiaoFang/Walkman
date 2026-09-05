@@ -20,6 +20,9 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Security.Cryptography;
+using System.Text;
+
 namespace Fast.Core;
 
 /// <summary>
@@ -28,6 +31,15 @@ namespace Fast.Core;
 [SuppressSniffer]
 public class GlobalContext
 {
+    /// <summary>
+    /// 客户端标识
+    /// </summary>
+    public static string ClientIdentity =>
+        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
+            $"{FastContext.HttpContext.Connection.RemoteIpAddress?.MapToIPv6()
+                   .ToString()
+               ?? "unknown"}:{Origin}:{DeviceType}:{DeviceId}")));
+
     /// <summary>
     /// 来源
     /// </summary>

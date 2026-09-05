@@ -75,7 +75,10 @@ internal abstract class ApiRateLimiterPolicy : IRateLimiterPolicy<string>
     /// <remarks>默认按照 Ip 与设备Id组合分区，供登录和未登录请求使用。</remarks>
     protected virtual string GetPartitionKey(HttpContext httpContext)
     {
-        var ipAddress = httpContext.RemoteIpv4();
+        // 转发头必须先经过可信代理中间件处理，不能直接用任意X-Forwarded-For绕过限流。
+        var ipAddress = httpContext.Connection.RemoteIpAddress?.MapToIPv6()
+                            .ToString()
+                        ?? "unknown";
         var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
             .ToString()
             .UrlDecode()

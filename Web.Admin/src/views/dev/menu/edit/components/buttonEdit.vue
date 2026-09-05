@@ -75,13 +75,13 @@ const modelValue = useVModel(props, "modelValue", emit, { passive: false });
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
+type IFormData = EditMenuButtonInput & {
+	roleTypes?: RoleTypeEnum[];
+};
+
 const state = reactive({
-	formData: withDefineType<
-		EditMenuButtonInput & {
-			roleTypes?: RoleTypeEnum[];
-		}
-	>({}),
-	formRules: withDefineType<FormRules>({
+	formData: withDefineType<IFormData>({}),
+	formRules: withDefineType<FormRules<IFormData>>({
 		buttonCode: [{ required: true, message: "请输入按钮编码", trigger: "blur" }],
 		buttonName: [{ required: true, message: "请输入按钮名称", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
@@ -167,7 +167,6 @@ const edit = (row: EditMenuButtonInput, index: number) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

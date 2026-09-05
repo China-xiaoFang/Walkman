@@ -163,7 +163,6 @@ const open = (roleId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	open,

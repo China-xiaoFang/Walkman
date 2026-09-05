@@ -31,7 +31,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<HandleComplaintInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<HandleComplaintInput>>({
 		handleDescription: [{ required: true, message: "请输入处理描述", trigger: "blur" }],
 	}),
 	dialogState: withDefineType<IPageStateType>("detail"),
@@ -58,7 +58,6 @@ const open = (complaintId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	open,

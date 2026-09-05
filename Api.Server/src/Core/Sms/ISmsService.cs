@@ -28,6 +28,13 @@ namespace Fast.Core;
 public interface ISmsService
 {
     /// <summary>
+    /// 获取当前验证码发送的剩余等待秒数
+    /// </summary>
+    /// <param name="smsType">短信类型</param>
+    /// <param name="mobile">手机号</param>
+    Task<int> GetVerificationCodeRetryAfterSeconds(SmsTypeEnum smsType, string mobile);
+
+    /// <summary>
     /// 发送验证码
     /// </summary>
     /// <param name="smsType">短信类型</param>
@@ -40,5 +47,17 @@ public interface ISmsService
     /// <param name="smsType">短信类型</param>
     /// <param name="mobile">手机号</param>
     /// <param name="verificationCode">验证码</param>
-    Task SendVerificationCode(SmsTypeEnum smsType, string mobile, string verificationCode);
+    Task VerifyVerificationCode(SmsTypeEnum smsType, string mobile, string verificationCode);
+
+    /// <summary>
+    /// 发送模板短信
+    /// </summary>
+    /// <param name="mobile">手机号</param>
+    /// <param name="templateCode">模板编码</param>
+    /// <param name="templateParam">模板参数对象</param>
+    /// <param name="accessKeyId">访问密钥Id，为null时读取配置</param>
+    /// <param name="accessKeySecret">访问密钥Secret，为null时读取配置</param>
+    /// <param name="signName">短信签名，为null时读取配置</param>
+    Task SendSms(string mobile, string templateCode, object templateParam, string accessKeyId = null,
+        string accessKeySecret = null, string signName = null);
 }

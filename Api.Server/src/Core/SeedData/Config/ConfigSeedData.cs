@@ -158,6 +158,15 @@ internal static class ConfigSeedData
                 new()
                 {
                     ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.SmsVerificationTemplateCode,
+                    ConfigName = "阿里云短信验证码模板Code",
+                    ConfigValue = "",
+                    Remark = "阿里云审核通过的验证码短信模板编码，模板变量为Code；",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
                     ConfigCode = ConfigConst.GaoDeMapKey,
                     ConfigName = "高德地图Key",
                     ConfigValue = "",

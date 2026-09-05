@@ -33,13 +33,10 @@ defineOptions({
 	name: "ApplicationSelect",
 });
 
-const props = withDefaults(
-	defineProps<{
-		modelValue?: string;
-		appName?: string;
-	}>(),
-	{}
-);
+const props = defineProps<{
+	modelValue?: string;
+	appName?: string;
+}>();
 
 const emit = defineEmits({
 	"update:modelValue": (_value: string) => true,

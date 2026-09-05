@@ -27,6 +27,10 @@ export interface GetLoginUserInfoOutput {
 	 */
 	avatar?: string;
 	/**
+	 * 身份校验
+	 */
+	identityVerification?: boolean;
+	/**
 	 * 租户编号
 	 */
 	tenantNo?: string;

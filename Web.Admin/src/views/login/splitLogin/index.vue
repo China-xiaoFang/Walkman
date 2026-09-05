@@ -1,8 +1,8 @@
 <template>
-	<div class="modern-login" :style="{ '--login-bg': props.background }">
+	<div class="split-login" :style="{ '--login-bg': props.background }">
 		<slot name="help" />
-		<section class="modern-login__panel">
-			<div class="panel__decoration" aria-hidden="true">
+		<section class="split-login__panel">
+			<div aria-hidden="true" class="panel__decoration">
 				<div class="deco-grid"></div>
 				<div class="deco-glow deco-glow--top"></div>
 				<div class="deco-glow deco-glow--bottom"></div>
@@ -10,7 +10,7 @@
 			</div>
 			<div class="panel__content">
 				<div class="panel__logo">
-					<img :src="logoImage" :alt="appStore.appName" class="logo-img" />
+					<img class="logo-img" :src="logoImage" :alt="appStore.appName" />
 					<span class="logo-text">{{ appStore.appName }}</span>
 				</div>
 				<div class="panel__hero">
@@ -27,11 +27,11 @@
 			</div>
 		</section>
 
-		<section class="modern-login__form-wrap">
+		<section class="split-login__form-wrap">
 			<div class="form-stage">
 				<div class="form-card">
-					<div class="form-card__accent" aria-hidden="true"></div>
-					<LoginFormPanel variant="split" :form-rules="props.formRules" />
+					<div aria-hidden="true" class="form-card__accent"></div>
+					<LoginForm :form-rules="props.formRules" variant="split" />
 				</div>
 			</div>
 			<div class="form-footer" :style="{ '--login-footer-height': addCssUnit(props.footerHeight) }">
@@ -45,7 +45,7 @@
 import { addCssUnit } from "@fast-china/utils";
 import logoImage from "@/assets/logo.png";
 import { useApp } from "@/stores";
-import LoginFormPanel from "../form/loginForm.vue";
+import LoginForm from "../components/loginForm.vue";
 import type { FormRules } from "element-plus";
 
 defineOptions({
@@ -53,11 +53,11 @@ defineOptions({
 });
 
 const props = defineProps<{
-	/** 页面主题背景。 */
+	/** 页面主题背景 */
 	background?: string;
-	/** 页脚高度。 */
+	/** 页脚高度*/
 	footerHeight?: number;
-	/** 登录表单校验规则。 */
+	/** 登录表单校验规则 */
 	formRules?: FormRules;
 }>();
 

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable table-key="1D1KL4GV24" row-key="clientUserId" :request-api="clientUserApi.queryClientUserPaged" stripe>
+		<FastTable table-key="1D1KL4GV24" row-key="clientUserId" :request-api="clientUserApi.queryClientUserPaged">
 			<template #lastLoginOS="{ row }: { row?: QueryClientUserPagedOutput }">
 				<span>设备：{{ row.lastLoginDevice }}</span>
 				<br />

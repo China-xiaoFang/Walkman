@@ -35,8 +35,8 @@ export const organizationApi = {
 	/**
 	 * 添加机构
 	 */
-	addOrganization(data: AddOrganizationInput): Promise<unknown> {
-		return axiosUtil.request({
+	addOrganization(data: AddOrganizationInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/organization/addOrganization",
 			method: "post",
 			data,
@@ -46,8 +46,8 @@ export const organizationApi = {
 	/**
 	 * 编辑机构
 	 */
-	editOrganization(data: EditOrganizationInput): Promise<unknown> {
-		return axiosUtil.request({
+	editOrganization(data: EditOrganizationInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/organization/editOrganization",
 			method: "post",
 			data,
@@ -57,8 +57,8 @@ export const organizationApi = {
 	/**
 	 * 删除机构
 	 */
-	deleteOrganization(data: OrganizationIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteOrganization(data: OrganizationIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/organization/deleteOrganization",
 			method: "post",
 			data,

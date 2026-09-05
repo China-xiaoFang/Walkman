@@ -558,8 +558,6 @@ public class FileApplication : IDynamicApplication
         };
         // 获取设备信息
         var userAgentInfo = _httpContext.RequestUserAgentInfo();
-        // 获取Ip信息
-        var ip = _httpContext.RemoteIpv4();
         // 获取万网信息
         var wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
         fileInfoModel.UploadDevice = userAgentInfo.Device;
@@ -567,7 +565,7 @@ public class FileApplication : IDynamicApplication
         fileInfoModel.UploadBrowser = userAgentInfo.Browser;
         fileInfoModel.UploadProvince = wanNetIpInfo.Province;
         fileInfoModel.UploadCity = wanNetIpInfo.City;
-        fileInfoModel.UploadIp = ip;
+        fileInfoModel.UploadIp = wanNetIpInfo.Ip;
         fileInfoModel.CreatedUserId = _user?.EmployeeId;
         fileInfoModel.CreatedUserName = _user?.NickName;
         fileInfoModel.CreatedTime = dateTime;

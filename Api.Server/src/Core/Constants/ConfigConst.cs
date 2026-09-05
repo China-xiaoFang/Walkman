@@ -95,6 +95,11 @@ public static class ConfigConst
     public const string SmsSignName = "SMS_SIGN_NAME";
 
     /// <summary>
+    /// 阿里云短信验证码模板Code
+    /// </summary>
+    public const string SmsVerificationTemplateCode = "SMS_VERIFICATION_TEMPLATE_CODE";
+
+    /// <summary>
     /// 高德地图Key
     /// </summary>
     public const string GaoDeMapKey = "GAO_DE_MAP_KEY";

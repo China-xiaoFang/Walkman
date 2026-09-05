@@ -48,8 +48,8 @@ export const applicationApi = {
 	/**
 	 * 添加应用
 	 */
-	addApplication(data: AddApplicationInput): Promise<unknown> {
-		return axiosUtil.request({
+	addApplication(data: AddApplicationInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/application/addApplication",
 			method: "post",
 			data,
@@ -59,8 +59,8 @@ export const applicationApi = {
 	/**
 	 * 编辑应用
 	 */
-	editApplication(data: EditApplicationInput): Promise<unknown> {
-		return axiosUtil.request({
+	editApplication(data: EditApplicationInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/application/editApplication",
 			method: "post",
 			data,
@@ -70,8 +70,8 @@ export const applicationApi = {
 	/**
 	 * 删除应用
 	 */
-	deleteApplication(data: AppIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteApplication(data: AppIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/application/deleteApplication",
 			method: "post",
 			data,

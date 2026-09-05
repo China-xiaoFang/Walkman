@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable table-key="1D11BD21TV" row-key="recordId" :request-api="sqlDiffLogApi.querySqlDiffLogPaged" stripe>
+		<FastTable table-key="1D11BD21TV" row-key="recordId" :request-api="sqlDiffLogApi.querySqlDiffLogPaged">
 			<template #mobile="{ row }: { row?: SqlDiffLogModel }">
 				{{ row.nickName }}
 				<br />

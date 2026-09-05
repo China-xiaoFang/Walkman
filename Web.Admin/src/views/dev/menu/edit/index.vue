@@ -170,16 +170,16 @@ const routerPathMap: Readonly<Record<string, string>> = routerPath;
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
+type IFormData = EditMenuInput &
+	AddMenuInput & {
+		appId?: string;
+		appName?: string;
+		roleTypes?: RoleTypeEnum[];
+	};
+
 const state = reactive({
-	formData: withDefineType<
-		EditMenuInput &
-			AddMenuInput & {
-				appId?: string;
-				appName?: string;
-				roleTypes?: RoleTypeEnum[];
-			}
-	>({}),
-	formRules: withDefineType<FormRules>({
+	formData: withDefineType<IFormData>({}),
+	formRules: withDefineType<FormRules<IFormData>>({
 		appId: [{ required: true, message: "请选择应用", trigger: "change" }],
 		menuType: [{ required: true, message: "请选择菜单类型", trigger: "change" }],
 		menuCode: [{ required: true, message: "请输入菜单编码", trigger: "blur" }],
@@ -348,7 +348,6 @@ onMounted(() => {
 	}
 });
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	add,

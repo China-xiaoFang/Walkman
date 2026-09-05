@@ -257,14 +257,16 @@ const schedulerJobGroupEnum = appStore.getDictionary("SchedulerJobGroupEnum");
 const triggerTypeEnum = appStore.getDictionary("TriggerTypeEnum");
 const schedulerJobTypeEnum = appStore.getDictionary("SchedulerJobTypeEnum");
 
+type IFormData = EditSchedulerJobInput & { mailMessages?: MailMessageEnum[]; weeks?: WeekEnum[] };
+
 const state = reactive({
-	formData: withDefineType<EditSchedulerJobInput & { mailMessages?: MailMessageEnum[]; weeks?: WeekEnum[] }>({
+	formData: withDefineType<IFormData>({
 		jobType: SchedulerJobTypeEnum.IntranetUrl,
 		beginTime: "1970-01-01 00:00:00",
 		triggerType: TriggerTypeEnum.Cron,
 		mailMessages: [MailMessageEnum.None],
 	}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<IFormData>>({
 		jobName: [{ required: true, message: "请输入作业名称", trigger: "blur" }],
 		jobGroup: [{ required: true, message: "请选择作业分组", trigger: "change" }],
 		jobType: [{ required: true, message: "请选择作业类型", trigger: "change" }],
@@ -440,7 +442,6 @@ const copy = (tenantId: string, jobName: string, jobGroup: SchedulerJobGroupEnum
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	add,

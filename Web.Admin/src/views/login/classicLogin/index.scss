@@ -63,7 +63,7 @@
 		}
 	}
 
-	&__copy {
+	.classic-brand__copy {
 		position: relative;
 		z-index: 2;
 		max-width: 520px;
@@ -91,7 +91,7 @@
 		}
 	}
 
-	&__badge {
+	.classic-brand__badge {
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
@@ -123,7 +123,7 @@
 	align-items: center;
 	justify-content: center;
 
-	&__halo {
+	.classic-visual__halo {
 		position: absolute;
 		width: min(440px, 82%);
 		aspect-ratio: 1;
@@ -148,7 +148,7 @@
 	backdrop-filter: blur(18px);
 	transform: perspective(900px) rotateX(1.5deg) rotateY(-2deg);
 
-	&__header {
+	.classic-console__header {
 		display: grid;
 		grid-template-columns: 58px minmax(0, 1fr) auto;
 		align-items: center;
@@ -196,7 +196,7 @@
 		}
 	}
 
-	&__body {
+	.classic-console__body {
 		display: grid;
 		grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
 		gap: 12px;
@@ -392,24 +392,21 @@
 	padding: var(--login-form-card-padding);
 	background: var(--login-panel);
 }
+.classic-orb--one {
+	width: 260px;
+	height: 260px;
+	top: -90px;
+	left: 12%;
+	background: rgb(125 211 252 / 25%);
+}
 
-.classic-orb {
-	&--one {
-		width: 260px;
-		height: 260px;
-		top: -90px;
-		left: 12%;
-		background: rgb(125 211 252 / 25%);
-	}
-
-	&--two {
-		width: 190px;
-		height: 190px;
-		right: 8%;
-		bottom: 4%;
-		background: rgb(167 139 250 / 22%);
-		animation-delay: -4s;
-	}
+.classic-orb--two {
+	width: 190px;
+	height: 190px;
+	right: 8%;
+	bottom: 4%;
+	background: rgb(167 139 250 / 22%);
+	animation-delay: -4s;
 }
 
 html.dark .classic-login-page {
@@ -452,7 +449,7 @@ html.dark .classic-login-page {
 		min-height: 210px;
 		padding: 28px;
 
-		&__copy {
+		.classic-brand__copy {
 			margin-top: 30px;
 
 			h1 {
@@ -485,7 +482,7 @@ html.dark .classic-login-page {
 		min-height: 170px;
 		padding: 22px;
 
-		&__copy {
+		.classic-brand__copy {
 			margin-top: 24px;
 
 			h1 {

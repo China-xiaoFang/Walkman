@@ -20,7 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.Text;
 using Fast.Admin.Domain;
 using Fast.Admin.Service.TenantDatabase.Dto;
 using Fast.Center.Domain;
@@ -111,20 +110,17 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                 .ToList()
         }));
 
+        MAppContext.ConsoleWrite(console =>
         {
-            var logSb = new StringBuilder();
-            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("info");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            logSb.Append(": ");
-            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-            logSb.Append(Environment.NewLine);
-            logSb.Append("\u001b[40m\u001b[90m");
-            logSb.Append("      ");
-            logSb.Append($"开始初始化租户【{tenantModel.TenantName}】数据库...");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            Console.WriteLine(logSb.ToString());
-        }
+            console.BackgroundColor = ConsoleColor.Black;
+            console.ForegroundColor = ConsoleColor.Green;
+            console.Write("info");
+            console.ResetColor();
+            console.WriteLine($": {DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+            console.BackgroundColor = ConsoleColor.Black;
+            console.ForegroundColor = ConsoleColor.DarkGray;
+            console.WriteLine($"      开始初始化租户【{tenantModel.TenantName}】数据库...");
+        });
 
         // 创建库
         newDb.DbMaintenance.CreateDatabase();
@@ -339,20 +335,17 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
         await db.Updateable(databaseModel)
             .ExecuteCommandAsync();
 
+        MAppContext.ConsoleWrite(console =>
         {
-            var logSb = new StringBuilder();
-            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("info");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            logSb.Append(": ");
-            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-            logSb.Append(Environment.NewLine);
-            logSb.Append("\u001b[40m\u001b[90m");
-            logSb.Append("      ");
-            logSb.Append($"初始化租户【{tenantModel.TenantName}】数据库成功。");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            Console.WriteLine(logSb.ToString());
-        }
+            console.BackgroundColor = ConsoleColor.Black;
+            console.ForegroundColor = ConsoleColor.Green;
+            console.Write("info");
+            console.ResetColor();
+            console.WriteLine($": {DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+            console.BackgroundColor = ConsoleColor.Black;
+            console.ForegroundColor = ConsoleColor.DarkGray;
+            console.WriteLine($"      初始化租户【{tenantModel.TenantName}】数据库成功。");
+        });
     }
 
     /// <summary>

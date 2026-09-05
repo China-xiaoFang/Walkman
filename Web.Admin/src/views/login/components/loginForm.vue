@@ -1,7 +1,7 @@
 <template>
-	<section class="login-form-panel" :class="`login-form-panel--${props.variant}`">
-		<header class="login-form-panel__header">
-			<div class="login-form-panel__eyebrow">
+	<section class="login-form" :class="`login-form--${props.variant}`">
+		<header class="login-form__header">
+			<div class="login-form__eyebrow">
 				<span class="eyebrow-dot"></span>
 				{{ variantEyebrow }}
 			</div>
@@ -10,25 +10,28 @@
 		</header>
 
 		<transition mode="out-in" name="login-step">
-			<div v-if="formStep !== 'SelectTenant'" :key="formStep" class="login-form-panel__step">
-				<div v-if="formStep === 'NewAccount'" class="login-form-panel__back">
-					<el-button type="primary" link :icon="ArrowLeftBold" @click="handleNewAccountBack">返回已保存账号</el-button>
+			<div v-if="formStep !== 'SelectTenant'" :key="formStep" class="login-form__step">
+				<div v-if="formStep === 'NewAccount'" class="login-form__back">
+					<el-button link type="primary" :icon="ArrowLeftBold" @click="handleNewAccountBack">返回已保存账号</el-button>
 				</div>
 
 				<el-form
 					ref="elFormRef"
+					size="large"
 					label-position="top"
 					:model="formData"
 					:rules="props.formRules"
-					size="large"
+					:disabled="faButtonRef?.loading"
+					scroll-to-error
 					@keyup.enter.prevent="handleKeyupEnter"
+					@submit.prevent
 				>
-					<el-form-item v-if="formStep === 'TenantAccount' && tenantList.length > 0" prop="userKey" label="工作空间">
+					<el-form-item v-if="formStep === 'TenantAccount' && tenantList.length > 0" label="工作空间" prop="userKey">
 						<el-select
 							v-model="formData.userKey"
 							fit-input-width
-							popper-class="login-tenant-popper"
 							placeholder="选择已保存的租户"
+							popper-class="login-tenant-popper"
 							@change="handleTenantChange"
 						>
 							<el-option
@@ -41,14 +44,14 @@
 									<img :src="item.tenant.logoUrl" :alt="item.tenant.tenantName" />
 									<div class="tenant-option__content">
 										<strong>{{ item.tenant.tenantName }}</strong>
-										<span>{{ item.tenant.departmentName || "未设置部门" }} · {{ item.tenant.employeeName }}</span>
+										<span>{{ item.tenant.departmentName || "无部门" }} · {{ item.tenant.employeeName }}</span>
 									</div>
 									<Tag size="small" name="EditionEnum" :value="item.tenant.edition" />
 									<el-button
 										class="tenant-option__remove"
+										size="small"
 										text
 										circle
-										size="small"
 										:icon="Close"
 										aria-label="移除已保存账号"
 										@click.stop="handleTenantRemove(index, item)"
@@ -56,7 +59,7 @@
 								</div>
 							</el-option>
 							<template #footer>
-								<el-button text type="primary" :icon="Plus" @click="handleNewAccount">绑定新的租户账号</el-button>
+								<el-button type="primary" text :icon="Plus" @click="handleNewAccount">绑定新的租户账号</el-button>
 							</template>
 						</el-select>
 					</el-form-item>
@@ -72,55 +75,71 @@
 						</template>
 						<el-input
 							v-model.trim="formData.account"
-							:disabled="formStep === 'TenantAccount'"
 							placeholder="请输入登录账号"
-							type="text"
-							autocomplete="username"
+							:prefix-icon="User"
+							:show-word-limit="false"
+							:disabled="formStep === 'TenantAccount'"
 							autocapitalize="off"
+							autocomplete="username"
 							spellcheck="false"
 							tabindex="1"
-							:prefix-icon="User"
 							@change="handleAccountChange"
 						/>
 					</el-form-item>
 
-					<el-form-item prop="password" label="密码">
+					<el-form-item label="密码" prop="password">
 						<el-input
+							type="password"
 							v-model.trim="formData.password"
 							placeholder="请输入登录密码"
-							type="password"
+							:prefix-icon="Lock"
+							show-password
+							:show-word-limit="false"
 							autocomplete="current-password"
 							tabindex="2"
-							show-password
-							:prefix-icon="Lock"
 						/>
 					</el-form-item>
 
-					<div class="login-form-panel__meta">
+					<ImageCaptcha
+						ref="captchaRef"
+						prop="captchaCode"
+						v-model="formData.captchaCode"
+						v-model:captcha-key="formData.captchaKey"
+						:disabled="faButtonRef?.loading"
+					/>
+
+					<div class="login-form__meta">
 						<el-checkbox v-model="formData.rememberMe" size="default">记住登录信息</el-checkbox>
-						<span class="secure-label">
-							<el-icon><CircleCheck /></el-icon>
-							安全连接
-						</span>
+						<el-button size="default" type="warning" link @click="passwordResetRef.open()">忘记密码</el-button>
 					</div>
 
-					<FaButton ref="faButtonRef" class="login-submit" type="primary" size="large" @click="handleFormLogin">
+					<FaButton ref="faButtonRef" class="login-submit" size="large" type="primary" @click="handleFormLogin">
 						<span>进入工作台</span>
 						<el-icon><Right /></el-icon>
 					</FaButton>
 				</el-form>
 			</div>
 
-			<div v-else key="SelectTenant" class="login-form-panel__step login-form-panel__step--tenant">
-				<div class="login-form-panel__back">
-					<el-button type="primary" link :icon="ArrowLeftBold" @click="handleTenantSelectionBack">返回账号登录</el-button>
+			<div v-else key="SelectTenant" class="login-form__step login-form__step--tenant">
+				<div class="login-form__back">
+					<el-button type="primary" link :disabled="faButtonRef?.loading" :icon="ArrowLeftBold" @click="handleTenantSelectionBack">
+						<span>返回账号登录</span>
+					</el-button>
 				</div>
+
 				<el-scrollbar class="tenant-list">
-					<button v-for="item in tenantSelector" :key="item.userKey" class="tenant-card" type="button" @click="handleTenantLogin(item)">
+					<button
+						v-for="item in tenantSelector"
+						:key="item.userKey"
+						class="tenant-card"
+						type="button"
+						:disabled="faButtonRef?.loading"
+						@click="handleTenantLogin(item)"
+					>
 						<img :src="item.logoUrl" :alt="item.tenantName" />
 						<span class="tenant-card__body">
 							<strong>{{ item.tenantName }}</strong>
-							<small>{{ item.departmentName || "未设置部门" }} · {{ item.employeeName }}</small>
+							<small>{{ item.departmentName || "无部门" }} · {{ item.employeeName }}</small>
 						</span>
 						<Tag size="small" name="EditionEnum" :value="item.edition" />
 						<el-icon class="tenant-card__arrow"><Right /></el-icon>
@@ -129,21 +148,29 @@
 			</div>
 		</transition>
 
-		<footer class="login-form-panel__footer">
+		<footer class="login-form__footer">
 			<span></span>
 			Powered by FastDotNet
 		</footer>
+
+		<PasswordReset ref="passwordResetRef" />
 	</section>
 </template>
 
 <script lang="ts" setup>
 import { computed, useTemplateRef } from "vue";
-import { ArrowLeftBold, CircleCheck, Close, Lock, Plus, Right, User } from "@element-plus/icons-vue";
+import { ArrowLeftBold, Close, Lock, Plus, Right, User } from "@element-plus/icons-vue";
+import { type FaButtonInstance, useOverlay } from "fast-element-plus";
+import ImageCaptcha from "@/components/ImageCaptcha/index.vue";
 import { useApp } from "@/stores";
-import { useLogin } from "../useLogin";
+import { useLogin } from "../useLogin.ts";
+import PasswordReset from "./passwordReset.vue";
 import type { FormInstance, FormRules } from "element-plus";
-import type { FaButtonInstance } from "fast-element-plus";
 import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
+
+defineOptions({
+	name: "LoginForm",
+});
 
 type LoginVariant = "classic" | "modern" | "simple" | "split";
 
@@ -157,6 +184,8 @@ const props = defineProps<{
 const appStore = useApp();
 const elFormRef = useTemplateRef<FormInstance>("elFormRef");
 const faButtonRef = useTemplateRef<FaButtonInstance>("faButtonRef");
+const captchaRef = useTemplateRef<InstanceType<typeof ImageCaptcha>>("captchaRef");
+const passwordResetRef = useTemplateRef<InstanceType<typeof PasswordReset>>("passwordResetRef");
 
 const {
 	formData,
@@ -172,7 +201,7 @@ const {
 	handleLogin,
 	handleFormLogin,
 	handleKeyupEnter,
-} = useLogin(elFormRef, faButtonRef);
+} = useLogin(elFormRef, faButtonRef, captchaRef);
 
 const variantEyebrow = computed(() => {
 	switch (props.variant) {
@@ -206,21 +235,24 @@ const stepContent = computed(() => {
 });
 
 const handleTenantSelectionBack = () => {
+	formData.value.loginTicket = undefined;
+	formData.value.userKey = undefined;
 	formStep.value = tenantList.value.length > 0 ? "NewAccount" : "Account";
 };
 
 const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 	formData.value.userKey = tenant.userKey;
-	await handleLogin();
+	useOverlay.show();
+	await handleLogin(null, () => useOverlay.hide());
 };
 </script>
 
 <style scoped lang="scss">
-.login-form-panel {
+.login-form {
 	width: 100%;
 	color: var(--login-text, #162033);
 
-	&__header {
+	.login-form__header {
 		margin-bottom: 28px;
 
 		h2 {
@@ -240,7 +272,7 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 		}
 	}
 
-	&__eyebrow {
+	.login-form__eyebrow {
 		display: flex;
 		align-items: center;
 		gap: 8px;
@@ -249,27 +281,28 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 		letter-spacing: 1.8px;
 		color: var(--el-color-primary);
 	}
-
-	.eyebrow-dot {
-		width: 7px;
-		height: 7px;
-		border-radius: 50%;
-		background: #22c55e;
-		box-shadow: 0 0 0 5px rgb(34 197 94 / 12%);
-		animation: loginStatusPulse 2.4s ease-in-out infinite;
+	.login-form {
+		.eyebrow-dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: #22c55e;
+			box-shadow: 0 0 0 5px rgb(34 197 94 / 12%);
+			animation: loginStatusPulse 2.4s ease-in-out infinite;
+		}
 	}
 
-	&__step {
+	.login-form__step {
 		min-height: 334px;
 	}
 
-	&__step--tenant {
+	.login-form__step--tenant {
 		display: flex;
 		min-height: 360px;
 		flex-direction: column;
 	}
 
-	&__back {
+	.login-form__back {
 		margin: -8px 0 14px;
 
 		:deep(.el-button > span) {
@@ -277,26 +310,14 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 		}
 	}
 
-	&__meta {
+	.login-form__meta {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		margin: -2px 0 20px;
-
-		.secure-label {
-			display: inline-flex;
-			align-items: center;
-			gap: 5px;
-			font-size: 12px;
-			color: var(--login-muted, #667085);
-
-			.el-icon {
-				color: #22c55e;
-			}
-		}
 	}
 
-	&__footer {
+	.login-form__footer {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -404,8 +425,8 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 }
 
 .tenant-list {
-	flex: 0 0 300px;
-	height: 300px;
+	flex: 0 0 400px;
+	height: 400px;
 	min-height: 0;
 	margin-right: -8px;
 	padding-right: 8px;
@@ -417,7 +438,8 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 	grid-template-columns: 42px minmax(0, 1fr) auto 20px;
 	align-items: center;
 	gap: 12px;
-	margin-bottom: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 	padding: 12px;
 	color: var(--login-text, #162033);
 	text-align: left;
@@ -439,7 +461,7 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 		box-shadow: 0 5px 12px rgb(16 24 40 / 10%);
 	}
 
-	&__body {
+	.tenant-card__body {
 		display: flex;
 		min-width: 0;
 		flex-direction: column;
@@ -461,7 +483,7 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 		}
 	}
 
-	&__arrow {
+	.tenant-card__arrow {
 		color: var(--login-faint, #98a2b3);
 		transition: transform 180ms ease;
 	}
@@ -588,8 +610,8 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 }
 
 @media (max-width: 520px) {
-	.login-form-panel {
-		&__header {
+	.login-form {
+		.login-form__header {
 			margin-bottom: 18px;
 
 			h2 {
@@ -598,20 +620,16 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 			}
 		}
 
-		&__step {
+		.login-form__step {
 			min-height: 300px;
 		}
 
-		&__footer {
+		.login-form__footer {
 			margin-top: 14px;
 		}
 
-		&__meta {
+		.login-form__meta {
 			margin-bottom: 16px;
-
-			.secure-label {
-				display: none;
-			}
 		}
 
 		:deep(.el-form-item) {
@@ -621,9 +639,9 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.login-form-panel *,
-	.login-form-panel *::before,
-	.login-form-panel *::after,
+	.login-form *,
+	.login-form *::before,
+	.login-form *::after,
 	:global(.login-tenant-popper .tenant-option__remove) {
 		scroll-behavior: auto !important;
 		animation-duration: 0.01ms !important;

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable table-key="1D1K2Z66L4" row-key="recordId" :request-api="visitLogApi.queryVisitLogPaged" stripe>
+		<FastTable table-key="1D1K2Z66L4" row-key="recordId" :request-api="visitLogApi.queryVisitLogPaged">
 			<template #mobile="{ row }: { row?: VisitLogModel }">
 				{{ row.nickName }}
 				<br />

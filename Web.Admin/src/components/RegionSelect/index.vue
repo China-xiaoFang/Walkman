@@ -23,15 +23,12 @@ defineOptions({
 	name: "RegionSelect",
 });
 
-const props = withDefaults(
-	defineProps<{
-		modelValue?: string;
-		provinceName?: string;
-		cityName?: string;
-		districtName?: string;
-	}>(),
-	{}
-);
+const props = defineProps<{
+	modelValue?: string;
+	provinceName?: string;
+	cityName?: string;
+	districtName?: string;
+}>();
 
 const emit = defineEmits({
 	"update:modelValue": (_value: string) => true,

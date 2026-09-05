@@ -127,6 +127,9 @@ builder.Services.AddHostedService<SqlSugarLogBackgroundService>();
 // 添加同步 Api 托管服务
 builder.Services.AddHostedService<SyncApiHostedService>();
 
+// 添加应用程序生命周期托管服务
+builder.Services.AddHostedService<ApplicationLifecycleHostedService>();
+
 // 添加生成Api文件托管服务
 builder.Services.AddHostedService<GenerateApiFileBackgroundService>();
 

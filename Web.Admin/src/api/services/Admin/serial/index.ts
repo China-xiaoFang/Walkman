@@ -36,8 +36,8 @@ export const serialApi = {
 	/**
 	 * 添加序号规则
 	 */
-	addSerialRule(data: AddSerialRuleInput): Promise<unknown> {
-		return axiosUtil.request({
+	addSerialRule(data: AddSerialRuleInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/serial/addSerialRule",
 			method: "post",
 			data,
@@ -47,8 +47,8 @@ export const serialApi = {
 	/**
 	 * 编辑序号规则
 	 */
-	editSerialRule(data: EditSerialRuleInput): Promise<unknown> {
-		return axiosUtil.request({
+	editSerialRule(data: EditSerialRuleInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/serial/editSerialRule",
 			method: "post",
 			data,

@@ -66,7 +66,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditMerchantInput & AddMerchantInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditMerchantInput & AddMerchantInput>>({
 		merchantName: [{ required: true, message: "请输入商户名称", trigger: "blur" }],
 		merchantNo: [{ required: true, message: "请输入商户号", trigger: "blur" }],
 	}),
@@ -122,7 +122,6 @@ const edit = (merchantId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

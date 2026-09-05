@@ -40,8 +40,8 @@ export const schedulerApi = {
 	/**
 	 * 启动调度器
 	 */
-	startScheduler(tenantId: string): Promise<unknown> {
-		return axiosUtil.request({
+	startScheduler(tenantId: string): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/startScheduler",
 			method: "post",
 			params: {
@@ -53,8 +53,8 @@ export const schedulerApi = {
 	/**
 	 * 停止调度器
 	 */
-	stopScheduler(tenantId: string): Promise<unknown> {
-		return axiosUtil.request({
+	stopScheduler(tenantId: string): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/stopScheduler",
 			method: "post",
 			params: {
@@ -66,8 +66,8 @@ export const schedulerApi = {
 	/**
 	 * 暂停调度作业
 	 */
-	stopSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
-		return axiosUtil.request({
+	stopSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/stopSchedulerJob",
 			method: "post",
 			params: {
@@ -80,8 +80,8 @@ export const schedulerApi = {
 	/**
 	 * 恢复调度作业
 	 */
-	resumeSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
-		return axiosUtil.request({
+	resumeSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/resumeSchedulerJob",
 			method: "post",
 			params: {
@@ -94,8 +94,8 @@ export const schedulerApi = {
 	/**
 	 * 立即执行调度作业
 	 */
-	triggerSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
-		return axiosUtil.request({
+	triggerSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/triggerSchedulerJob",
 			method: "post",
 			params: {
@@ -164,8 +164,8 @@ export const schedulerApi = {
 	/**
 	 * 添加调度作业
 	 */
-	addSchedulerJob(data: AddSchedulerJobInput): Promise<unknown> {
-		return axiosUtil.request({
+	addSchedulerJob(data: AddSchedulerJobInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/addSchedulerJob",
 			method: "post",
 			data,
@@ -175,8 +175,8 @@ export const schedulerApi = {
 	/**
 	 * 编辑调度作业
 	 */
-	editSchedulerJob(data: EditSchedulerJobInput): Promise<unknown> {
-		return axiosUtil.request({
+	editSchedulerJob(data: EditSchedulerJobInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/editSchedulerJob",
 			method: "post",
 			data,
@@ -186,8 +186,8 @@ export const schedulerApi = {
 	/**
 	 * 删除调度作业
 	 */
-	deleteSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/deleteSchedulerJob",
 			method: "post",
 			params: {
@@ -200,8 +200,8 @@ export const schedulerApi = {
 	/**
 	 * 移除调度作业异常信息
 	 */
-	deleteSchedulerJobException(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteSchedulerJobException(tenantId: string, data: SchedulerJobKeyInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/scheduler/deleteSchedulerJobException",
 			method: "post",
 			params: {

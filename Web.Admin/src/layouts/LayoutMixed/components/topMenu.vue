@@ -72,7 +72,7 @@ const topMenuList = computed(() => {
 });
 
 /** 判断路径是否在模块中 */
-const isPathInModule = (menu: AuthMenuInfoDto, path: string): boolean => {
+const isPathInModule = (menu: AuthMenuInfoDto, path: string) => {
 	if (menu.router === path) return true;
 	if (menu.children) {
 		for (const child of menu.children) {

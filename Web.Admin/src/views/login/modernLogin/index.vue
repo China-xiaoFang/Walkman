@@ -60,7 +60,7 @@
 
 				<section class="modern-form-card">
 					<div class="modern-form-card__glow"></div>
-					<LoginFormPanel variant="modern" :form-rules="props.formRules" />
+					<LoginForm variant="modern" :form-rules="props.formRules" />
 				</section>
 			</div>
 		</el-main>
@@ -76,7 +76,7 @@ import { Connection, DataAnalysis, TrendCharts } from "@element-plus/icons-vue";
 import { addCssUnit } from "@fast-china/utils";
 import logoImage from "@/assets/logo.png";
 import { useApp } from "@/stores";
-import LoginFormPanel from "../form/loginForm.vue";
+import LoginForm from "../components/loginForm.vue";
 import type { FormRules } from "element-plus";
 
 defineOptions({
@@ -84,11 +84,11 @@ defineOptions({
 });
 
 const props = defineProps<{
-	/** 页面主题背景。 */
+	/** 页面主题背景 */
 	background?: string;
-	/** 页脚高度。 */
+	/** 页脚高度*/
 	footerHeight?: number;
-	/** 登录表单校验规则。 */
+	/** 登录表单校验规则 */
 	formRules?: FormRules;
 }>();
 

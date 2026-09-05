@@ -167,6 +167,16 @@ public static partial class PermissionConst
     /// <summary>密码记录列表</summary>
     public const string PasswordRecordPaged = "PasswordRecord:Paged";
 
+    /// <summary>消息发送记录</summary>
+    public static class MessageSendRecord
+    {
+        /// <summary>消息发送记录列表</summary>
+        public const string Paged = "MessageSendRecord:Paged";
+
+        /// <summary>消息发送记录详情</summary>
+        public const string Detail = "MessageSendRecord:Detail";
+    }
+
     /// <summary>异常日志列表</summary>
     public const string ExceptionLogPaged = "ExceptionLog:Paged";
 

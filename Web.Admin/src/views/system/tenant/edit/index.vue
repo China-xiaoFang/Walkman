@@ -29,10 +29,26 @@
 				<el-input v-model="state.formData.adminName" maxlength="20" placeholder="请输入管理员名称" />
 			</FaFormItem>
 			<FaFormItem prop="adminMobile" label="管理员手机">
-				<el-input v-model="state.formData.adminMobile" maxlength="11" placeholder="请输入管理员手机" />
+				<el-input
+					v-model="state.formData.adminMobile"
+					maxlength="11"
+					placeholder="请输入管理员手机"
+					autocapitalize="off"
+					autocomplete="tel"
+					inputmode="tel"
+					spellcheck="false"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="adminEmail" label="管理员邮箱">
-				<el-input v-model="state.formData.adminEmail" maxlength="50" placeholder="请输入管理员邮箱" />
+				<el-input
+					v-model="state.formData.adminEmail"
+					maxlength="50"
+					placeholder="请输入管理员邮箱"
+					autocapitalize="off"
+					autocomplete="email"
+					inputmode="email"
+					spellcheck="false"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="adminPhone" label="管理员电话">
 				<el-input v-model="state.formData.adminPhone" maxlength="20" placeholder="请输入管理员电话" />
@@ -75,7 +91,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditTenantInput & AddTenantInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditTenantInput & AddTenantInput>>({
 		tenantName: [{ required: true, message: "请输入租户名称", trigger: "blur" }],
 		tenantCode: [{ required: true, message: "请输入租户编码", trigger: "blur" }],
 		shortName: [{ required: true, message: "请输入租户简称", trigger: "blur" }],
@@ -145,7 +161,6 @@ const edit = (tenantId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

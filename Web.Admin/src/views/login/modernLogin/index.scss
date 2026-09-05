@@ -38,7 +38,7 @@
 		left: 0;
 	}
 
-	&__copy {
+	.modern-brand__copy {
 		position: relative;
 		z-index: 2;
 		max-width: 660px;
@@ -111,7 +111,7 @@
 		transform: perspective(1000px) rotateX(0) rotateY(0) translateY(-3px);
 	}
 
-	&__bar {
+	.insight-window__bar {
 		display: flex;
 		align-items: center;
 		gap: 6px;
@@ -142,14 +142,14 @@
 		}
 	}
 
-	&__content {
+	.insight-window__content {
 		display: grid;
 		grid-template-columns: 1.5fr 0.8fr 0.8fr;
 		gap: 12px;
 		padding: 16px;
 	}
 
-	&__scan {
+	.insight-window__scan {
 		position: absolute;
 		top: 0;
 		left: -35%;
@@ -173,7 +173,7 @@
 	min-height: 132px;
 	padding: 15px;
 
-	&__head {
+	.insight-main__head {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -258,11 +258,11 @@
 		color: var(--login-heading);
 	}
 
-	&--violet {
+	.insight-stat--violet {
 		color: #8b5cf6;
 	}
 
-	&--cyan {
+	.insight-stat--cyan {
 		color: #06b6d4;
 	}
 }
@@ -280,7 +280,7 @@
 		inset 0 1px rgb(255 255 255 / 74%);
 	backdrop-filter: blur(30px) saturate(1.2);
 
-	&__glow {
+	.modern-form-card__glow {
 		position: absolute;
 		width: 240px;
 		height: 240px;
@@ -304,35 +304,33 @@
 	transform: rotate(-14deg);
 	animation: modernBeam 8s ease-in-out infinite;
 
-	&--one {
+	.modern-beam--one {
 		top: 18%;
 		left: -18%;
 	}
 
-	&--two {
+	.modern-beam--two {
 		right: -22%;
 		bottom: 20%;
 		animation-delay: -4s;
 	}
 }
 
-.modern-orb {
-	&--one {
-		width: 300px;
-		height: 300px;
-		top: -100px;
-		right: 13%;
-		background: rgb(139 92 246 / 18%);
-	}
+.modern-orb--one {
+	width: 300px;
+	height: 300px;
+	top: -100px;
+	right: 13%;
+	background: rgb(139 92 246 / 18%);
+}
 
-	&--two {
-		width: 220px;
-		height: 220px;
-		bottom: -70px;
-		left: 8%;
-		background: rgb(14 165 233 / 17%);
-		animation-delay: -5s;
-	}
+.modern-orb--two {
+	width: 220px;
+	height: 220px;
+	bottom: -70px;
+	left: 8%;
+	background: rgb(14 165 233 / 17%);
+	animation-delay: -5s;
 }
 
 html.dark .modern-login-page {
@@ -349,7 +347,7 @@ html.dark .modern-login-page {
 			0 28px 90px rgb(0 0 0 / 32%),
 			inset 0 1px rgb(255 255 255 / 6%);
 
-		&__bar {
+		.insight-window__bar {
 			border-color: rgb(255 255 255 / 6%);
 		}
 	}
@@ -422,7 +420,7 @@ html.dark .modern-login-page {
 			align-self: flex-start;
 		}
 
-		&__copy {
+		.modern-brand__copy {
 			margin-top: 28px;
 
 			h1 {
@@ -457,7 +455,7 @@ html.dark .modern-login-page {
 			position: static;
 		}
 
-		&__copy {
+		.modern-brand__copy {
 			display: none;
 		}
 	}
@@ -465,7 +463,7 @@ html.dark .modern-login-page {
 
 @media (max-width: 520px) {
 	.modern-brand {
-		&__copy {
+		.modern-brand__copy {
 			margin-top: 22px;
 
 			h1 {

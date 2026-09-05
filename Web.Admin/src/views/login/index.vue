@@ -79,11 +79,14 @@ const state = reactive({
 	/** 表单数据 */
 	formData: withDefineType<IFormData>({}),
 	/** 表单规则 */
-	formRules: withDefineType<FormRules>({
-		account: [{ required: true, message: "请输入账号", trigger: "blur" }],
+	formRules: withDefineType<FormRules<IFormData>>({
+		account: [
+			{ required: true, message: "请输入账号", trigger: "blur" },
+			{ min: 1, max: 50, message: "账号长度必须为 1~50 个字符", trigger: "blur" },
+		],
 		password: [
 			{ required: true, message: "请输入密码", trigger: "blur" },
-			{ min: 6, max: 20, message: "密码长度必须为 6～20 个字符", trigger: "blur" },
+			{ min: 6, max: 20, message: "密码长度必须为 6~20 个字符", trigger: "blur" },
 		],
 		userKey: [{ required: true, message: "请选择租户", trigger: "change" }],
 	}),
@@ -170,7 +173,7 @@ const handleDropdownClick = (command: string) => {
  * @param angleDeg 渐变角度，默认 165°
  * @returns CSS linear-gradient 字符串
  */
-const getThemeGradient = (baseColor: string, mode: "light" | "dark" = "light", angleDeg = 165): string => {
+const getThemeGradient = (baseColor: string, mode: "light" | "dark" = "light", angleDeg = 165) => {
 	/**
 	 * HEX 转 HSL
 	 */

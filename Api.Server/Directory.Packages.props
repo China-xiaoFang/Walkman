@@ -4,19 +4,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageVersion Include="Fast.Cache" Version="3.5.31" />
-    <PackageVersion Include="Fast.DependencyInjection" Version="3.5.27" />
-    <PackageVersion Include="Fast.DynamicApplication" Version="3.5.33" />
-    <PackageVersion Include="Fast.IaaS" Version="3.5.25" />
-    <PackageVersion Include="Fast.JwtBearer" Version="3.5.38" />
-    <PackageVersion Include="Fast.Logging" Version="3.5.30" />
-    <PackageVersion Include="Fast.NET.Core" Version="3.5.34" />
-    <PackageVersion Include="Fast.OpenApi" Version="3.5.36" />
-    <PackageVersion Include="Fast.Runtime" Version="3.5.28" />
+    <PackageVersion Include="Fast.Cache" Version="3.5.32" />
+    <PackageVersion Include="Fast.DependencyInjection" Version="3.5.28" />
+    <PackageVersion Include="Fast.DynamicApplication" Version="3.5.34" />
+    <PackageVersion Include="Fast.IaaS" Version="3.5.27" />
+    <PackageVersion Include="Fast.JwtBearer" Version="3.5.39" />
+    <PackageVersion Include="Fast.Logging" Version="3.5.31" />
+    <PackageVersion Include="Fast.NET.Core" Version="3.5.37" />
+    <PackageVersion Include="Fast.OpenApi" Version="3.5.38" />
+    <PackageVersion Include="Fast.Runtime" Version="3.5.29" />
     <PackageVersion Include="Fast.Serialization.Newtonsoft.Json" Version="3.5.25" />
-    <PackageVersion Include="Fast.SqlSugar" Version="3.5.63" />
-    <PackageVersion Include="Fast.Swagger" Version="3.5.32" />
-    <PackageVersion Include="Fast.UnifyResult" Version="3.5.31" />
+    <PackageVersion Include="Fast.SqlSugar" Version="3.5.64" />
+    <PackageVersion Include="Fast.Swagger" Version="3.5.33" />
+    <PackageVersion Include="Fast.UnifyResult" Version="3.5.32" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,14 +27,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageVersion Include="Quartz" Version="3.20.0" />
-    <PackageVersion Include="Quartz.Extensions.Hosting" Version="3.20.0" />
-    <PackageVersion Include="Quartz.Serialization.Json" Version="3.20.0" />
+      <PackageVersion Include="Quartz" Version="3.20.0" />
+      <PackageVersion Include="Quartz.Extensions.Hosting" Version="3.20.0" />
+      <PackageVersion Include="Quartz.Serialization.Json" Version="3.20.0" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20180501" Version="1.0.11" />
-    <PackageVersion Include="AlipaySDKNet.Standard" Version="4.9.1234" />
+    <PackageVersion Include="AlipaySDKNet.Standard" Version="4.9.1369" />
     <PackageVersion Include="SKIT.FlurlHttpClient.Wechat.Api" Version="3.15.0" />
     <PackageVersion Include="SKIT.FlurlHttpClient.Wechat.TenpayV3" Version="3.17.0" />
   </ItemGroup>

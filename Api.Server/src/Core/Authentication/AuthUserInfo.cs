@@ -85,6 +85,11 @@ public class AuthUserInfo
     /// </summary>
     public virtual string Avatar { get; set; }
 
+    /// <summary>
+    /// 账号是否已完成身份校验
+    /// </summary>
+    public virtual bool IdentityVerification { get; set; }
+
     #endregion
 
     #region 客户端用户

@@ -44,7 +44,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditJobLevelInput & AddJobLevelInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditJobLevelInput & AddJobLevelInput>>({
 		jobLevelName: [{ required: true, message: "请输入职级名称", trigger: "blur" }],
 		level: [{ required: true, message: "请输入职级等级", trigger: "blur" }],
 	}),
@@ -98,7 +98,6 @@ const edit = (jobLevelId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

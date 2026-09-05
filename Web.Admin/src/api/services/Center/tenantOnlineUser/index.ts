@@ -22,8 +22,8 @@ export const tenantOnlineUserApi = {
 	/**
 	 * 强制下线
 	 */
-	forceOffline(data: ForceOfflineInput): Promise<unknown> {
-		return axiosUtil.request({
+	forceOffline(data: ForceOfflineInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/tenantOnlineUser/forceOffline",
 			method: "post",
 			data,

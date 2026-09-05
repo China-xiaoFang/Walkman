@@ -8,8 +8,8 @@ export const tenantDatabaseApi = {
 	/**
 	 * 初始化数据库
 	 */
-	initDatabase(data: InitDatabaseInput): Promise<unknown> {
-		return axiosUtil.request({
+	initDatabase(data: InitDatabaseInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/tenantDatabase/initDatabase",
 			method: "post",
 			data,

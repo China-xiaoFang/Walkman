@@ -110,7 +110,7 @@ const state = reactive({
 });
 
 /** 扁平化菜单 */
-const flattenMenus = (menus: AuthMenuInfoDto[], parentName = ""): ISearchItem[] => {
+const flattenMenus = (menus: AuthMenuInfoDto[], parentName = "") => {
 	const result: ISearchItem[] = [];
 
 	for (const menu of menus) {

@@ -1,11 +1,16 @@
 import { axiosUtil } from "@fast-china/axios";
 import type { ElSelectorOutput, PagedInput, PagedResult } from "fast-element-plus";
 import type { AccountIdInput } from "./models/AccountIdInput";
+import type { AccountVerificationInput } from "./models/AccountVerificationInput";
 import type { ChangePasswordInput } from "./models/ChangePasswordInput";
 import type { EditAccountInput } from "./models/EditAccountInput";
+import type { PasswordResetInput } from "./models/PasswordResetInput";
 import type { QueryAccountDetailOutput } from "./models/QueryAccountDetailOutput";
 import type { QueryAccountPagedInput } from "./models/QueryAccountPagedInput";
 import type { QueryAccountPagedOutput } from "./models/QueryAccountPagedOutput";
+import type { SendAccountVerificationCodeInput } from "./models/SendAccountVerificationCodeInput";
+import type { SendPasswordResetCodeInput } from "./models/SendPasswordResetCodeInput";
+import type { SendPasswordResetCodeOutput } from "./models/SendPasswordResetCodeOutput";
 
 /**
  * 账号服务Api
@@ -59,20 +64,9 @@ export const accountApi = {
 	/**
 	 * 编辑账号
 	 */
-	editAccount(data: EditAccountInput): Promise<unknown> {
-		return axiosUtil.request({
+	editAccount(data: EditAccountInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/account/editAccount",
-			method: "post",
-			data,
-			requestType: "edit",
-		});
-	},
-	/**
-	 * 账号修改密码
-	 */
-	changePassword(data: ChangePasswordInput): Promise<unknown> {
-		return axiosUtil.request({
-			url: "/account/changePassword",
 			method: "post",
 			data,
 			requestType: "edit",
@@ -81,20 +75,9 @@ export const accountApi = {
 	/**
 	 * 账号解除锁定
 	 */
-	unlock(data: AccountIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	unlock(data: AccountIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/account/unlock",
-			method: "post",
-			data,
-			requestType: "edit",
-		});
-	},
-	/**
-	 * 账号重置密码
-	 */
-	resetPassword(data: AccountIdInput): Promise<unknown> {
-		return axiosUtil.request({
-			url: "/account/resetPassword",
 			method: "post",
 			data,
 			requestType: "edit",
@@ -103,12 +86,89 @@ export const accountApi = {
 	/**
 	 * 账号更改状态
 	 */
-	changeStatus(data: AccountIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	changeStatus(data: AccountIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/account/changeStatus",
 			method: "post",
 			data,
 			requestType: "edit",
+		});
+	},
+	/**
+	 * 账号修改密码
+	 */
+	changePassword(data: ChangePasswordInput): Promise<void> {
+		return axiosUtil.request<void>({
+			url: "/account/changePassword",
+			method: "post",
+			data,
+			requestType: "edit",
+		});
+	},
+	/**
+	 * 账号重置密码
+	 */
+	resetPassword(data: AccountIdInput): Promise<void> {
+		return axiosUtil.request<void>({
+			url: "/account/resetPassword",
+			method: "post",
+			data,
+			requestType: "edit",
+		});
+	},
+	/**
+	 * 发送密码重置验证码
+	 */
+	sendPasswordResetCode(data: SendPasswordResetCodeInput): Promise<SendPasswordResetCodeOutput> {
+		return axiosUtil.request<SendPasswordResetCodeOutput>({
+			url: "/account/sendPasswordResetCode",
+			method: "post",
+			data,
+			requestType: "auth",
+		});
+	},
+	/**
+	 * 通过验证码重置密码
+	 */
+	resetPasswordByVerificationCode(data: PasswordResetInput): Promise<void> {
+		return axiosUtil.request<void>({
+			url: "/account/resetPasswordByVerificationCode",
+			method: "post",
+			data,
+			requestType: "auth",
+		});
+	},
+	/**
+	 * 发送账号校验验证码
+	 */
+	sendAccountVerificationCode(data: SendAccountVerificationCodeInput): Promise<void> {
+		return axiosUtil.request<void>({
+			url: "/account/sendAccountVerificationCode",
+			method: "post",
+			data,
+			requestType: "auth",
+		});
+	},
+	/**
+	 * 账号校验
+	 */
+	accountVerification(data: AccountVerificationInput): Promise<void> {
+		return axiosUtil.request<void>({
+			url: "/account/accountVerification",
+			method: "post",
+			data,
+			requestType: "auth",
+		});
+	},
+	/**
+	 * 发送编辑账号验证码
+	 */
+	sendEditAccountVerificationCode(data: SendAccountVerificationCodeInput): Promise<void> {
+		return axiosUtil.request<void>({
+			url: "/account/sendEditAccountVerificationCode",
+			method: "post",
+			data,
+			requestType: "auth",
 		});
 	},
 };

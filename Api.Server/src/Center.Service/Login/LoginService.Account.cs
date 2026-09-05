@@ -23,253 +23,14 @@
 using System.Text.RegularExpressions;
 using Fast.Center.Domain;
 using Fast.Center.Service.Login.Dto;
-using Fast.CenterLog.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Extensions.DependencyInjection;
-using Yitter.IdGenerator;
 
 namespace Fast.Center.Service.Login;
 
 public partial class LoginService
 {
-    /// <summary>
-    /// 验证密码
-    /// </summary>
-    /// <param name="accountModel">账号信息</param>
-    /// <param name="password">待验证的原始密码</param>
-    /// <param name="dateTime">操作时间</param>
-    private async Task VerifyPassword(AccountModel accountModel, string password, DateTime dateTime)
-    {
-        if (accountModel.Status == CommonStatusEnum.Disable)
-            throw new UserFriendlyException("账号已被平台禁用！");
-
-        if (string.IsNullOrWhiteSpace(accountModel.Password))
-        {
-            throw new UserFriendlyException("未设定密码，请重置密码后重试！");
-        }
-
-        if (accountModel.LockEndTime != null && accountModel.LockEndTime > dateTime)
-        {
-            var unLockTimeSpan = accountModel.LockEndTime.Value - dateTime;
-            throw new UserFriendlyException($"账号已被锁定，请 {unLockTimeSpan.ToDescription()} 后再重试！");
-        }
-
-        /*
-         * 连续错误3次，锁定1分钟
-         * 连续错误5次，锁定5分钟
-         * 连续错误10次，锁定账号
-         * 登录成功后清除锁定信息
-         */
-        if (!CryptoUtil.VerifyPasswordPBKDF2SHA256(password, accountModel.Password))
-        {
-            accountModel.PasswordErrorTime ??= 0;
-            // 错误次数+1
-            accountModel.PasswordErrorTime++;
-
-            switch (accountModel.PasswordErrorTime)
-            {
-                // 错误3次，锁定1分钟
-                case 3:
-                    accountModel.LockStartTime ??= dateTime;
-                    accountModel.LockEndTime = accountModel.LockStartTime.Value.AddMinutes(1);
-                    break;
-                // 错误5次，锁定5分钟
-                case 5:
-                    accountModel.LockStartTime ??= dateTime;
-                    accountModel.LockEndTime = dateTime.AddMinutes(5);
-                    break;
-                // 判断是否连续错误10次以上
-                case >= 10:
-                    // 错误10次，直接禁用账号
-                    accountModel.Status = CommonStatusEnum.Disable;
-                    await _repository.Updateable(accountModel)
-                        .ExecuteCommandAsync();
-                    await _user.RevokeAccount(accountModel.AccountId);
-                    throw new UserFriendlyException("密码连续输入错误10次，账号已被禁用，请联系管理员！");
-            }
-
-            await _repository.Updateable(accountModel)
-                .ExecuteCommandAsync();
-
-            throw new UserFriendlyException("密码不正确！");
-        }
-
-        // 清除锁定信息
-        if (accountModel.PasswordErrorTime != null)
-        {
-            accountModel.PasswordErrorTime = null;
-            accountModel.LockStartTime = null;
-            accountModel.LockEndTime = null;
-        }
-    }
-
-    /// <summary>
-    /// 处理登录
-    /// </summary>
-    /// <returns>登录结果</returns>
-    private async Task<LoginOutput> HandleLogin(ApplicationModel applicationModel, AccountModel accountModel,
-        TenantUserModel tenantUserModel, DateTime dateTime)
-    {
-        // 验证账号状态
-        if (accountModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("账号已被平台禁用！");
-        }
-
-        if (tenantUserModel == null)
-        {
-            throw new UserFriendlyException("用户不存在！");
-        }
-
-        // 验证租户用户状态
-        if (tenantUserModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("用户已被禁用！");
-        }
-
-        // 验证是否为机器人
-        if (tenantUserModel.UserType == UserTypeEnum.Robot)
-        {
-            throw new UserFriendlyException("无效用户！");
-        }
-
-        // 查询租户
-        var tenantModel = await _repository.Queryable<TenantModel>()
-            .Where(wh => wh.TenantId == tenantUserModel.TenantId)
-            .SingleAsync();
-
-        if (tenantModel == null)
-        {
-            throw new UserFriendlyException("租户不存在！");
-        }
-
-        if (tenantModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("租户已被禁用！");
-        }
-
-        // 验证版本
-        if (tenantModel.Edition < applicationModel.Edition)
-        {
-            throw new UserFriendlyException(
-                $"当前租户版本【{tenantModel.Edition.GetDescription()}】不支持访问该应用，请升级至【{applicationModel.Edition.GetDescription()}】或更高版本。");
-        }
-
-        // 获取设备信息
-        var userAgentInfo = _httpContext.RequestUserAgentInfo();
-        // 获取Ip信息
-        var ip = _httpContext.RemoteIpv4();
-        // 获取万网信息
-        var wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
-
-        if (accountModel.FirstLoginTime == null)
-        {
-            accountModel.FirstLoginTenantId = tenantModel.TenantId;
-            accountModel.FirstLoginDevice = userAgentInfo.Device;
-            accountModel.FirstLoginOS = userAgentInfo.OS;
-            accountModel.FirstLoginBrowser = userAgentInfo.Browser;
-            accountModel.FirstLoginProvince = wanNetIpInfo.Province;
-            accountModel.FirstLoginCity = wanNetIpInfo.City;
-            accountModel.FirstLoginIp = ip;
-            accountModel.FirstLoginTime = dateTime;
-        }
-
-        accountModel.LastLoginTenantId = tenantModel.TenantId;
-        accountModel.LastLoginDevice = userAgentInfo.Device;
-        accountModel.LastLoginOS = userAgentInfo.OS;
-        accountModel.LastLoginBrowser = userAgentInfo.Browser;
-        accountModel.LastLoginProvince = wanNetIpInfo.Province;
-        accountModel.LastLoginCity = wanNetIpInfo.City;
-        accountModel.LastLoginIp = ip;
-        accountModel.LastLoginTime = dateTime;
-        await _repository.Updateable(accountModel)
-            .ExecuteCommandAsync();
-
-        // 登录
-        await _user.Login(new AuthUserInfo
-        {
-            DeviceType = GlobalContext.DeviceType,
-            DeviceId = GlobalContext.DeviceId,
-            AppNo = applicationModel.AppNo,
-            AppName = applicationModel.AppName,
-            AccountId = accountModel.AccountId,
-            AccountKey = accountModel.AccountKey,
-            Mobile = accountModel.Mobile,
-            NickName = accountModel.NickName,
-            Avatar = accountModel.Avatar,
-            TenantId = tenantModel.TenantId,
-            TenantNo = tenantModel.TenantNo,
-            TenantName = tenantModel.TenantName,
-            TenantCode = tenantModel.TenantCode,
-            IsSystemTenant = tenantModel.TenantType == TenantTypeEnum.System,
-            UserKey = tenantUserModel.UserKey,
-            EmployeeId = tenantUserModel.EmployeeId,
-            EmployeeNo = tenantUserModel.EmployeeNo,
-            EmployeeName = tenantUserModel.EmployeeName,
-            DepartmentId = tenantUserModel.DepartmentId,
-            DepartmentName = tenantUserModel.DepartmentName,
-            IsSuperAdmin = tenantUserModel.UserType == UserTypeEnum.SuperAdmin,
-            IsAdmin = tenantUserModel.UserType == UserTypeEnum.Admin,
-            LastLoginDevice = accountModel.LastLoginDevice,
-            LastLoginOS = accountModel.LastLoginOS,
-            LastLoginBrowser = accountModel.LastLoginBrowser,
-            LastLoginProvince = accountModel.LastLoginProvince,
-            LastLoginCity = accountModel.LastLoginCity,
-            LastLoginIp = accountModel.LastLoginIp,
-            LastLoginTime = accountModel.LastLoginTime.Value
-        });
-
-        // 添加访问日志
-        var visitLogModel = new VisitLogModel
-        {
-            RecordId = YitIdHelper.NextId(),
-            AccountId = _user.AccountId,
-            Mobile = _user.Mobile,
-            NickName = _user.NickName,
-            VisitType = VisitTypeEnum.Login,
-            DepartmentId = _user.DepartmentId,
-            DepartmentName = _user.DepartmentName,
-            CreatedUserId = _user.EmployeeId,
-            CreatedUserName = _user.EmployeeName,
-            CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId,
-            TenantName = _user.TenantName
-        };
-        visitLogModel.RecordCreate(_httpContext);
-        await _httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>()
-            .InsertAsync(visitLogModel);
-
-        return new LoginOutput
-        {
-            Status = LoginStatusEnum.Success,
-            Message = "登录成功",
-            AccountKey = accountModel.AccountKey,
-            NickName = accountModel.NickName,
-            Avatar = accountModel.Avatar,
-            TenantList =
-            [
-                new LoginTenantOutput
-                {
-                    UserKey = tenantUserModel.UserKey,
-                    TenantName = tenantModel.TenantName,
-                    ShortName = tenantModel.ShortName,
-                    SpellName = tenantModel.SpellName,
-                    Edition = tenantModel.Edition,
-                    LogoUrl = tenantModel.LogoUrl,
-                    EmployeeNo = tenantUserModel.EmployeeNo,
-                    EmployeeName = tenantUserModel.EmployeeName,
-                    IdPhoto = tenantUserModel.IdPhoto,
-                    DepartmentId = tenantUserModel.DepartmentId,
-                    DepartmentName = tenantUserModel.DepartmentName,
-                    UserType = tenantUserModel.UserType,
-                    Status = tenantUserModel.Status
-                }
-            ]
-        };
-    }
-
     /// <summary>
     /// 登录
     /// </summary>
@@ -277,14 +38,16 @@ public partial class LoginService
     [ApiInfo("登录", HttpRequestActionEnum.Auth)]
     [AllowAnonymous]
     [EnableRateLimiting(CommonConst.LoginApiRateLimit)]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<LoginOutput> Login(LoginInput input)
     {
         // 查询应用信息
-        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+        var applicationModel = await EnsureApplication();
 
-        if (applicationModel.AppType != GlobalContext.DeviceType)
+        // 目前只有 Web 端启用了图片验证码
+        if (GlobalContext.IsWeb && await IsLoginCaptchaEnabled())
         {
-            throw new UserFriendlyException("应用类型不匹配！");
+            await _captchaService.VerifyImageCaptcha(input.CaptchaKey, input.CaptchaCode);
         }
 
         // 判断账号是否为手机号
@@ -386,6 +149,7 @@ public partial class LoginService
         {
             Status = LoginStatusEnum.SelectTenant,
             Message = "请选择租户登录",
+            LoginTicket = await GetTenantLoginTicket(accountModel),
             AccountKey = accountModel.AccountKey,
             NickName = accountModel.NickName,
             Avatar = accountModel.Avatar,
@@ -398,7 +162,8 @@ public partial class LoginService
     /// </summary>
     [HttpGet("/queryLoginUser")]
     [ApiInfo("获取登录用户", HttpRequestActionEnum.Query)]
-    [DisabledRequestLog]
+    [EnableRateLimiting(CommonConst.LoginApiRateLimit)]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<List<LoginTenantOutput>> QueryLoginUser()
     {
         return await _repository.Queryable<AccountModel>()
@@ -432,17 +197,19 @@ public partial class LoginService
     [ApiInfo("租户登录", HttpRequestActionEnum.Auth)]
     [AllowAnonymous]
     [EnableRateLimiting(CommonConst.LoginApiRateLimit)]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<LoginOutput> TenantLogin(TenantLoginInput input)
     {
-        if (string.IsNullOrWhiteSpace(input.Password))
+        if (string.IsNullOrWhiteSpace(input.Password) && string.IsNullOrWhiteSpace(input.LoginTicket))
             throw new UserFriendlyException("密码不能为空！");
 
         // 查询应用信息
-        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+        var applicationModel = await EnsureApplication();
 
-        if (applicationModel.AppType != GlobalContext.DeviceType)
+        // 目前只有 Web 端启用了图片验证码，这里登录凭证为空的情况下是存在租户直接登录的
+        if (string.IsNullOrWhiteSpace(input.LoginTicket) && GlobalContext.IsWeb && await IsLoginCaptchaEnabled())
         {
-            throw new UserFriendlyException("应用类型不匹配！");
+            await _captchaService.VerifyImageCaptcha(input.CaptchaKey, input.CaptchaCode);
         }
 
         // 查询租户用户
@@ -472,8 +239,16 @@ public partial class LoginService
 
         var dateTime = DateTime.Now;
 
-        // 验证密码
-        await VerifyPassword(accountModel, input.Password, dateTime);
+        if (!string.IsNullOrWhiteSpace(input.LoginTicket))
+        {
+            // 验证登录凭证
+            await VerifyTenantLoginTicket(input.LoginTicket, accountModel);
+        }
+        else
+        {
+            // 验证密码
+            await VerifyPassword(accountModel, input.Password, dateTime);
+        }
 
         // 处理登录
         return await HandleLogin(applicationModel.Application, accountModel, tenantUserModel, dateTime);

@@ -17,8 +17,8 @@ export const employeeApi = {
 	/**
 	 * 添加职员
 	 */
-	addEmployee(data: AddEmployeeInput): Promise<unknown> {
-		return axiosUtil.request({
+	addEmployee(data: AddEmployeeInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/employee/addEmployee",
 			method: "post",
 			data,
@@ -28,8 +28,8 @@ export const employeeApi = {
 	/**
 	 * 编辑本职员
 	 */
-	editSelfEmployee(data: EditEmployeeInput): Promise<unknown> {
-		return axiosUtil.request({
+	editSelfEmployee(data: EditEmployeeInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/employee/editSelfEmployee",
 			method: "post",
 			data,
@@ -39,8 +39,8 @@ export const employeeApi = {
 	/**
 	 * 编辑职员
 	 */
-	editEmployee(data: EditEmployeeInput): Promise<unknown> {
-		return axiosUtil.request({
+	editEmployee(data: EditEmployeeInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/employee/editEmployee",
 			method: "post",
 			data,
@@ -85,8 +85,8 @@ export const employeeApi = {
 	/**
 	 * 职员更改状态
 	 */
-	changeStatus(data: ChangeStatusInput): Promise<unknown> {
-		return axiosUtil.request({
+	changeStatus(data: ChangeStatusInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/employee/changeStatus",
 			method: "post",
 			data,
@@ -96,8 +96,8 @@ export const employeeApi = {
 	/**
 	 * 职员离职
 	 */
-	employeeResigned(data: EmployeeResignedInput): Promise<unknown> {
-		return axiosUtil.request({
+	employeeResigned(data: EmployeeResignedInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/employee/employeeResigned",
 			method: "post",
 			data,
@@ -107,8 +107,8 @@ export const employeeApi = {
 	/**
 	 * 绑定登录账号
 	 */
-	bindLoginAccount(data: BindLoginAccountInput): Promise<unknown> {
-		return axiosUtil.request({
+	bindLoginAccount(data: BindLoginAccountInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/employee/bindLoginAccount",
 			method: "post",
 			data,
@@ -118,8 +118,8 @@ export const employeeApi = {
 	/**
 	 * 更改登录状态
 	 */
-	changeLoginStatus(data: EmployeeIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	changeLoginStatus(data: EmployeeIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/employee/changeLoginStatus",
 			method: "post",
 			data,

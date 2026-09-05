@@ -1,4 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
+import type { LoginCaptchaOutput } from "./models/LoginCaptchaOutput";
 import type { LoginInput } from "./models/LoginInput";
 import type { LoginOutput } from "./models/LoginOutput";
 import type { LoginTenantOutput } from "./models/LoginTenantOutput";
@@ -46,6 +47,20 @@ export const loginApi = {
 		});
 	},
 	/**
+	 * 获取登录图片验证码
+	 */
+	getLoginCaptcha(isForce: boolean): Promise<LoginCaptchaOutput> {
+		return axiosUtil.request<LoginCaptchaOutput>({
+			url: "/getLoginCaptcha",
+			method: "post",
+			params: {
+				isForce,
+			},
+			cancelDuplicateRequest: false,
+			requestType: "auth",
+		});
+	},
+	/**
 	 * 尝试登录
 	 */
 	tryLogin(data: TryLoginInput): Promise<LoginOutput> {
@@ -59,8 +74,8 @@ export const loginApi = {
 	/**
 	 * 退出登录
 	 */
-	logout(): Promise<unknown> {
-		return axiosUtil.request({
+	logout(): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/logout",
 			method: "post",
 			requestType: "auth",

@@ -34,16 +34,12 @@ defineOptions({
 	name: "TenantSelectPage",
 });
 
-const props = withDefaults(
-	defineProps<{
-		modelValue?: string;
-		tenantName?: string;
-		tenantNo?: string;
-		tenantCode?: string;
-	}>(),
-	{}
-);
-
+const props = defineProps<{
+	modelValue?: string;
+	tenantName?: string;
+	tenantNo?: string;
+	tenantCode?: string;
+}>();
 const emit = defineEmits({
 	"update:modelValue": (_value: string) => true,
 	"update:tenantName": (_value: string) => true,

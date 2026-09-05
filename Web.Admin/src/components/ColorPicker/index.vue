@@ -10,12 +10,9 @@ defineOptions({
 	name: "ColorPicker",
 });
 
-const props = withDefaults(
-	defineProps<{
-		modelValue?: string;
-	}>(),
-	{}
-);
+const props = defineProps<{
+	modelValue?: string;
+}>();
 
 const emit = defineEmits({
 	"update:modelValue": (_value: string) => true,

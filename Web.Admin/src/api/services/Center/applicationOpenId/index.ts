@@ -38,8 +38,8 @@ export const applicationOpenIdApi = {
 	/**
 	 * 添加应用标识
 	 */
-	addApplicationOpenId(data: AddApplicationOpenIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	addApplicationOpenId(data: AddApplicationOpenIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/applicationOpenId/addApplicationOpenId",
 			method: "post",
 			data,
@@ -49,8 +49,8 @@ export const applicationOpenIdApi = {
 	/**
 	 * 编辑应用标识
 	 */
-	editApplicationOpenId(data: EditApplicationOpenIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	editApplicationOpenId(data: EditApplicationOpenIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/applicationOpenId/editApplicationOpenId",
 			method: "post",
 			data,
@@ -60,8 +60,8 @@ export const applicationOpenIdApi = {
 	/**
 	 * 删除应用标识
 	 */
-	deleteApplicationOpenId(data: RecordIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteApplicationOpenId(data: RecordIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/applicationOpenId/deleteApplicationOpenId",
 			method: "post",
 			data,

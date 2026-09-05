@@ -204,9 +204,15 @@ const emit = defineEmits(["ok"]);
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
+type IFormData = EditDatabaseInput &
+	AddDatabaseInput &
+	QueryDatabaseDetailOutput & {
+		slaveDatabaseList?: EditSlaveDatabaseInput[];
+	};
+
 const state = reactive({
-	formData: withDefineType<EditDatabaseInput & AddDatabaseInput & QueryDatabaseDetailOutput>({}),
-	formRules: withDefineType<FormRules>({
+	formData: withDefineType<IFormData>({}),
+	formRules: withDefineType<FormRules<IFormData>>({
 		tenantId: [{ required: true, message: "请选择租户", trigger: "change" }],
 		publicIp: [{ required: true, message: "请输入公网Ip地址", trigger: "blur" }],
 		intranetIp: [{ required: true, message: "请输入内网Ip地址", trigger: "blur" }],
@@ -288,7 +294,6 @@ const edit = (mainId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

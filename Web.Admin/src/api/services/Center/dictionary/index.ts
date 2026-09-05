@@ -58,8 +58,8 @@ export const dictionaryApi = {
 	/**
 	 * 添加字典
 	 */
-	addDictionary(data: AddDictionaryInput): Promise<unknown> {
-		return axiosUtil.request({
+	addDictionary(data: AddDictionaryInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/dictionary/addDictionary",
 			method: "post",
 			data,
@@ -69,8 +69,8 @@ export const dictionaryApi = {
 	/**
 	 * 编辑字典
 	 */
-	editDictionary(data: EditDictionaryInput): Promise<unknown> {
-		return axiosUtil.request({
+	editDictionary(data: EditDictionaryInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/dictionary/editDictionary",
 			method: "post",
 			data,
@@ -80,8 +80,8 @@ export const dictionaryApi = {
 	/**
 	 * 删除字典
 	 */
-	deleteDictionary(data: DictionaryIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteDictionary(data: DictionaryIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/dictionary/deleteDictionary",
 			method: "post",
 			data,

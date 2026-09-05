@@ -39,8 +39,16 @@ public interface IMailService
     /// <para>warn</para>
     /// <para>error</para>
     /// </param>
+    /// <param name="displayName">发件人显示名称，为null时读取配置</param>
     /// <returns>公用邮件模板</returns>
-    string GetEmailTemplate(string title, string msg, string type = null);
+    Task<string> GetEmailTemplate(string title, string msg, string type = null, string displayName = null);
+
+    /// <summary>
+    /// 获取当前验证码发送的剩余等待秒数
+    /// </summary>
+    /// <param name="mailType">邮件类型</param>
+    /// <param name="email">邮箱</param>
+    Task<int> GetVerificationCodeRetryAfterSeconds(MailTypeEnum mailType, string email);
 
     /// <summary>
     /// 发送验证码
@@ -55,35 +63,34 @@ public interface IMailService
     /// <param name="mailType">邮件类型</param>
     /// <param name="email">邮箱</param>
     /// <param name="verificationCode">验证码</param>
-    Task SendVerificationCode(MailTypeEnum mailType, string email, string verificationCode);
+    Task VerifyVerificationCode(MailTypeEnum mailType, string email, string verificationCode);
 
     /// <summary>
     /// 发送邮件
     /// </summary>
-    Task SendEmail(string title, string content, string receiveEmails);
+    /// <param name="title">邮件标题</param>
+    /// <param name="content">邮件正文</param>
+    /// <param name="receiveEmails">收件邮箱，为null时使用默认收件人</param>
+    /// <param name="smtp">发件服务器地址，为null时读取配置</param>
+    /// <param name="port">发件服务器端口，为null时读取配置</param>
+    /// <param name="email">发件邮箱，为null时读取配置</param>
+    /// <param name="authCode">发件邮箱授权码，为null时读取配置</param>
+    /// <param name="displayName">发件人显示名称，为null时读取配置</param>
+    Task SendEmail(string title, string content, List<string> receiveEmails = null, string smtp = null, int? port = null,
+        string email = null, string authCode = null, string displayName = null);
 
-    /// <summary>
-    /// 发送邮件 - 默认收件人
-    /// </summary>
-    Task SendEmail(string title, string content);
-
-    /// <summary>
-    /// 发送邮件
-    /// </summary>
-    Task SendEmail(string title, BodyBuilder content, string receiveEmails);
-
-    /// <summary>
-    /// 发送邮件 - 默认收件人
-    /// </summary>
-    Task SendEmail(string title, BodyBuilder content);
 
     /// <summary>
     /// 发送邮件
     /// </summary>
-    Task SendEmail(string title, string content, List<string> receiveEmails);
-
-    /// <summary>
-    /// 发送邮件
-    /// </summary>
-    Task SendEmail(string title, BodyBuilder content, List<string> receiveEmails);
+    /// <param name="title">邮件标题</param>
+    /// <param name="content">邮件正文</param>
+    /// <param name="receiveEmails">收件邮箱，为null时使用默认收件人</param>
+    /// <param name="smtp">发件服务器地址，为null时读取配置</param>
+    /// <param name="port">发件服务器端口，为null时读取配置</param>
+    /// <param name="email">发件邮箱，为null时读取配置</param>
+    /// <param name="authCode">发件邮箱授权码，为null时读取配置</param>
+    /// <param name="displayName">发件人显示名称，为null时读取配置</param>
+    Task SendEmail(string title, BodyBuilder content, List<string> receiveEmails = null, string smtp = null, int? port = null,
+        string email = null, string authCode = null, string displayName = null);
 }

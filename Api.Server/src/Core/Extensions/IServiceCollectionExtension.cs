@@ -98,10 +98,13 @@ public static class IServiceCollectionExtension
                     ?.PolicyName;
                 var settings = httpContext.RequestServices.GetRequiredService<IOptions<ApiRateLimitSettingsOptions>>()
                     .Value;
+                // 仅使用经过可信代理中间件处理的连接地址，不能直接信任客户端伪造的转发头。
+                var remoteIp = httpContext.Connection.RemoteIpAddress?.MapToIPv6()
+                                   .ToString()
+                               ?? "unknown";
                 return policyName switch
                 {
-                    CommonConst.GlobalApiRateLimit => RateLimitPartition.GetSlidingWindowLimiter(
-                        $"global-ip:{httpContext.RemoteIpv4()}",
+                    CommonConst.GlobalApiRateLimit => RateLimitPartition.GetSlidingWindowLimiter($"global-ip:{remoteIp}",
                         _ => new SlidingWindowRateLimiterOptions
                         {
                             PermitLimit = settings.IpPermitLimit.GetValueOrDefault(60),
@@ -110,8 +113,7 @@ public static class IServiceCollectionExtension
                             QueueLimit = 0,
                             AutoReplenishment = true
                         }),
-                    CommonConst.LoginApiRateLimit => RateLimitPartition.GetSlidingWindowLimiter(
-                        $"login-ip:{httpContext.RemoteIpv4()}",
+                    CommonConst.LoginApiRateLimit => RateLimitPartition.GetSlidingWindowLimiter($"login-ip:{remoteIp}",
                         _ => new SlidingWindowRateLimiterOptions
                         {
                             PermitLimit = settings.LoginIpPermitLimit.GetValueOrDefault(30),

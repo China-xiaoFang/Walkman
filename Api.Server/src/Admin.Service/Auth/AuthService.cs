@@ -75,6 +75,9 @@ public class AuthService : IDynamicApplication
             throw new UserFriendlyException("租户已被禁用！");
         }
 
+        // 登录后身份验证开关
+        var loginIdentityVerificationOpen = bool.Parse(await ConfigContext.GetConfig(ConfigConst.LoginIdentityVerificationOpen));
+
         var result = new GetLoginUserInfoOutput
         {
             AccountId = _user.AccountId,
@@ -82,6 +85,8 @@ public class AuthService : IDynamicApplication
             Mobile = _user.Mobile,
             NickName = _user.NickName,
             Avatar = _user.Avatar,
+            // 开启验证并且需要验证
+            IdentityVerification = loginIdentityVerificationOpen && _user.IdentityVerification,
             TenantNo = _user.TenantNo,
             TenantName = _user.TenantName,
             ShortName = tenantModel.ShortName,

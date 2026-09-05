@@ -33,15 +33,12 @@ defineOptions({
 	name: "AccountSelectPage",
 });
 
-const props = withDefaults(
-	defineProps<{
-		modelValue?: string;
-		mobile?: string;
-		email?: string;
-		accountKey?: string;
-	}>(),
-	{}
-);
+const props = defineProps<{
+	modelValue?: string;
+	mobile?: string;
+	email?: string;
+	accountKey?: string;
+}>();
 
 const emit = defineEmits({
 	"update:modelValue": (_value: string) => true,

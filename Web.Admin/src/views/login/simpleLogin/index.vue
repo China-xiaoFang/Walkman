@@ -19,7 +19,7 @@
 
 				<section class="simple-form-card">
 					<div class="simple-form-card__accent"></div>
-					<LoginFormPanel variant="simple" :form-rules="props.formRules" />
+					<LoginForm variant="simple" :form-rules="props.formRules" />
 				</section>
 
 				<div class="simple-trust">
@@ -47,7 +47,7 @@ import { Cloudy, Lock } from "@element-plus/icons-vue";
 import { addCssUnit } from "@fast-china/utils";
 import logoImage from "@/assets/logo.png";
 import { useApp } from "@/stores";
-import LoginFormPanel from "../form/loginForm.vue";
+import LoginForm from "../components/loginForm.vue";
 import type { FormRules } from "element-plus";
 
 defineOptions({
@@ -55,11 +55,11 @@ defineOptions({
 });
 
 const props = defineProps<{
-	/** 页面主题背景。 */
+	/** 页面主题背景 */
 	background?: string;
-	/** 页脚高度。 */
+	/** 页脚高度*/
 	footerHeight?: number;
-	/** 登录表单校验规则。 */
+	/** 登录表单校验规则 */
 	formRules?: FormRules;
 }>();
 

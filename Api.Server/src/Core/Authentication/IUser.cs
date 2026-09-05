@@ -85,6 +85,11 @@ public interface IUser
     /// </summary>
     string Avatar { get; set; }
 
+    /// <summary>
+    /// 账号是否已完成身份校验
+    /// </summary>
+    bool IdentityVerification { get; set; }
+
     #endregion
 
     #region 客户端用户

@@ -40,7 +40,7 @@ const state = reactive({
 	formData: withDefineType<EmployeeResignedInput>({
 		resignDate: dayjs().format("YYYY-MM-DD"),
 	}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EmployeeResignedInput>>({
 		resignDate: [{ required: true, message: "请选择离职日期", trigger: "change" }],
 		resignReason: [{ required: true, message: "请输入离职原因", trigger: "blur" }],
 	}),
@@ -68,7 +68,6 @@ const open = (employeeId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	open,

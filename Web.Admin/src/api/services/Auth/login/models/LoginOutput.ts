@@ -26,6 +26,10 @@ export interface LoginOutput {
 	 */
 	avatar?: string;
 	/**
+	 * 选择租户的一次性租户登录凭据
+	 */
+	loginTicket?: string;
+	/**
 	 * 租户集合
 	 */
 	tenantList?: LoginTenantOutput[];

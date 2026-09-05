@@ -60,11 +60,11 @@
 <script lang="ts" setup>
 import { reactive, useTemplateRef } from "vue";
 import { ElMessage } from "element-plus";
+import { type FaDialogInstance, type FaFormInstance, RegExps } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { departmentApi } from "@/api/services/Admin/department";
 import { organizationApi } from "@/api/services/Admin/organization";
 import type { FormRules } from "element-plus";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { AddDepartmentInput } from "@/api/services/Admin/department/models/AddDepartmentInput";
 import type { EditDepartmentInput } from "@/api/services/Admin/department/models/EditDepartmentInput";
 
@@ -77,14 +77,24 @@ const emit = defineEmits(["ok"]);
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
+type IFormData = EditDepartmentInput &
+	AddDepartmentInput & {
+		orgName?: string;
+		parentName?: string;
+	};
+
 const state = reactive({
-	formData: withDefineType<EditDepartmentInput & AddDepartmentInput & { orgName?: string; parentName?: string }>({}),
-	formRules: withDefineType<FormRules>({
+	formData: withDefineType<IFormData>({}),
+	formRules: withDefineType<FormRules<IFormData>>({
 		orgId: [{ required: true, message: "请选择机构", trigger: "change" }],
 		departmentName: [{ required: true, message: "请输入部门名称", trigger: "blur" }],
 		departmentCode: [{ required: true, message: "请输入部门编码", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
 		dataPublic: [{ required: true, message: "请选择数据公开", trigger: "change" }],
+		email: [
+			{ pattern: RegExps.Email, message: "请输入正确的邮箱", trigger: "blur" },
+			{ max: 50, message: "邮箱不能超过50位字符", trigger: "blur" },
+		],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
@@ -146,7 +156,6 @@ const edit = (departmentId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

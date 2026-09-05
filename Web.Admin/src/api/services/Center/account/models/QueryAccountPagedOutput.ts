@@ -17,6 +17,10 @@ export interface QueryAccountPagedOutput {
 	 */
 	email?: string;
 	/**
+	 * 身份验证
+	 */
+	identityVerification?: boolean;
+	/**
 	 * 
 	 */
 	status?: CommonStatusEnum;

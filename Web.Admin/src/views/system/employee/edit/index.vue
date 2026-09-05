@@ -61,10 +61,26 @@
 				<el-input v-model="state.formData.employeeName" maxlength="20" placeholder="请输入职员名称" />
 			</FaFormItem>
 			<FaFormItem prop="mobile" label="手机">
-				<el-input v-model="state.formData.mobile" maxlength="11" placeholder="请输入手机" />
+				<el-input
+					v-model="state.formData.mobile"
+					maxlength="11"
+					placeholder="请输入手机"
+					autocapitalize="off"
+					autocomplete="tel"
+					inputmode="tel"
+					spellcheck="false"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="email" label="邮箱">
-				<el-input v-model="state.formData.email" maxlength="50" placeholder="请输入邮箱" />
+				<el-input
+					v-model="state.formData.email"
+					maxlength="50"
+					placeholder="请输入邮箱"
+					autocapitalize="off"
+					autocomplete="email"
+					inputmode="email"
+					spellcheck="false"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="sex" label="性别">
 				<RadioGroup name="GenderEnum" v-model="state.formData.sex" />
@@ -102,6 +118,7 @@
 <script lang="ts" setup>
 import { reactive, useTemplateRef } from "vue";
 import { ElMessage, dayjs } from "element-plus";
+import { type ElSelectorOutput, type FaDialogInstance, type FaFormInstance, RegExps } from "fast-element-plus";
 import { isDateAfterNow, withDefineType } from "@fast-china/utils";
 import { GenderEnum } from "@/api/enums/GenderEnum";
 import { employeeApi } from "@/api/services/Admin/employee";
@@ -111,7 +128,6 @@ import { positionApi } from "@/api/services/Admin/position";
 import { roleApi } from "@/api/services/Admin/role";
 import { fileApi } from "@/api/services/File";
 import type { CheckboxValueType, FormRules } from "element-plus";
-import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { AddEmployeeInput } from "@/api/services/Admin/employee/models/AddEmployeeInput";
 import type { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
 import type { EmployeeOrgModel } from "@/api/services/Admin/employee/models/EmployeeOrgModel";
@@ -126,18 +142,30 @@ const emit = defineEmits(["ok"]);
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
+type IFormData = EditEmployeeInput &
+	AddEmployeeInput & {
+		roleIds?: string[];
+	};
+
 const state = reactive({
-	formData: withDefineType<EditEmployeeInput & AddEmployeeInput & { roleIds?: string[] }>({
+	formData: withDefineType<IFormData>({
 		roleIds: [],
 	}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<IFormData>>({
 		orgId: [{ required: true, message: "请选择机构", trigger: "change" }],
 		departmentId: [{ required: true, message: "请选择部门", trigger: "change" }],
 		positionId: [{ required: true, message: "请选择职位", trigger: "change" }],
 		jobLevelId: [{ required: true, message: "请选择职级", trigger: "change" }],
 		employeeName: [{ required: true, message: "请输入职员名称", trigger: "blur" }],
-		mobile: [{ required: true, message: "请输入手机", trigger: "blur" }],
-		email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+		mobile: [
+			{ required: true, message: "请输入手机", trigger: "blur" },
+			{ pattern: RegExps.Mobile, message: "请输入正确的手机号", trigger: "blur" },
+		],
+		email: [
+			{ required: true, message: "请输入邮箱", trigger: "blur" },
+			{ pattern: RegExps.Email, message: "请输入正确的邮箱", trigger: "blur" },
+			{ max: 50, message: "邮箱不能超过50位字符", trigger: "blur" },
+		],
 		idPhoto: [{ required: true, message: "请上传证件照", trigger: "change" }],
 		entryDate: [{ required: true, message: "请选择入职日期", trigger: "change" }],
 	}),
@@ -253,7 +281,6 @@ const edit = (employeeId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

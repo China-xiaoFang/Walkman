@@ -53,6 +53,11 @@ public class GetLoginUserInfoOutput
     public string Avatar { get; set; }
 
     /// <summary>
+    /// 身份校验
+    /// </summary>
+    public bool IdentityVerification { get; set; }
+
+    /// <summary>
     /// 租户编号
     /// </summary>
     public string TenantNo { get; set; }

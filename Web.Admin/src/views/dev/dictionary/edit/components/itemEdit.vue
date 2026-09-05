@@ -76,7 +76,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditDictionaryItemInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditDictionaryItemInput>>({
 		label: [{ required: true, message: "请输入字典项名称", trigger: "blur" }],
 		value: [{ required: true, message: "请输入字典项值", trigger: "blur" }],
 		order: [{ required: true, message: "请输入排序", trigger: "blur" }],
@@ -132,7 +132,6 @@ const edit = (row: EditDictionaryItemInput, index: number) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

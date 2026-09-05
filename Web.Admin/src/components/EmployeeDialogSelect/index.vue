@@ -28,15 +28,12 @@ defineOptions({
 	name: "EmployeeDialogSelect",
 });
 
-const props = withDefaults(
-	defineProps<{
-		modelValue?: string;
-		employeeName?: string;
-		employeeNo?: string;
-		mobile?: string;
-	}>(),
-	{}
-);
+const props = defineProps<{
+	modelValue?: string;
+	employeeName?: string;
+	employeeNo?: string;
+	mobile?: string;
+}>();
 
 const emit = defineEmits({
 	"update:modelValue": (_value: string) => true,

@@ -28,6 +28,7 @@ export const useUserInfo = defineStore(
 			mobile: "",
 			nickName: "",
 			avatar: "",
+			identityVerification: false,
 			tenantNo: "",
 			tenantName: "",
 			shortName: "",
@@ -63,6 +64,8 @@ export const useUserInfo = defineStore(
 		const removeToken = (): void => {
 			state.token = "";
 			state.refreshToken = "";
+			// 删除Token后，不用校验账号
+			state.identityVerification = false;
 		};
 
 		/** 设置 Token */

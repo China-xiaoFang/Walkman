@@ -1,5 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
-import type { AxiosProgressEvent } from "axios";
+import type { AxiosProgressEvent, AxiosResponse } from "axios";
 import type { PagedResult } from "fast-element-plus";
 import type { DownloadFileInput } from "./models/DownloadFileInput";
 import type { QueryFilePagedInput } from "./models/QueryFilePagedInput";
@@ -23,13 +23,13 @@ export const fileApi = {
 	/**
 	 * 下载文件
 	 */
-	download(data: DownloadFileInput): Promise<unknown> {
-		return axiosUtil.request({
+	download(data: DownloadFileInput, autoDownloadFile = true): Promise<AxiosResponse<Blob>> {
+		return axiosUtil.request<AxiosResponse<Blob>>({
 			url: "/file/download",
 			method: "post",
 			data,
 			responseType: "blob",
-			autoDownloadFile: true,
+			autoDownloadFile,
 			requestType: "download",
 		});
 	},

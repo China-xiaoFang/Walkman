@@ -30,14 +30,26 @@ public class LoginInput
     /// <summary>
     /// 账号
     /// </summary>
-    /// <remarks>手机号/工号</remarks>
-    [StringRequired(ErrorMessage = "账号不能为空")]
+    /// <remarks>手机号/邮箱/工号</remarks>
+    [StringRequired(ErrorMessage = "账号不能为空"), MaxLength(50, ErrorMessage = "账号不能超过50位字符")]
     public string Account { get; set; }
 
     /// <summary>
     /// 密码
     /// </summary>
-    [StringRequired(ErrorMessage = "密码不能为空"), MinLength(6, ErrorMessage = "密码不能少于6位字符"),
-     MaxLength(20, ErrorMessage = "密码不能超过20位字符")]
+    [StringRequired(ErrorMessage = "密码不能为空"), StringLength(20, MinimumLength = 6, ErrorMessage = "密码长度必须为 6~20 位字符")]
     public string Password { get; set; }
+
+    /// <summary>
+    /// 图片验证码Key
+    /// </summary>
+    [MaxLength(32, ErrorMessage = "图片验证码Key不能超过32位字符")]
+    public string CaptchaKey { get; set; }
+
+    /// <summary>
+    /// 图片验证码
+    /// </summary>
+    [MaxLength(4, ErrorMessage = "图片验证码不能超过4位字符")]
+    [RegularExpression(RegexConst.ImageCaptchaCode, ErrorMessage = "图片验证码必须为4位字母或数字")]
+    public string CaptchaCode { get; set; }
 }

@@ -11,8 +11,20 @@ export interface TenantLoginInput {
 	 */
 	userKey?: string;
 	/**
-	 * 原始密码；生产环境必须通过 HTTPS 传输
+	 * 密码
 	 */
 	password?: string;
+	/**
+	 * 登录凭据
+	 */
+	loginTicket?: string;
+	/**
+	 * 图片验证码Key
+	 */
+	captchaKey?: string;
+	/**
+	 * 图片验证码
+	 */
+	captchaCode?: string;
 }
 

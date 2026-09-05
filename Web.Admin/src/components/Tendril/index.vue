@@ -88,7 +88,7 @@ class Oscillator {
 	}
 
 	/** 更新当前值 */
-	update(): number {
+	update() {
 		this.phase += this.frequency;
 		this.value = this.offset + Math.sin(this.phase) * this.amplitude;
 		return this.value;

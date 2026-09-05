@@ -52,10 +52,10 @@
 <script lang="ts" setup>
 import { reactive, useTemplateRef } from "vue";
 import { ElMessage } from "element-plus";
+import { type FaDialogInstance, type FaFormInstance, RegExps } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { organizationApi } from "@/api/services/Admin/organization";
 import type { FormRules } from "element-plus";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { AddOrganizationInput } from "@/api/services/Admin/organization/models/AddOrganizationInput";
 import type { EditOrganizationInput } from "@/api/services/Admin/organization/models/EditOrganizationInput";
 
@@ -68,13 +68,22 @@ const emit = defineEmits(["ok"]);
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
+type IFormData = EditOrganizationInput &
+	AddOrganizationInput & {
+		parentName?: string;
+	};
+
 const state = reactive({
-	formData: withDefineType<EditOrganizationInput & AddOrganizationInput & { parentName?: string }>({}),
-	formRules: withDefineType<FormRules>({
+	formData: withDefineType<IFormData>({}),
+	formRules: withDefineType<FormRules<IFormData>>({
 		orgName: [{ required: true, message: "请输入机构名称", trigger: "blur" }],
 		orgCode: [{ required: true, message: "请输入机构编码", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
 		dataPublic: [{ required: true, message: "请选择数据公开", trigger: "change" }],
+		email: [
+			{ pattern: RegExps.Email, message: "请输入正确的邮箱", trigger: "blur" },
+			{ max: 50, message: "邮箱不能超过50位字符", trigger: "blur" },
+		],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
@@ -136,7 +145,6 @@ const edit = (orgId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

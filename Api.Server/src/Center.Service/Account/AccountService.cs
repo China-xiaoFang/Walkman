@@ -20,15 +20,14 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using System.Text;
+using Fast.Cache;
 using Fast.Center.Domain;
 using Fast.Center.Service.Account.Dto;
-using Fast.CenterLog.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.DependencyInjection;
-using Yitter.IdGenerator;
 
 namespace Fast.Center.Service.Account;
 
@@ -36,17 +35,80 @@ namespace Fast.Center.Service.Account;
 /// 账号服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "account")]
-public class AccountService : IDynamicApplication
+public partial class AccountService : IDynamicApplication
 {
     private readonly IUser _user;
+    private readonly ICache<CenterCCL> _centerCache;
     private readonly ISqlSugarRepository<AccountModel> _repository;
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;
+    private readonly ICaptchaService _captchaService;
+    private readonly IMailService _mailService;
+    private readonly ISmsService _smsService;
 
-    public AccountService(IUser user, ISqlSugarRepository<AccountModel> repository, IHubContext<ChatHub, IChatClient> hubContext)
+    public AccountService(IUser user, ICache<CenterCCL> centerCache, ISqlSugarRepository<AccountModel> repository,
+        IHubContext<ChatHub, IChatClient> hubContext, ICaptchaService captchaService, IMailService mailService,
+        ISmsService smsService)
     {
         _user = user;
+        _centerCache = centerCache;
         _repository = repository;
         _hubContext = hubContext;
+        _captchaService = captchaService;
+        _mailService = mailService;
+        _smsService = smsService;
+    }
+
+    /// <summary>
+    /// 确保应用安全
+    /// </summary>
+    private async Task<ApplicationOpenIdModel> EnsureApplication()
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        return applicationModel;
+    }
+
+    /// <summary>
+    /// 强制发送配额
+    /// 共享Redis计数用于多实例发送配额，刷新设备Id或验证Key不能重置IP、账号和收件人配额
+    /// </summary>
+    private async Task EnforceSendQuota(string identity, params (int limit, int windowSeconds)[] quotas)
+    {
+        const string script = """
+                              if tonumber(ARGV[3]) == 1 then
+                                  local n = redis.call('INCR', KEYS[1])
+                                  if n == 1 then
+                                      redis.call('EXPIRE', KEYS[1], ARGV[1])
+                                  end
+                                  if n <= tonumber(ARGV[2]) then
+                                      return 0
+                                  end
+                              elseif tonumber(redis.call('GET', KEYS[1]) or '0') < tonumber(ARGV[2]) then
+                                  return 0
+                              end
+                              return math.ceil(redis.call('PTTL', KEYS[1]) / 1000)
+                              """;
+        var identityHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(identity)));
+        var retryAfterSeconds = 0;
+        foreach (var (limit, windowSeconds) in quotas)
+        {
+            // 已被前一个窗口拒绝时，后续窗口只检查等待时间，不再扣除配额。
+            var result = await _centerCache.Client.EvalAsync(script, $"Login:SendQuota:{identityHash}:{windowSeconds}",
+                windowSeconds, limit, retryAfterSeconds == 0 ? 1 : 0);
+            retryAfterSeconds = Math.Max(retryAfterSeconds, Convert.ToInt32(result));
+        }
+
+        // 同时触发小时和全天配额时，提示较长的剩余等待时间。
+        if (retryAfterSeconds > 0)
+        {
+            throw new UserFriendlyException($"操作过于频繁，请在 {TimeSpan.FromSeconds(retryAfterSeconds).ToDescription()} 后重试！");
+        }
     }
 
     /// <summary>
@@ -138,6 +200,7 @@ public class AccountService : IDynamicApplication
                 AccountId = t1.AccountId,
                 Mobile = t1.Mobile,
                 Email = t1.Email,
+                IdentityVerification = t1.IdentityVerification,
                 Status = t1.Status,
                 NickName = t1.NickName,
                 Avatar = t1.Avatar,
@@ -260,29 +323,105 @@ public class AccountService : IDynamicApplication
     [ApiInfo("编辑账号", HttpRequestActionEnum.Edit)]
     public async Task EditAccount(EditAccountInput input)
     {
-        if (!new Regex(RegexConst.Mobile).IsMatch(input.Mobile))
-        {
-            throw new UserFriendlyException("手机号码不正确！");
-        }
+        await EnsureApplication();
 
+        var mobile = input.Mobile.Trim();
+        var email = input.Email.Trim()
+            .ToLowerInvariant();
         var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (await _repository.AnyAsync(a => a.Mobile == input.Mobile && a.AccountId != _user.AccountId))
+        // 验证账号状态
+        if (accountModel.Status == CommonStatusEnum.Disable)
+        {
+            throw new UserFriendlyException("账号已被平台禁用！");
+        }
+
+        if (await _repository.AnyAsync(a => a.Mobile == mobile && a.AccountId != _user.AccountId))
         {
             throw new UserFriendlyException("手机号已存在账号信息！");
         }
 
-        if (await _repository.AnyAsync(a => a.Email == input.Email && a.AccountId != _user.AccountId))
+        if (await _repository.AnyAsync(a => a.Email == email && a.AccountId != _user.AccountId))
         {
             throw new UserFriendlyException("邮箱已存在账号信息！");
         }
 
-        accountModel.Mobile = input.Mobile;
-        accountModel.Email = input.Email;
+        var mobileChange = accountModel.Mobile != mobile;
+        var emailChange = !string.Equals(accountModel.Email, email, StringComparison.OrdinalIgnoreCase);
+        // 获取缓存Key
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.EditAccountVerification, accountModel.AccountKey,
+            GlobalContext.ClientIdentity);
+
+        // 只有手机号或邮箱发生变化的时候才判断
+        if (mobileChange || emailChange)
+        {
+            using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 120);
+            if (codeLock == null)
+            {
+                throw new UserFriendlyException("操作过于频繁，请稍后重试！");
+            }
+
+            var dto = await _centerCache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+            if (dto == null || dto.AccountId != accountModel.AccountId || dto.ClientIdentity != GlobalContext.ClientIdentity)
+            {
+                throw new UserFriendlyException("验证码无效或已过期！");
+            }
+
+            if (!string.Equals(Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password))),
+                    dto.PasswordHash))
+            {
+                throw new UserFriendlyException("验证码无效或已过期！");
+            }
+
+            if (mobileChange)
+            {
+                if (string.IsNullOrWhiteSpace(input.MobileVerificationCode))
+                {
+                    throw new UserFriendlyException("请输入短信验证码！");
+                }
+
+                if (dto.Mobile != mobile || dto.MobileExpiresTime <= DateTime.Now)
+                {
+                    throw new UserFriendlyException("短信验证码无效或已过期！");
+                }
+
+                if (!dto.MobileVerified)
+                {
+                    await _smsService.VerifyVerificationCode(SmsTypeEnum.Validity, mobile, input.MobileVerificationCode);
+                    dto.Mobile = mobile;
+                    dto.MobileVerified = true;
+                    await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+                }
+            }
+
+            if (emailChange)
+            {
+                if (string.IsNullOrWhiteSpace(input.EmailVerificationCode))
+                {
+                    throw new UserFriendlyException("请输入邮件验证码！");
+                }
+
+                if (dto.Email != email || dto.EmailExpiresTime <= DateTime.Now)
+                {
+                    throw new UserFriendlyException("邮件验证码无效或已过期！");
+                }
+
+                if (!dto.EmailVerified)
+                {
+                    await _mailService.VerifyVerificationCode(MailTypeEnum.Validity, email, input.MobileVerificationCode);
+                    dto.Email = mobile;
+                    dto.EmailVerified = true;
+                    await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+                }
+            }
+        }
+
+        accountModel.Mobile = mobile;
+        accountModel.Email = email;
         accountModel.NickName = input.NickName;
         accountModel.Avatar = input.Avatar;
         accountModel.RowVersion = input.RowVersion;
@@ -317,214 +456,27 @@ public class AccountService : IDynamicApplication
             await _repository.UpdateAsync(accountModel);
         }, ex => throw ex);
 
-        // 刷新缓存
-        await _user.RefreshAccount(new RefreshAccountDto
+        await _centerCache.DelAsync(cacheKey);
+
+        if (mobileChange || emailChange)
         {
-            DeviceType = _user.DeviceType,
-            AppNo = _user.AppNo,
-            Mobile = accountModel.Mobile,
-            NickName = input.NickName,
-            Avatar = input.Avatar,
-            TenantNo = _user.TenantNo,
-            EmployeeNo = _user.EmployeeNo
-        });
-    }
-
-    /// <summary>
-    /// 账号修改密码
-    /// </summary>
-    [HttpPost]
-    [ApiInfo("账号修改密码", HttpRequestActionEnum.Edit)]
-    public async Task ChangePassword(ChangePasswordInput input)
-    {
-        if (!string.Equals(input.NewPassword, input.ConfirmPassword, StringComparison.Ordinal))
-        {
-            throw new UserFriendlyException("新密码和确认密码不一致！");
-        }
-
-        // 客户端提交原始密码后，服务端可以直接校验真实复杂度
-        if (input.NewPassword.Length < 8
-            || !input.NewPassword.Any(char.IsUpper)
-            || !input.NewPassword.Any(char.IsLower)
-            || !input.NewPassword.Any(char.IsDigit))
-        {
-            throw new UserFriendlyException("新密码至少8位，且必须包含大小写字母、数字！");
-        }
-
-        var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
-        if (accountModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-
-        if (!CryptoUtil.VerifyPasswordPBKDF2SHA256(input.OldPassword, accountModel.Password))
-        {
-            throw new UserFriendlyException("旧密码不正确！");
-        }
-
-        // 查询最近3次密码修改记录
-        var passwordRecordList = await _repository.Queryable<PasswordRecordModel>()
-            .Where(wh => wh.AccountId == accountModel.AccountId)
-            .OrderByDescending(ob => ob.CreatedTime)
-            .Take(3)
-            .Select(sl => sl.Password)
-            .ToListAsync();
-        if (passwordRecordList.Any(history => CryptoUtil.VerifyPasswordPBKDF2SHA256(input.NewPassword, history)))
-            throw new UserFriendlyException("新密码不能与最近3次使用的密码相同！");
-
-        // 更新密码
-        accountModel.Password = CryptoUtil.HashPasswordPBKDF2SHA256(input.NewPassword);
-        accountModel.RowVersion = input.RowVersion;
-
-        var httpContext = FastContext.HttpContext;
-        var _visitLogRepository = httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>();
-
-        // 添加访问日志
-        var visitLogModel = new VisitLogModel
-        {
-            RecordId = YitIdHelper.NextId(),
-            AccountId = _user.AccountId,
-            Mobile = _user.Mobile,
-            NickName = _user.NickName,
-            VisitType = VisitTypeEnum.ChangePassword,
-            DepartmentId = _user.DepartmentId,
-            DepartmentName = _user.DepartmentName,
-            CreatedUserId = _user.EmployeeId,
-            CreatedUserName = _user.EmployeeName,
-            CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId,
-            TenantName = _user.TenantName
-        };
-        visitLogModel.RecordCreate(httpContext);
-
-        await _repository.Ado.UseTranAsync(async () =>
-        {
-            await _repository.UpdateAsync(accountModel);
-            await _repository.Insertable(new PasswordRecordModel
-                {
-                    AccountId = accountModel.AccountId,
-                    OperationType = PasswordOperationTypeEnum.Change,
-                    Type = PasswordTypeEnum.PBKDF2_SHA256,
-                    Password = accountModel.Password
-                })
-                .ExecuteCommandAsync();
-            await _visitLogRepository.InsertAsync(visitLogModel);
-        }, ex => throw ex);
-
-        // 退出登录
-        await _user.Logout();
-        await _user.RevokeAccount(accountModel.AccountId);
-        await AccountForceOffline(accountModel.AccountId, "密码已修改，请重新登录");
-    }
-
-    /// <summary>
-    /// 账号解除锁定
-    /// </summary>
-    [HttpPost]
-    [ApiInfo("账号解除锁定", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Account.Unlock)]
-    [PlatformOnly]
-    public async Task Unlock(AccountIdInput input)
-    {
-        var accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
-        if (accountModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        var dateTime = DateTime.Now;
-
-        // 判断是否存在锁定
-        if (accountModel.LockEndTime == null || accountModel.LockEndTime < dateTime)
-        {
-            throw new UserFriendlyException("账号未锁定！");
-        }
-
-        accountModel.PasswordErrorTime = null;
-        accountModel.LockStartTime = null;
-        accountModel.LockEndTime = null;
-        accountModel.RowVersion = input.RowVersion;
-
-        await _repository.UpdateAsync(accountModel);
-    }
-
-    /// <summary>
-    /// 账号重置密码
-    /// </summary>
-    [HttpPost]
-    [ApiInfo("账号重置密码", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Account.ResetPassword)]
-    [PlatformOnly]
-    public async Task ResetPassword(AccountIdInput input)
-    {
-        if (_user.AccountId == input.AccountId)
-        {
-            throw new UserFriendlyException("禁止重置当前登录账号密码！");
-        }
-
-        var accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
-        if (accountModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        // 更新密码
-        accountModel.Password = CryptoUtil.HashPasswordPBKDF2SHA256(CommonConst.Default.Password);
-        accountModel.RowVersion = input.RowVersion;
-
-        await _repository.Ado.UseTranAsync(async () =>
-        {
-            await _repository.UpdateAsync(accountModel);
-            await _repository.Insertable(new PasswordRecordModel
-                {
-                    AccountId = accountModel.AccountId,
-                    OperationType = PasswordOperationTypeEnum.Reset,
-                    Type = PasswordTypeEnum.PBKDF2_SHA256,
-                    Password = accountModel.Password
-                })
-                .ExecuteCommandAsync();
-        }, ex => throw ex);
-
-        await _user.RevokeAccount(accountModel.AccountId);
-        await AccountForceOffline(accountModel.AccountId, "密码已重置，请重新登录");
-    }
-
-    /// <summary>
-    /// 账号更改状态
-    /// </summary>
-    [HttpPost]
-    [ApiInfo("账号更改状态", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Account.Status)]
-    [PlatformOnly]
-    public async Task ChangeStatus(AccountIdInput input)
-    {
-        if (_user.AccountId == input.AccountId)
-        {
-            throw new UserFriendlyException("禁止更改当前登录账号状态！");
-        }
-
-        var accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
-        if (accountModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        // 更改状态
-        accountModel.Status = accountModel.Status switch
-        {
-            CommonStatusEnum.Enable => CommonStatusEnum.Disable,
-            CommonStatusEnum.Disable => CommonStatusEnum.Enable,
-            _ => accountModel.Status
-        };
-        accountModel.RowVersion = input.RowVersion;
-
-        await _repository.UpdateAsync(accountModel);
-
-        if (accountModel.Status == CommonStatusEnum.Disable)
-        {
+            await _user.Logout();
             await _user.RevokeAccount(accountModel.AccountId);
-            await AccountForceOffline(accountModel.AccountId, "账号已被禁用");
+            await AccountForceOffline(accountModel.AccountId, "账号已修改，请重新登录");
+        }
+        else
+        {
+            // 刷新缓存
+            await _user.RefreshAccount(new RefreshAccountDto
+            {
+                DeviceType = _user.DeviceType,
+                AppNo = _user.AppNo,
+                Mobile = accountModel.Mobile,
+                NickName = input.NickName,
+                Avatar = input.Avatar,
+                TenantNo = _user.TenantNo,
+                EmployeeNo = _user.EmployeeNo
+            });
         }
     }
 

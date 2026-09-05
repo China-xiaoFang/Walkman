@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable table-key="1D1KHQS53T" row-key="recordId" :request-api="operateLogApi.queryOperateLogPaged" stripe>
+		<FastTable table-key="1D1KHQS53T" row-key="recordId" :request-api="operateLogApi.queryOperateLogPaged">
 			<template #employeeNo="{ row }: { row?: OperateLogModel }">
 				{{ row.createdUserName }}
 				<br />

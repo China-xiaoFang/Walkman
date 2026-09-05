@@ -30,18 +30,38 @@ public class TenantLoginInput
     /// <summary>
     /// 账号Key
     /// </summary>
+    [MaxLength(50, ErrorMessage = "账号Key不能超过50位字符")]
     public string AccountKey { get; set; }
 
     /// <summary>
     /// 用户Key
     /// </summary>
-    [StringRequired(ErrorMessage = "用户Key不能为空")]
+    [StringRequired(ErrorMessage = "用户Key不能为空"), MaxLength(50, ErrorMessage = "用户Key不能超过50位字符")]
     public string UserKey { get; set; }
 
     /// <summary>
     /// 密码
     /// </summary>
-    [StringRequired(ErrorMessage = "密码不能为空"), MinLength(6, ErrorMessage = "密码不能少于6位字符"),
-     MaxLength(20, ErrorMessage = "密码不能超过20位字符")]
+    [StringLength(20, MinimumLength = 6, ErrorMessage = "密码长度必须为 6~20 位字符")]
     public string Password { get; set; }
+
+    /// <summary>
+    /// 登录凭据
+    /// </summary>
+    /// <remarks>无登录凭证的时候必须提供密码</remarks>
+    [MaxLength(32, ErrorMessage = "登录凭据不能超过32位字符")]
+    public string LoginTicket { get; set; }
+
+    /// <summary>
+    /// 图片验证码Key
+    /// </summary>
+    [MaxLength(32, ErrorMessage = "图片验证码Key不能超过32位字符")]
+    public string CaptchaKey { get; set; }
+
+    /// <summary>
+    /// 图片验证码
+    /// </summary>
+    [MaxLength(4, ErrorMessage = "图片验证码不能超过4位字符")]
+    [RegularExpression(RegexConst.ImageCaptchaCode, ErrorMessage = "图片验证码必须为4位字母或数字")]
+    public string CaptchaCode { get; set; }
 }

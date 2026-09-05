@@ -52,8 +52,8 @@ export const merchantApi = {
 	/**
 	 * 添加商户号
 	 */
-	addMerchant(data: AddMerchantInput): Promise<unknown> {
-		return axiosUtil.request({
+	addMerchant(data: AddMerchantInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/merchant/addMerchant",
 			method: "post",
 			data,
@@ -63,8 +63,8 @@ export const merchantApi = {
 	/**
 	 * 编辑商户号
 	 */
-	editMerchant(data: EditMerchantInput): Promise<unknown> {
-		return axiosUtil.request({
+	editMerchant(data: EditMerchantInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/merchant/editMerchant",
 			method: "post",
 			data,
@@ -74,8 +74,8 @@ export const merchantApi = {
 	/**
 	 * 删除商户号
 	 */
-	deleteMerchant(data: MerchantIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteMerchant(data: MerchantIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/merchant/deleteMerchant",
 			method: "post",
 			data,

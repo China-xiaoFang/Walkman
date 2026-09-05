@@ -83,6 +83,9 @@ builder.Services.AddHostedService<DeleteLogBackgroundService>();
 // 添加 SqlSugar 日志后台服务
 builder.Services.AddHostedService<SqlSugarLogBackgroundService>();
 
+// 添加应用程序生命周期托管服务
+builder.Services.AddHostedService<ApplicationLifecycleHostedService>();
+
 // 添加调度后台托管服务
 builder.Services.AddHostedService<SchedulerHostedService>();
 

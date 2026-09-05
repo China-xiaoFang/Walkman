@@ -203,7 +203,7 @@ public class ChatHub : Hub<IChatClient>
         authUserInfo.LastLoginBrowser = userAgentInfo.Browser;
         authUserInfo.LastLoginProvince = wanNetIpInfo.Province;
         authUserInfo.LastLoginCity = wanNetIpInfo.City;
-        authUserInfo.LastLoginIp = httpContext.RemoteIpv4();
+        authUserInfo.LastLoginIp = wanNetIpInfo.Ip;
         authUserInfo.LastLoginTime = dateTime;
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,

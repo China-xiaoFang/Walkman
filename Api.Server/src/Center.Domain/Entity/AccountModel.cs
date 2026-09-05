@@ -59,6 +59,12 @@ public class AccountModel : IUpdateVersion
     public string Email { get; set; }
 
     /// <summary>
+    /// 身份验证
+    /// </summary>
+    [SugarColumn(ColumnDescription = "身份验证")]
+    public bool IdentityVerification { get; set; }
+
+    /// <summary>
     /// 客户端用户Id
     /// </summary>
     [SugarColumn(ColumnDescription = "客户端用户Id")]

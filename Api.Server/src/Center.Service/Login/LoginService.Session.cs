@@ -24,6 +24,7 @@ using Fast.Center.Domain;
 using Fast.Center.Service.Login.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Fast.Center.Service.Login;
 
@@ -34,15 +35,12 @@ public partial class LoginService
     /// </summary>
     [HttpPost("/tryLogin")]
     [ApiInfo("尝试登录", HttpRequestActionEnum.Auth)]
+    [EnableRateLimiting(CommonConst.LoginApiRateLimit)]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<LoginOutput> TryLogin(TryLoginInput input)
     {
         // 查询应用信息
-        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
-
-        if (applicationModel.AppType != GlobalContext.DeviceType)
-        {
-            throw new UserFriendlyException("应用类型不匹配！");
-        }
+        var applicationModel = await EnsureApplication();
 
         var tenantUserModel = await _repository.Queryable<TenantUserModel>()
             .ClearFilter<IBaseTEntity>()
@@ -79,6 +77,8 @@ public partial class LoginService
     [HttpPost("/logout")]
     [ApiInfo("退出登录", HttpRequestActionEnum.Auth)]
     [AllowAnonymous]
+    [EnableRateLimiting(CommonConst.LoginApiRateLimit)]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task Logout()
     {
         await _user.Logout();

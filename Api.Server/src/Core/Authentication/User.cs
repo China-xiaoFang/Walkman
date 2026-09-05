@@ -95,6 +95,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         Mobile = authUserInfo.Mobile;
         NickName = authUserInfo.NickName;
         Avatar = authUserInfo.Avatar;
+        IdentityVerification = authUserInfo.IdentityVerification;
 
         // 客户端用户
         ClientUserId = authUserInfo.ClientUserId;

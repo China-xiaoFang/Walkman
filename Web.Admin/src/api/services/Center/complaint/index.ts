@@ -47,8 +47,8 @@ export const complaintApi = {
 	/**
 	 * 添加投诉
 	 */
-	addComplaint(data: AddComplaintInput): Promise<unknown> {
-		return axiosUtil.request({
+	addComplaint(data: AddComplaintInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/complaint/addComplaint",
 			method: "post",
 			data,
@@ -58,8 +58,8 @@ export const complaintApi = {
 	/**
 	 * 处理投诉
 	 */
-	handleComplaint(data: HandleComplaintInput): Promise<unknown> {
-		return axiosUtil.request({
+	handleComplaint(data: HandleComplaintInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/complaint/handleComplaint",
 			method: "post",
 			data,

@@ -147,7 +147,7 @@ internal static partial class MenuSeedData
                     AppId = applicationModel.AppId,
                     MenuId = employeeMenuModel.MenuId,
                     ButtonCode = PermissionConst.Employee.Status,
-                    RoleType = RoleTypeEnum.Admin | RoleTypeEnum.IT | RoleTypeEnum.HR,
+                    RoleType = RoleTypeEnum.Admin | RoleTypeEnum.IT | RoleTypeEnum.HR | RoleTypeEnum.Finance,
                     ButtonName = "状态更改",
                     HasDesktop = true,
                     HasWeb = true,

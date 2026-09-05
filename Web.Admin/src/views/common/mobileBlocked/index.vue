@@ -30,8 +30,7 @@ defineOptions({
 	background: var(--el-bg-color-page);
 	padding: 20px;
 	box-sizing: border-box;
-
-	&__card {
+	.mobile-blocked__card {
 		text-align: center;
 		max-width: 360px;
 		padding: 40px 30px;
@@ -39,19 +38,16 @@ defineOptions({
 		border-radius: 16px;
 		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 	}
-
-	&__icon {
+	.mobile-blocked__icon {
 		margin-bottom: 20px;
 	}
-
-	&__title {
+	.mobile-blocked__title {
 		font-size: 20px;
 		font-weight: 600;
 		color: var(--el-text-color-primary);
 		margin: 0 0 12px;
 	}
-
-	&__desc {
+	.mobile-blocked__desc {
 		font-size: 14px;
 		color: var(--el-text-color-secondary);
 		line-height: 1.6;

@@ -7,9 +7,17 @@ export interface EditAccountInput {
 	 */
 	mobile?: string;
 	/**
+	 * 短信验证码
+	 */
+	mobileVerificationCode?: string;
+	/**
 	 * 邮箱
 	 */
 	email?: string;
+	/**
+	 * 邮箱验证码
+	 */
+	emailVerificationCode?: string;
 	/**
 	 * 昵称
 	 */

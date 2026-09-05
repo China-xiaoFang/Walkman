@@ -3,32 +3,57 @@
 		ref="faDialogRef"
 		title="修改密码"
 		:show-fullscreen="false"
+		:show-refresh="false"
 		show-before-close
 		width="450"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
-		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules">
+		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" cols="1">
 			<FaFormItem label="旧密码" prop="oldPassword">
-				<el-input type="password" v-model.trim="state.formData.oldPassword" placeholder="请输入旧密码" />
+				<el-input
+					type="password"
+					v-model.trim="state.formData.oldPassword"
+					maxlength="20"
+					placeholder="请输入旧密码"
+					:show-word-limit="false"
+					autocomplete="current-password"
+				/>
 			</FaFormItem>
 			<FaFormItem label="新密码" prop="newPassword">
-				<el-input type="password" v-model.trim="state.formData.newPassword" placeholder="请输入新密码" autocomplete="new-password" />
+				<el-input
+					type="password"
+					v-model.trim="state.formData.newPassword"
+					placeholder="新密码8~20位，包含大小写字母和数字"
+					maxlength="20"
+					show-password
+					:show-word-limit="false"
+					autocomplete="new-password"
+				/>
 			</FaFormItem>
 			<FaFormItem label="确认密码" prop="confirmPassword">
-				<el-input type="password" v-model.trim="state.formData.confirmPassword" placeholder="请输入确认新密码" autocomplete="new-password" />
+				<el-input
+					type="password"
+					v-model.trim="state.formData.confirmPassword"
+					placeholder="确认密码8~20位，包含大小写字母和数字"
+					maxlength="20"
+					show-password
+					:show-word-limit="false"
+					autocomplete="new-password"
+					@keyup.enter="handleConfirm"
+				/>
 			</FaFormItem>
 		</FaForm>
 	</FaDialog>
 </template>
 <script lang="ts" setup>
-import { reactive, useTemplateRef } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { reactive, useTemplateRef, watch } from "vue";
+import { ElMessageBox } from "element-plus";
+import { type FaDialogInstance, type FaFormInstance, RegExps } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { accountApi } from "@/api/services/Center/account";
 import { useUserInfo } from "@/stores";
 import type { FormRules } from "element-plus";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { ChangePasswordInput } from "@/api/services/Center/account/models/ChangePasswordInput";
 
 defineOptions({
@@ -42,40 +67,34 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<ChangePasswordInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<ChangePasswordInput>>({
 		oldPassword: [{ required: true, message: "请输入旧密码", trigger: "blur" }],
 		newPassword: [
 			{ required: true, message: "请输入新密码", trigger: "blur" },
-			{ min: 8, max: 20, message: "密码长度必须为 8～20 个字符", trigger: "blur" },
+			{ pattern: RegExps.MediumPassword, message: "新密码长度必须为8~20位，且必须包含大小写字母、数字", trigger: "blur" },
 		],
 		confirmPassword: [
 			{ required: true, message: "请输入确认新密码", trigger: "blur" },
-			{ min: 8, max: 20, message: "密码长度必须为 8～20 个字符", trigger: "blur" },
+			{
+				validator: (_rule, value, callback) => {
+					if (value !== state.formData.newPassword) callback(new Error("两次密码输入不一致"));
+					else callback();
+				},
+				trigger: "blur",
+			},
 		],
 	}),
-	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("detail"),
-	dialogTitle: "配置",
 });
 
 const handleConfirm = async () => {
 	await faFormRef.value.validateScrollToField();
-	const { newPassword, confirmPassword } = state.formData;
-	if (newPassword !== confirmPassword) {
-		ElMessage.warning("两次密码输入不一致");
-		return;
-	}
-	void faDialogRef.value.close(() => {
-		void ElMessageBox.confirm("确认修改密码", {
-			type: "warning",
-		}).then(async () => {
-			await accountApi.changePassword(state.formData);
-			await ElMessageBox.alert("修改成功，请重新登录！", {
-				type: "success",
-				confirmButtonText: "重新登录",
-			});
-			await userInfoStore.logout();
+	void faDialogRef.value.close(async () => {
+		await accountApi.changePassword(state.formData);
+		await ElMessageBox.alert("修改成功，请重新登录！", {
+			type: "success",
+			confirmButtonText: "重新登录",
 		});
+		await userInfoStore.logout();
 	});
 };
 
@@ -88,7 +107,17 @@ const open = () => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
+watch(
+	() => state.formData.newPassword,
+	() => {
+		if (state.formData.confirmPassword) {
+			void faFormRef.value.validateField("confirmPassword");
+		} else {
+			faFormRef.value.clearValidate("confirmPassword");
+		}
+	}
+);
+
 defineExpose({
 	open,
 });

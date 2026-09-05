@@ -70,5 +70,6 @@ internal static partial class MenuSeedData
         await SeedDevTable(db, applicationModel, dateTime, devCLMenuModel);
         await SeedDevScheduler(db, applicationModel, dateTime, devCLMenuModel);
         await SeedDevPasswordRecord(db, applicationModel, dateTime, devCLMenuModel);
+        await SeedDevMessageSendRecord(db, applicationModel, dateTime, devCLMenuModel);
     }
 }

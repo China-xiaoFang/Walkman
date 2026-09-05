@@ -53,6 +53,11 @@ public class LoginOutput
     public string Avatar { get; set; }
 
     /// <summary>
+    /// 选择租户的一次性租户登录凭据
+    /// </summary>
+    public string LoginTicket { get; set; }
+
+    /// <summary>
     /// 租户集合
     /// </summary>
     public List<LoginTenantOutput> TenantList { get; set; }

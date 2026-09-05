@@ -31,15 +31,29 @@ public class EditAccountInput : UpdateVersionInput
     /// 手机
     /// </summary>
     [StringRequired(ErrorMessage = "手机不能为空")]
+    [MaxLength(11, ErrorMessage = "手机号不能超过11位字符")]
     [RegularExpression(RegexConst.Mobile, ErrorMessage = "手机格式不正确")]
     public string Mobile { get; set; }
+
+    /// <summary>
+    /// 短信验证码
+    /// </summary>
+    [RegularExpression(@"^\d{6}$", ErrorMessage = "短信验证码必须为6位数字")]
+    public string MobileVerificationCode { get; set; }
 
     /// <summary>
     /// 邮箱
     /// </summary>
     [StringRequired(ErrorMessage = "邮箱不能为空")]
+    [MaxLength(50, ErrorMessage = "邮箱不能超过50位字符")]
     [RegularExpression(RegexConst.EmailAddress, ErrorMessage = "邮箱格式不正确")]
     public string Email { get; set; }
+
+    /// <summary>
+    /// 邮箱验证码
+    /// </summary>
+    [RegularExpression(@"^\d{6}$", ErrorMessage = "邮箱验证码必须为6位数字")]
+    public string EmailVerificationCode { get; set; }
 
     /// <summary>
     /// 昵称

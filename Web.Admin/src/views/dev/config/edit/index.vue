@@ -47,7 +47,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditConfigInput & AddConfigInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditConfigInput & AddConfigInput>>({
 		configCode: [{ required: true, message: "请输入配置编码", trigger: "blur" }],
 		configName: [{ required: true, message: "请输入配置名称", trigger: "blur" }],
 		configValue: [{ required: true, message: "请输入配置值", trigger: "blur" }],
@@ -102,7 +102,6 @@ const edit = (configId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

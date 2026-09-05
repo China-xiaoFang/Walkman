@@ -45,6 +45,11 @@ public class QueryAccountPagedOutput
     public string Email { get; set; }
 
     /// <summary>
+    /// 身份验证
+    /// </summary>
+    public bool IdentityVerification { get; set; }
+
+    /// <summary>
     /// 状态
     /// </summary>
     public CommonStatusEnum Status { get; set; }

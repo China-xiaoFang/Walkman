@@ -49,8 +49,8 @@ export const tenantApi = {
 	/**
 	 * 添加租户
 	 */
-	addTenant(data: AddTenantInput): Promise<unknown> {
-		return axiosUtil.request({
+	addTenant(data: AddTenantInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/tenant/addTenant",
 			method: "post",
 			data,
@@ -60,8 +60,8 @@ export const tenantApi = {
 	/**
 	 * 编辑租户
 	 */
-	editTenant(data: EditTenantInput): Promise<unknown> {
-		return axiosUtil.request({
+	editTenant(data: EditTenantInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/tenant/editTenant",
 			method: "post",
 			data,
@@ -71,8 +71,8 @@ export const tenantApi = {
 	/**
 	 * 租户更改状态
 	 */
-	changeStatus(data: TenantIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	changeStatus(data: TenantIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/tenant/changeStatus",
 			method: "post",
 			data,

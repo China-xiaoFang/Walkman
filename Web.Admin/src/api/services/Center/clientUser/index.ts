@@ -33,8 +33,8 @@ export const clientUserApi = {
 	/**
 	 * 编辑客户端用户
 	 */
-	editClientUser(data: EditClientUserInput): Promise<unknown> {
-		return axiosUtil.request({
+	editClientUser(data: EditClientUserInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/clientUser/editClientUser",
 			method: "post",
 			data,

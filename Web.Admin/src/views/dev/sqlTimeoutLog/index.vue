@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable table-key="1D11DZCT3N" row-key="recordId" :request-api="sqlTimeoutLogApi.querySqlTimeoutLogPaged" stripe>
+		<FastTable table-key="1D11DZCT3N" row-key="recordId" :request-api="sqlTimeoutLogApi.querySqlTimeoutLogPaged">
 			<template #mobile="{ row }: { row?: SqlTimeoutLogModel }">
 				{{ row.nickName }}
 				<br />

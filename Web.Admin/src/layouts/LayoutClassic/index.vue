@@ -202,7 +202,7 @@ const handleRefreshSystem = () => {
 	});
 };
 
-const handleTenantChange = async (data: ElSelectorOutput | ElSelectorOutput[]): Promise<void> => {
+const handleTenantChange = async (data: ElSelectorOutput | ElSelectorOutput[]) => {
 	if (Array.isArray(data)) return;
 	const { userKey } = userInfoStore;
 	if (data.userKey !== userKey) {

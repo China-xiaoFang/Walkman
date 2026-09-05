@@ -58,9 +58,9 @@ public class MachineApplication : IDynamicApplication
             // 主机名称
             HostName = Environment.MachineName,
             // 操作系统
-            OSName = MachineUtil.GetOSDescription(),
+            OSName = RuntimeInformation.OSDescription,
             // 系统架构
-            OSArchitecture = $"{Environment.OSVersion.Platform.ToString()} {RuntimeInformation.OSArchitecture.ToString()}",
+            OSArchitecture = $"{Environment.OSVersion.Platform} {RuntimeInformation.OSArchitecture}",
             // CPU核数
             CpuCount = $"{Environment.ProcessorCount} 核",
             // CPU使用率(%)

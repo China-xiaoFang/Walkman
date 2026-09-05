@@ -29,14 +29,11 @@ defineOptions({
 	name: "MerchantSelect",
 });
 
-const props = withDefaults(
-	defineProps<{
-		modelValue?: string;
-		merchantNo?: string;
-		merchantType?: PaymentChannelEnum;
-	}>(),
-	{}
-);
+const props = defineProps<{
+	modelValue?: string;
+	merchantNo?: string;
+	merchantType?: PaymentChannelEnum;
+}>();
 
 const emit = defineEmits({
 	"update:modelValue": (_value: string) => true,

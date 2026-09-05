@@ -53,7 +53,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditSysSerialRuleInput & AddSysSerialRuleInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditSysSerialRuleInput & AddSysSerialRuleInput>>({
 		length: [{ required: true, message: "请输入长度", trigger: "blur" }],
 	}),
 	formDisabled: false,
@@ -110,7 +110,6 @@ const edit = (serialRuleId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

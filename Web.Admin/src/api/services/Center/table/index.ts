@@ -32,8 +32,8 @@ export const tableApi = {
 	/**
 	 * 编辑表格列配置
 	 */
-	editTableColumnConfig(data: EditTableColumnConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	editTableColumnConfig(data: EditTableColumnConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/table/editTableColumnConfig",
 			method: "post",
 			data,
@@ -67,8 +67,8 @@ export const tableApi = {
 	/**
 	 * 添加表格配置
 	 */
-	addTableConfig(data: AddTableConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	addTableConfig(data: AddTableConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/table/addTableConfig",
 			method: "post",
 			data,
@@ -78,8 +78,8 @@ export const tableApi = {
 	/**
 	 * 编辑表格配置
 	 */
-	editTableConfig(data: EditTableConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	editTableConfig(data: EditTableConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/table/editTableConfig",
 			method: "post",
 			data,
@@ -89,8 +89,8 @@ export const tableApi = {
 	/**
 	 * 删除表格配置
 	 */
-	deleteTableConfig(data: TableIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteTableConfig(data: TableIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/table/deleteTableConfig",
 			method: "post",
 			data,
@@ -100,8 +100,8 @@ export const tableApi = {
 	/**
 	 * 复制表格配置
 	 */
-	copyTableConfig(data: CopyTableConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	copyTableConfig(data: CopyTableConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/table/copyTableConfig",
 			method: "post",
 			data,
@@ -124,8 +124,8 @@ export const tableApi = {
 	/**
 	 * 同步用户表格配置
 	 */
-	syncUserTableConfig(data: SyncUserTableConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	syncUserTableConfig(data: SyncUserTableConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/table/syncUserTableConfig",
 			method: "post",
 			data,
@@ -135,8 +135,8 @@ export const tableApi = {
 	/**
 	 * 保存用户表格配置
 	 */
-	saveUserTableConfig(data: SaveUserTableConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	saveUserTableConfig(data: SaveUserTableConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/table/saveUserTableConfig",
 			method: "post",
 			data,
@@ -146,8 +146,8 @@ export const tableApi = {
 	/**
 	 * 清除用户表格配置
 	 */
-	clearUserTableConfig(data: SyncUserTableConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	clearUserTableConfig(data: SyncUserTableConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/table/clearUserTableConfig",
 			method: "post",
 			data,

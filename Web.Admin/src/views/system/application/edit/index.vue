@@ -55,7 +55,7 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditApplicationInput & AddApplicationInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditApplicationInput & AddApplicationInput>>({
 		appName: [{ required: true, message: "请输入应用名称", trigger: "blur" }],
 		themeColor: [{ required: true, message: "请选择主题色", trigger: "blur" }],
 		logoUrl: [{ required: true, message: "请上传Logo", trigger: "change" }],
@@ -112,7 +112,6 @@ const edit = (appId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,

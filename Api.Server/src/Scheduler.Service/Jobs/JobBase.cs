@@ -122,7 +122,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         if ((MailMessage & MailMessageEnum.Info) != 0)
         {
             title = $"【信息】调度作业-{title}";
-            var emailContent = _mailService.GetEmailTemplate(title, msg, "info");
+            var emailContent = await _mailService.GetEmailTemplate(title, msg, "info");
             await _mailService.SendEmail(title, emailContent);
         }
     }
@@ -138,7 +138,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         if ((MailMessage & MailMessageEnum.Warn) != 0)
         {
             title = $"【警告】调度作业-{title}";
-            var emailContent = _mailService.GetEmailTemplate(title, msg, "warn");
+            var emailContent = await _mailService.GetEmailTemplate(title, msg, "warn");
             await _mailService.SendEmail(title, emailContent);
         }
     }
@@ -163,7 +163,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
                        <p class='error'>错误提示：</p>
                        {msg}
                        """;
-                var emailContent = _mailService.GetEmailTemplate(title, msg, "error");
+                var emailContent = await _mailService.GetEmailTemplate(title, msg, "error");
                 await _mailService.SendEmail(title, emailContent);
             }
         }
@@ -181,7 +181,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
                        <p class='error'>异常信息：</p>
                        <pre class='error'>{JsonConvert.SerializeObject(exception, _jsonSerializerSettings)}</pre>
                        """;
-                var emailContent = _mailService.GetEmailTemplate(title, msg, "error");
+                var emailContent = await _mailService.GetEmailTemplate(title, msg, "error");
                 await _mailService.SendEmail(title, emailContent);
             }
         }

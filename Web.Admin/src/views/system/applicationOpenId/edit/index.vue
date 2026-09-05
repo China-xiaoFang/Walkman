@@ -141,9 +141,15 @@ const applicationTemplateTypeEnum = appStore.getDictionary("ApplicationTemplateT
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
+type IFormData = EditApplicationOpenIdInput &
+	AddApplicationOpenIdInput & {
+		appName?: string;
+		templateIdList?: EditApplicationTemplateIdInput[];
+	};
+
 const state = reactive({
-	formData: withDefineType<EditApplicationOpenIdInput & AddApplicationOpenIdInput & { appName?: string }>({}),
-	formRules: withDefineType<FormRules>({
+	formData: withDefineType<IFormData>({}),
+	formRules: withDefineType<FormRules<IFormData>>({
 		appId: [{ required: true, message: "请选择应用", trigger: "change" }],
 		openId: [{ required: true, message: "请输入应用标识", trigger: "blur" }],
 		requestTimeout: [{ required: true, message: "请输入请求超时时间", trigger: "blur" }],
@@ -212,7 +218,6 @@ const edit = (recordId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	detail,
