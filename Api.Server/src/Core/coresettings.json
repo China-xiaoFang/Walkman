@@ -45,11 +45,11 @@
     // 是否验证密钥
     "ValidateIssuerSigningKey": true,
     // 签名密钥，string 类型，必须是复杂密钥，长度等于32
-    "IssuerSigningKey": "Xh6<>-L*d%/Qg)cktH[]t3tk{tFZ%=9R",
+    "IssuerSigningKey": "7Wt7@A%!~xk6xg*y^]2fg+ssnHGy}3}Y",
     // 是否验证签发方
     "ValidateIssuer": true,
     // 签发方，string 类型
-    "ValidIssuer": "Fast.Admin",
+    "ValidIssuer": "Fast.Walkman",
     // 是否验证签收方
     "ValidateAudience": true,
     // 签收方，string 类型

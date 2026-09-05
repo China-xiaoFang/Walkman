@@ -12,6 +12,7 @@
         <ProjectReference Include="$(SolutionDir)src\Admin.Service\Fast.Admin.Service.csproj" />
         <ProjectReference Include="$(SolutionDir)src\Center.Service\Fast.Center.Service.csproj" />
         <ProjectReference Include="$(SolutionDir)src\Scheduler.Service\Fast.Scheduler.Service.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Walkman.Service\Fast.Walkman.Service.csproj" />
     </ItemGroup>
 
     <ItemGroup>

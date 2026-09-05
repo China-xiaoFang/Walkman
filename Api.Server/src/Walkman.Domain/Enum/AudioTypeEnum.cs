@@ -20,36 +20,23 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.AdminLog.Domain;
+namespace Fast.Walkman.Domain;
 
 /// <summary>
-/// 操作日志类型枚举
+/// 音频类型枚举
 /// </summary>
-[Flags]
-[FastEnum("操作日志类型枚举")]
-public enum OperateLogTypeEnum : long
+[FastEnum("音频类型枚举")]
+public enum AudioTypeEnum : byte
 {
     /// <summary>
-    /// 配置管理
+    /// 美音
     /// </summary>
-    [Description("配置管理")]
-    Config = 1 << 0,
+    [Description("美音")]
+    American = 1,
 
     /// <summary>
-    /// 组织架构
+    /// 英音
     /// </summary>
-    [Description("组织架构")]
-    Organization = 1 << 1,
-
-    /// <summary>
-    /// 财务管理
-    /// </summary>
-    [Description("财务管理")]
-    Finance = 1 << 2,
-
-    /// <summary>
-    /// 内容管理
-    /// </summary>
-    [Description("内容管理")]
-    Content = 1 << 3
+    [Description("英音")]
+    British = 2
 }

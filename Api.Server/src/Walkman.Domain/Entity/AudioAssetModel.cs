@@ -20,36 +20,58 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.AdminLog.Domain;
+namespace Fast.Walkman.Domain;
 
 /// <summary>
-/// 操作日志类型枚举
+/// 音频资源表Model类
 /// </summary>
-[Flags]
-[FastEnum("操作日志类型枚举")]
-public enum OperateLogTypeEnum : long
+[SugarTable("AudioAsset", "音频资源表")]
+[SugarDbType(DatabaseTypeEnum.Admin)]
+[SugarIndex($"IX_{{table}}_{nameof(AudioType)}", nameof(LessonId), OrderByType.Asc, nameof(AudioType), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(BookId)}_{nameof(LessonId)}", nameof(BookId), OrderByType.Asc, nameof(LessonId),
+    OrderByType.Asc)]
+public class AudioAssetModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
-    /// 配置管理
+    /// 音频资源Id
     /// </summary>
-    [Description("配置管理")]
-    Config = 1 << 0,
+    [SugarColumn(ColumnDescription = "音频资源Id", IsPrimaryKey = true)]
+    public long AudioAssetId { get; set; }
 
     /// <summary>
-    /// 组织架构
+    /// 教材Id
     /// </summary>
-    [Description("组织架构")]
-    Organization = 1 << 1,
+    [SugarColumn(ColumnDescription = "教材Id")]
+    public long BookId { get; set; }
 
     /// <summary>
-    /// 财务管理
+    /// 课程Id
     /// </summary>
-    [Description("财务管理")]
-    Finance = 1 << 2,
+    [SugarColumn(ColumnDescription = "课程Id")]
+    public long LessonId { get; set; }
 
     /// <summary>
-    /// 内容管理
+    /// 音频类型
     /// </summary>
-    [Description("内容管理")]
-    Content = 1 << 3
+    [SugarColumn(ColumnDescription = "音频类型")]
+    public AudioTypeEnum AudioType { get; set; }
+
+    /// <summary>
+    /// 音频地址
+    /// </summary>
+    [Required]
+    [SugarColumn(ColumnDescription = "音频地址", Length = 200)]
+    public string AudioUrl { get; set; }
+
+    /// <summary>
+    /// 音频时长
+    /// </summary>
+    [SugarColumn(ColumnDescription = "音频时长")]
+    public TimeSpan AudioDuration { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public long RowVersion { get; set; }
 }

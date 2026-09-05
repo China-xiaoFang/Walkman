@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,63 +20,57 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Core;
+namespace Fast.Walkman.Domain;
 
 /// <summary>
-/// 公共常量
+/// 词条表Model类
 /// </summary>
-[SuppressSniffer]
-public static class CommonConst
+[SugarTable("Word", "词条表")]
+[SugarDbType(DatabaseTypeEnum.Admin)]
+[SugarIndex($"IX_{{table}}_{nameof(NormalizedLemma)}", nameof(NormalizedLemma), OrderByType.Asc, true)]
+public class WordModel : IUpdateVersion
 {
     /// <summary>
-    /// 全局 API 限流规则
+    /// 词条Id
     /// </summary>
-    public const string GlobalApiRateLimit = "GlobalApiRateLimit";
+    [SugarColumn(ColumnDescription = "词条Id", IsPrimaryKey = true)]
+    public long WordId { get; set; }
 
     /// <summary>
-    /// 登录 API 限流规则
+    /// 词条来源
     /// </summary>
-    public const string LoginApiRateLimit = "LoginApiRateLimit";
+    [SugarColumn(ColumnDescription = "词条来源")]
+    public WordSourceEnum WordSource { get; set; }
 
     /// <summary>
-    /// 默认
+    /// 词条
     /// </summary>
-    public static class Default
-    {
-        /// <summary>
-        /// 管理员密码
-        /// </summary>
-        public const string AdminPassword = "Walkman.2026";
-
-        /// <summary>
-        /// 密码
-        /// </summary>
-        public const string Password = "123456";
-
-        /// <summary>
-        /// 超级管理员账户Id
-        /// </summary>
-        public const long SuperAdminAccountId = 10086;
-
-        /// <summary>
-        /// 租户Id
-        /// </summary>
-        public const long TenantId = 18080;
-
-        /// <summary>
-        /// 租户编号
-        /// </summary>
-        public const string TenantNo = "Fast2018";
-    }
+    [Required]
+    [SugarColumn(ColumnDescription = "词条", Length = 200)]
+    public string Lemma { get; set; }
 
     /// <summary>
-    /// 默认Logo
+    /// 词条检索键
     /// </summary>
-    public const string DefaultLogo = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png";
+    [Required]
+    [SugarColumn(ColumnDescription = "词条检索键", Length = 200)]
+    public string NormalizedLemma { get; set; }
 
     /// <summary>
-    /// 默认头像
+    /// 创建时间
     /// </summary>
-    public const string DefaultAvatar =
-        "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132";
+    [Required, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
+    public DateTime? UpdatedTime { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public long RowVersion { get; set; }
 }

@@ -43,7 +43,7 @@ internal static class ApplicationSeedData
             AppId = YitIdHelper.NextId(),
             Edition = EditionEnum.None,
             AppNo = "App201801",
-            AppName = "Fast.Admin",
+            AppName = "概念随听",
             LogoUrl = CommonConst.DefaultLogo,
             ThemeColor = "#409EFF",
             CreatedTime = dateTime

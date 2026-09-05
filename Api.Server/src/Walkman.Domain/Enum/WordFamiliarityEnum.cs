@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,63 +20,29 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Core;
+namespace Fast.Walkman.Domain;
 
 /// <summary>
-/// 公共常量
+/// 词条掌握度枚举
 /// </summary>
-[SuppressSniffer]
-public static class CommonConst
+[FastEnum("词条掌握度枚举")]
+public enum WordFamiliarityEnum : byte
 {
     /// <summary>
-    /// 全局 API 限流规则
+    /// 新收藏
     /// </summary>
-    public const string GlobalApiRateLimit = "GlobalApiRateLimit";
+    [Description("新收藏")]
+    New = 1,
 
     /// <summary>
-    /// 登录 API 限流规则
+    /// 学习中
     /// </summary>
-    public const string LoginApiRateLimit = "LoginApiRateLimit";
+    [Description("学习中")]
+    Learning = 2,
 
     /// <summary>
-    /// 默认
+    /// 已熟悉
     /// </summary>
-    public static class Default
-    {
-        /// <summary>
-        /// 管理员密码
-        /// </summary>
-        public const string AdminPassword = "Walkman.2026";
-
-        /// <summary>
-        /// 密码
-        /// </summary>
-        public const string Password = "123456";
-
-        /// <summary>
-        /// 超级管理员账户Id
-        /// </summary>
-        public const long SuperAdminAccountId = 10086;
-
-        /// <summary>
-        /// 租户Id
-        /// </summary>
-        public const long TenantId = 18080;
-
-        /// <summary>
-        /// 租户编号
-        /// </summary>
-        public const string TenantNo = "Fast2018";
-    }
-
-    /// <summary>
-    /// 默认Logo
-    /// </summary>
-    public const string DefaultLogo = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png";
-
-    /// <summary>
-    /// 默认头像
-    /// </summary>
-    public const string DefaultAvatar =
-        "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132";
+    [Description("已熟悉")]
+    Familiar = 4
 }

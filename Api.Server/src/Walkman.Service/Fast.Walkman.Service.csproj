@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>Fast.Admin 应用概念随听服务库。</Description>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <NoWarn>1591;</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)src\Admin.Service\Fast.Admin.Service.csproj" />
+    </ItemGroup>
+
+</Project>
