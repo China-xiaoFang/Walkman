@@ -55,7 +55,7 @@ internal static class ApplicationSeedData
                 new()
                 {
                     AppId = applicationModel.AppId,
-                    OpenId = "127.0.0.1:2001",
+                    OpenId = "127.0.0.1:3001",
                     AppType = AppEnvironmentEnum.Web,
                     EnvironmentType =
                         FastContext.HostEnvironment.IsDevelopment()
