@@ -13,10 +13,6 @@ declare interface ImportMetaEnv {
 	 */
 	readonly STATIC_ASSET_BASE_URL: string;
 	/**
-	 * CDN 地址
-	 */
-	readonly CDN_URL: string;
-	/**
 	 * 构建输出目录
 	 */
 	readonly BUILD_OUT_DIR: string;

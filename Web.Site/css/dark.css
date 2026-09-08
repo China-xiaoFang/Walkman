@@ -1,0 +1,23 @@
+/* 自动跟随设备/浏览器浅色主题，无需 JavaScript 或手动配置。 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+        --bg: #06101d;
+        --bg-deep: #030914;
+        --surface: rgba(14, 27, 45, 0.72);
+        --surface-strong: rgba(17, 33, 55, 0.9);
+        --surface-soft: rgba(255, 255, 255, 0.045);
+        --line: rgba(167, 220, 255, 0.14);
+        --line-strong: rgba(167, 220, 255, 0.26);
+        --text: #f5fbff;
+        --text-soft: #c4d2df;
+        --muted: #8194a8;
+        --primary: #8ed8ff;
+        --primary-strong: #4fb9f3;
+        --secondary: #7b8dff;
+        --cyan: #5ff1df;
+        --warning: #ffd489;
+        --danger: #ff8c9b;
+        --shadow: 0 30px 80px rgba(0, 0, 0, 0.36);
+    }
+}

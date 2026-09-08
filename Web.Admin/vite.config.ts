@@ -1,7 +1,7 @@
 import { URL, fileURLToPath } from "node:url";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { buildInfo, cdnImport, componentRegistry, envGuard, routerMeta, svgIcons } from "fast-vite-plugins";
+import { buildInfo, componentRegistry, envGuard, routerMeta, svgIcons } from "fast-vite-plugins";
 import visualizer from "rollup-plugin-visualizer";
 import { defineConfig, loadEnv } from "vite";
 import viteCompression from "vite-plugin-compression";
@@ -173,117 +173,6 @@ export default defineConfig(({ command, mode }): UserConfig => {
 			/* 生成构建信息，供客户端检测线上版本更新。 */
 			buildInfo({
 				version: viteEnv.VITE_APP_VERSION,
-			}),
-			cdnImport({
-				/* 开发环境不使用 CDN，避免影响本地调试。 */
-				dev: false,
-				urlTemplate: viteEnv.CDN_URL,
-				modules: [
-					{
-						name: "vue",
-						global: "Vue",
-						js: isBuild ? "dist/vue.runtime.global.prod.js" : "dist/vue.runtime.global.js",
-					},
-					{
-						name: "@vueuse/shared",
-						global: "VueUse",
-						js: "dist/index.iife.min.js",
-					},
-					{
-						name: "@vueuse/core",
-						global: "VueUse",
-						js: "dist/index.iife.min.js",
-					},
-					{
-						name: "vue-router",
-						global: "VueRouter",
-						js: isBuild ? "dist/vue-router.global.prod.js" : "dist/vue-router.global.js",
-					},
-					{
-						name: "vue-json-pretty",
-						global: "VueJsonPretty.default",
-						js: "lib/vue-json-pretty.js",
-						css: "lib/styles.css",
-					},
-					{
-						name: "dayjs",
-						global: "dayjs",
-						js: ["dayjs.min.js", "locale/zh-cn.js"],
-					},
-					{
-						name: "@element-plus/icons-vue",
-						global: "ElementPlusIconsVue",
-						js: "dist/index.iife.min.js",
-					},
-					{
-						name: "element-plus",
-						global: "ElementPlus",
-						js: ["dist/index.full.min.js", "dist/locale/zh-cn.min.js"],
-						css: ["dist/index.css", "theme-chalk/dark/css-vars.css"],
-					},
-					{
-						name: "@fast-china/utils",
-						global: "FastUtils",
-						js: "dist/index.global.min.js",
-					},
-					{
-						name: "axios",
-						global: "axios",
-						js: "dist/axios.min.js",
-					},
-					{
-						name: "@fast-china/axios",
-						global: "FastAxios",
-						js: "dist/index.global.min.js",
-					},
-					{
-						name: "pinia",
-						global: "Pinia",
-						js: "dist/pinia.iife.prod.js",
-					},
-					{
-						name: "pinia-plugin-persistedstate",
-						global: "piniaPluginPersistedstate",
-						js: "dist/index.iife.js",
-					},
-					{
-						name: "@microsoft/signalr",
-						global: "signalR",
-						js: "dist/browser/signalr.min.js",
-					},
-					{
-						name: "nprogress",
-						global: "NProgress",
-						js: "nprogress.js",
-						css: "nprogress.css",
-					},
-					{
-						name: "echarts",
-						global: "echarts",
-						js: "dist/echarts.min.js",
-					},
-					{
-						name: "pinyin-pro",
-						global: "pinyinPro",
-						js: "dist/index.js",
-					},
-					{
-						name: "lodash",
-						global: "_",
-						js: "lodash.min.js",
-					},
-					{
-						name: "@fast-element-plus/icons-vue",
-						global: "FastElementPlusIconsVue",
-						js: "dist/index.global.min.js",
-					},
-					{
-						name: "fast-element-plus",
-						global: "FastElementPlus",
-						js: "dist/index.global.min.js",
-						css: "dist/index.css",
-					},
-				],
 			}),
 			/* 仅在构建阶段为超过 10 KiB 的静态资源生成 gzip 文件。 */
 			isBuild &&
