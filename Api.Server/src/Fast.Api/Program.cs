@@ -129,10 +129,7 @@ builder.Services.AddHostedService();
 var app = builder.Build();
 
 // 启用请求头转发
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+app.UseForwardedHeaders(new ForwardedHeadersOptions {ForwardedHeaders = ForwardedHeaders.All});
 
 if (!app.Environment.IsDevelopment())
 {

@@ -201,7 +201,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
 					},
 					{
 						name: "vue-json-pretty",
-						global: "VueJsonPretty",
+						global: "VueJsonPretty.default",
 						js: "lib/vue-json-pretty.js",
 						css: "lib/styles.css",
 					},

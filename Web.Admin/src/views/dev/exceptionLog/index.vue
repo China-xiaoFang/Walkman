@@ -34,7 +34,7 @@
 					@click="
 						() => {
 							state.title = '堆栈信息';
-							state.content = row.stackTrace || '';
+							state.content = row.stackTrace;
 							state.visible = true;
 						}
 					"
@@ -52,7 +52,7 @@
 					@click="
 						() => {
 							state.title = '参数对象';
-							state.content = row.paramsObj || '';
+							state.content = row.paramsObj;
 							state.visible = true;
 						}
 					"

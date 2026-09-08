@@ -261,15 +261,7 @@ public class SMSService : ISmsService, ISingletonDependency
                     IsSuccess = isSuccess,
                     CreatedTime = sendTime
                 };
-                // 部分情况下这里可能获取不到请求
-                try
-                {
-                    messageSendRecordModel.RecordCreate(FastContext.HttpContext);
-                }
-                catch
-                {
-                    // ignored
-                }
+                messageSendRecordModel.RecordCreate(FastContext.HttpContext);
 
                 await db.Insertable(messageSendRecordModel)
                     .ExecuteCommandAsync();

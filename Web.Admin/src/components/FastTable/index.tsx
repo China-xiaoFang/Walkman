@@ -2,22 +2,17 @@ import { useWindowSize } from "@vueuse/core";
 import { Fragment, computed, defineComponent, onMounted, ref, shallowReactive } from "vue";
 import { ElDropdownItem, ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { FaTable, faTableEmits, faTableProps } from "fast-element-plus";
-import { debounce, definePropType, makeSlots, useEmits, useExpose, useProps, useRender, withDefineType } from "@fast-china/utils";
+import { debounce, makeSlots, useEmits, useExpose, useProps, useRender, withDefineType } from "@fast-china/utils";
 import { isString } from "lodash";
 import { tableApi } from "@/api/services/Center/table";
 import { useApp, useConfig } from "@/stores";
-import type { FaTableColumnCtx, FaTableDataRange, FaTableInstance, FaTableSlots } from "fast-element-plus";
+import type { FaTableColumnCtx, FaTableInstance, FaTableSlots } from "fast-element-plus";
 import type { VNode } from "vue";
 
 export default defineComponent({
 	name: "FastTable",
 	props: {
 		...faTableProps,
-		/** @description 搜索时间范围 */
-		dataSearchRange: {
-			type: definePropType<FaTableDataRange>(String),
-			default: "Past3D",
-		},
 		/** @description 列配置按钮 */
 		columnSettingBtn: {
 			type: Boolean,

@@ -34,7 +34,7 @@
 					@click="
 						() => {
 							state.title = '请求参数';
-							state.content = row.param || '';
+							state.content = row.param;
 							state.decrypt = false;
 							state.visible = true;
 						}
@@ -53,7 +53,7 @@
 					@click="
 						() => {
 							state.title = '返回结果';
-							state.content = row.result || '';
+							state.content = row.result;
 							state.decrypt = true;
 							state.visible = true;
 						}

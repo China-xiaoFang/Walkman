@@ -66,8 +66,10 @@ public partial class LoginService
             if (accountModel != null)
             {
                 tenantUserList = await _repository.Queryable<TenantUserModel>()
+                    .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
                     .ClearFilter<IBaseTEntity>()
-                    .Where(wh => wh.AccountId == accountModel.AccountId)
+                    .Where(t1 => t1.AccountId == accountModel.AccountId)
+                    .Where((t1, t2) => t2.Status == CommonStatusEnum.Enable)
                     .ToListAsync();
             }
         }
@@ -75,8 +77,10 @@ public partial class LoginService
         {
             // 根据账号或登录工号查询租户用户信息
             var tenantUserModel = await _repository.Queryable<TenantUserModel>()
+                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
                 .ClearFilter<IBaseTEntity>()
-                .Where(wh => wh.EmployeeNo == input.Account)
+                .Where(t1 => t1.EmployeeNo == input.Account)
+                .Where((t1, t2) => t2.Status == CommonStatusEnum.Enable)
                 .SingleAsync();
 
             if (tenantUserModel != null)
@@ -171,6 +175,7 @@ public partial class LoginService
             .InnerJoin<TenantModel>((t1, t2, t3) => t2.TenantId == t3.TenantId)
             .ClearFilter<IBaseTEntity>()
             .Where(t1 => t1.AccountId == _user.AccountId)
+            .Where((t1, t2, t3) => t3.Status == CommonStatusEnum.Enable)
             .Select((t1, t2, t3) => new LoginTenantOutput
             {
                 UserKey = t2.UserKey,
@@ -214,8 +219,10 @@ public partial class LoginService
 
         // 查询租户用户
         var tenantUserModel = await _repository.Queryable<TenantUserModel>()
+            .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
             .ClearFilter<IBaseTEntity>()
-            .Where(wh => wh.UserKey == input.UserKey)
+            .Where(t1 => t1.UserKey == input.UserKey)
+            .Where((t1, t2) => t2.Status == CommonStatusEnum.Enable)
             .SingleAsync();
 
         if (tenantUserModel == null)

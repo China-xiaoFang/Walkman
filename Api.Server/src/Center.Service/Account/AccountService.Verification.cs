@@ -247,12 +247,9 @@ public partial class AccountService
             throw new UserFriendlyException("验证码无效或已过期！");
         }
 
-
-        // TODO：因为穷买不起短信，下面注释的代码是为了兼容默认短信验证码 123456 的，后续购买后可删除。
-        if (
-            //dto.Mobile != mobile ||
-            dto.Email != email
-            //|| dto.MobileExpiresTime <= DateTime.Now
+        if (dto.Mobile != mobile
+            || dto.Email != email
+            || dto.MobileExpiresTime <= DateTime.Now
             || dto.EmailExpiresTime <= DateTime.Now)
         {
             throw new UserFriendlyException("验证码无效或已过期！");
@@ -261,15 +258,9 @@ public partial class AccountService
         // 分别保存已验证的结果，邮箱输错或后续更新失败时，不会要求重发已通过的短信验证码。
         if (!dto.MobileVerified)
         {
-            if (dto.Mobile == null && input.MobileVerificationCode == "123456")
-            {
-            }
-            else
-            {
-                await _smsService.VerifyVerificationCode(SmsTypeEnum.Validity, mobile, input.MobileVerificationCode);
-                dto.MobileVerified = true;
-                await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
-            }
+            await _smsService.VerifyVerificationCode(SmsTypeEnum.Validity, mobile, input.MobileVerificationCode);
+            dto.MobileVerified = true;
+            await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
         }
 
         if (!dto.EmailVerified)
@@ -280,7 +271,7 @@ public partial class AccountService
         }
 
         // 更新手机号，邮箱，校验标识
-        //accountModel.Mobile = mobile;
+        accountModel.Mobile = mobile;
         accountModel.Email = email;
         accountModel.IdentityVerification = true;
 

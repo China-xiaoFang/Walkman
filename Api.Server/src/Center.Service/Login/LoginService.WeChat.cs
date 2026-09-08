@@ -124,8 +124,10 @@ public partial class LoginService
         }
 
         var tenantUserList = await _repository.Queryable<TenantUserModel>()
+            .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
             .ClearFilter<IBaseTEntity>()
             .Where(t1 => t1.AccountId == accountModel.AccountId)
+            .Where((t1, t2) => t2.Status == CommonStatusEnum.Enable)
             .ToListAsync();
         if (tenantUserList.Count == 0)
         {

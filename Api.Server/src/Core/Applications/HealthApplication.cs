@@ -61,7 +61,7 @@ public class HealthApplication : IDynamicApplication
     /// </summary>
     [HttpGet("/health"), HttpGet("/health/index")]
     [ApiInfo("健康检查", HttpRequestActionEnum.Other)]
-    [AllowAnonymous]
+    [AllowAnonymous, DisabledRequestLog]
     [ResponseEncipher(false)]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {

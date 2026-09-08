@@ -320,7 +320,7 @@ public partial class EmployeeService
         // 操作日志
         await LogContext.OperateLog(new OperateLogDto
         {
-            Title = "职员更改登录账号",
+            Title = "更改职员登录状态",
             OperateType = OperateLogTypeEnum.Organization,
             BizId = employeeModel.EmployeeId,
             BizNo = employeeModel.EmployeeNo,

@@ -72,8 +72,8 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
         try
         {
             message.AppendLine(context.Exception.Message);
-            message.AppendLine(
-                $"请求Url：{httpContext.Request.Method}, {httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.Path}");
+            message.AppendLine($"Host：{httpContext.Request.Scheme}://{httpContext.Request.Host}");
+            message.AppendLine($"Url：{httpContext.Request.Method}, {httpContext.Request.Path}");
 
             var deviceType = httpContext.Request.Headers[HttpHeaderConst.DeviceType]
                 .ToString()

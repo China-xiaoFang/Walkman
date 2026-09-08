@@ -43,7 +43,12 @@ router.beforeEach(async (to, from) => {
 	// 开启进度条
 	NProgress.start();
 
-	if (import.meta.env.VITE_ENABLE_MOBILE !== "true" && to.path !== "/mobileBlocked" && (isMobileUserAgent() || isTabletUserAgent())) {
+	const isMobileDevice = isMobileUserAgent() || isTabletUserAgent();
+	if (to.path === "/mobileBlocked" && !isMobileDevice) {
+		return { path: "/", replace: true };
+	}
+
+	if (import.meta.env.VITE_ENABLE_MOBILE !== "true" && to.path !== "/mobileBlocked" && isMobileDevice) {
 		return "/mobileBlocked";
 	}
 

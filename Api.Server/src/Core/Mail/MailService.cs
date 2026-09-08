@@ -452,17 +452,9 @@ public class MailService : IMailService, ISingletonDependency
                     })
                     .ToList();
                 var httpContext = FastContext.HttpContext;
-                // 部分情况下这里可能获取不到请求
                 foreach (var item in messageSendRecordList)
                 {
-                    try
-                    {
-                        item.RecordCreate(httpContext);
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
+                    item.RecordCreate(httpContext);
                 }
 
                 await db.Insertable(messageSendRecordList)

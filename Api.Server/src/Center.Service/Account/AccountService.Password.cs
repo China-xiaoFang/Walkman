@@ -506,6 +506,6 @@ public partial class AccountService
         await AccountForceOffline(accountModel.AccountId, "密码已重置，请重新登录");
 
         // 发送通知
-        await SendPasswordChangedNotification(accountModel, $"通过{dto.Channel}验证码找回并重置密码");
+        await SendPasswordChangedNotification(accountModel, $"通过{dto.Channel.GetDescription()}验证码找回并重置密码");
     }
 }

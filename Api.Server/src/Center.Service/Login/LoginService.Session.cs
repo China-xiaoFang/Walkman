@@ -43,8 +43,10 @@ public partial class LoginService
         var applicationModel = await EnsureApplication();
 
         var tenantUserModel = await _repository.Queryable<TenantUserModel>()
+            .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
             .ClearFilter<IBaseTEntity>()
-            .Where(wh => wh.UserKey == input.UserKey)
+            .Where(t1 => t1.UserKey == input.UserKey)
+            .Where((t1, t2) => t2.Status == CommonStatusEnum.Enable)
             .SingleAsync();
 
         if (tenantUserModel == null)

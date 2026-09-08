@@ -31,8 +31,6 @@ namespace Fast.Core;
 [SuppressSniffer]
 public class MetadataContext
 {
-    private static ServerMetadataInfo _metadataInfo;
-
     /// <summary>
     /// 元数据信息
     /// </summary>
@@ -40,10 +38,10 @@ public class MetadataContext
     {
         get
         {
-            _metadataInfo ??= GetServerMetadata()
+            field ??= GetServerMetadata()
                 .Result;
 
-            return _metadataInfo;
+            return field;
         }
     }
 

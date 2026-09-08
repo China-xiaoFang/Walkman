@@ -22,7 +22,7 @@
 					:model="formData"
 					:rules="props.formRules"
 					:disabled="faButtonRef?.loading"
-					scroll-to-error
+					:scroll-to-error="false"
 					@keyup.enter.prevent="handleKeyupEnter"
 					@submit.prevent
 				>
