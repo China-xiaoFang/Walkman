@@ -261,7 +261,6 @@ const add = () => {
 			isPrincipal: false,
 			sex: GenderEnum.Unknown,
 			entryDate: dayjs().format("YYYY-MM-DD"),
-			idPhoto: "https://cdn.fastdotnet.com/his/file/764670271123525.png",
 			roleList: [],
 		};
 		state.roleList = await roleApi.roleSelector();
