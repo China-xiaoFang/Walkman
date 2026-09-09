@@ -70,6 +70,11 @@ public class QueryAudioAssetDetailOutput : PagedOutput
     public string AudioUrl { get; set; }
 
     /// <summary>
+    /// 音频访问票据地址
+    /// </summary>
+    public string AudioTicketUrl { get; set; }
+
+    /// <summary>
     /// 音频时长
     /// </summary>
     public TimeSpan AudioDuration { get; set; }

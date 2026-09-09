@@ -54,7 +54,7 @@ public class AudioAssetService : IDynamicApplication
     [Permission(PermissionConst.AudioAsset.Paged)]
     public async Task<PagedResult<QueryAudioAssetPagedOutput>> QueryAudioAssetPaged(QueryAudioAssetPagedInput input)
     {
-        return await _repository.Entities.LeftJoin<BookModel>((t1, t2) => t1.BookId == t2.BookId)
+        var result = await _repository.Entities.LeftJoin<BookModel>((t1, t2) => t1.BookId == t2.BookId)
             .LeftJoin<LessonModel>((t1, t2, t3) => t1.LessonId == t3.LessonId)
             .WhereIF(input.BookId != null, t1 => t1.BookId == input.BookId)
             .WhereIF(input.LessonId != null, t1 => t1.LessonId == input.LessonId)
@@ -71,7 +71,7 @@ public class AudioAssetService : IDynamicApplication
                 LessonTitle = t3.LessonTitle,
                 LessonNumber = t3.LessonNumber,
                 AudioType = t1.AudioType,
-                AudioUrl = FileContext.CreateMediaAssetTicket(t1.AudioUrl, Math.Ceiling(t1.AudioDuration.TotalMinutes) + 10),
+                AudioUrl = t1.AudioUrl,
                 AudioDuration = t1.AudioDuration,
                 CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
@@ -80,6 +80,14 @@ public class AudioAssetService : IDynamicApplication
                 RowVersion = t1.RowVersion
             })
             .ToPagedListAsync(input);
+
+        foreach (var item in result.Rows)
+        {
+            item.AudioUrl =
+                await FileContext.CreateMediaAssetTicket(item.AudioUrl, Math.Ceiling(item.AudioDuration.TotalMinutes) + 10);
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -118,6 +126,8 @@ public class AudioAssetService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
+        result.AudioTicketUrl =
+            await FileContext.CreateMediaAssetTicket(result.AudioUrl, Math.Ceiling(result.AudioDuration.TotalMinutes) + 10);
         result.LyricDocumentList = await _lyricDocumentRepository.Entities.Where(wh => wh.AudioAssetId == result.AudioAssetId)
             .OrderBy(ob => ob.StartTime)
             .OrderBy(ob => ob.EndTime)
