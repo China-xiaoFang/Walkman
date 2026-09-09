@@ -1,7 +1,6 @@
-import "@vue/runtime-core";
+import type { Directive } from "vue";
 
-// GlobalComponents for Volar
-declare module "@vue/runtime-core" {
+declare module "vue" {
 	export interface GlobalDirectives {
 		/**
 		 * 权限指令
