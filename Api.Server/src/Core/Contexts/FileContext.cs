@@ -130,7 +130,7 @@ public class FileContext
     /// <param name="lifetimeMinutes">票据有效期，单位：分钟，限制为 15～120 分钟</param>
     /// <param name="uploadFileSettingsOptions">文件上传配置</param>
     /// <returns>媒体资源临时访问地址</returns>
-    public static async Task<string> CreateMediaAssetTicket(string fileUrl, long lifetimeMinutes,
+    public static async Task<string> CreateMediaAssetTicket(string fileUrl, double lifetimeMinutes,
         UploadFileSettingsOptions uploadFileSettingsOptions = null)
     {
         if (string.IsNullOrWhiteSpace(fileUrl))
