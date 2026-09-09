@@ -22,7 +22,6 @@
 
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 using Fast.Center.Domain;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.WebUtilities;
@@ -36,8 +35,9 @@ namespace Fast.Core;
 [SuppressSniffer]
 public class FileContext
 {
-    private const string MediaAssetTokenVersion = "v1";
-    private const string MediaAssetTokenSigningPurpose = "Fast:MediaAssetToken:v1";
+    private const int MediaAssetTokenNonceLength = 12;
+    private const int MediaAssetTokenTagLength = 16;
+    private const string MediaAssetTokenEncryptionPurpose = "Fast:MediaAssetToken";
 
     /// <summary>
     /// 图片
@@ -166,10 +166,7 @@ public class FileContext
             ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(lifetimeMinutes)
                 .ToUnixTimeSeconds()
         };
-        var payloadText = WebEncoders.Base64UrlEncode(JsonSerializer.SerializeToUtf8Bytes(payload));
-        var signingInput = $"{MediaAssetTokenVersion}.{payloadText}";
-        var signature = CryptoUtil.HMACSHA256Encrypt(signingInput, GetMediaAssetSigningKey());
-        var token = $"{signingInput}.{signature}";
+        var token = EncryptMediaAssetToken(payload);
 
         return $"{uri.GetLeftPart(UriPartial.Authority)}/file/media/{token}";
     }
@@ -179,7 +176,7 @@ public class FileContext
     /// </summary>
     /// <param name="token">媒体资源访问 Token</param>
     /// <param name="payload">验证成功后的 Token 载荷</param>
-    /// <returns>Token 签名、格式和有效期均有效时返回 <c>true</c></returns>
+    /// <returns>Token 加密认证、格式和有效期均有效时返回 <c>true</c></returns>
     public static bool TryValidateMediaAssetToken(string token, out MediaAssetTokenPayload payload)
     {
         payload = null;
@@ -188,44 +185,43 @@ public class FileContext
             return false;
         }
 
-        var tokenParts = token.Split('.');
-        if (tokenParts.Length != 3 || tokenParts[0] != MediaAssetTokenVersion)
-        {
-            return false;
-        }
-
         try
         {
-            var signingInput = $"{tokenParts[0]}.{tokenParts[1]}";
-            var actualSignature = Encoding.ASCII.GetBytes(tokenParts[2]);
-            var expectedSignature = Encoding.ASCII.GetBytes(
-                CryptoUtil.HMACSHA256Encrypt(signingInput, GetMediaAssetSigningKey()));
-            if (!CryptographicOperations.FixedTimeEquals(actualSignature, expectedSignature))
+            var tokenBytes = WebEncoders.Base64UrlDecode(token);
+            if (tokenBytes.Length < MediaAssetTokenNonceLength + MediaAssetTokenTagLength)
             {
                 return false;
             }
 
-            payload = JsonSerializer.Deserialize<MediaAssetTokenPayload>(WebEncoders.Base64UrlDecode(tokenParts[1]));
-            if (payload == null
-                || payload.FileId <= 0
-                || string.IsNullOrWhiteSpace(payload.AppNo)
-                || string.IsNullOrWhiteSpace(payload.TenantNo)
-                || string.IsNullOrWhiteSpace(payload.EmployeeNo)
-                || string.IsNullOrWhiteSpace(payload.SessionId)
-                || payload.ExpiresAt <= DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            var ciphertextLength = tokenBytes.Length - MediaAssetTokenNonceLength - MediaAssetTokenTagLength;
+            var nonce = tokenBytes.AsSpan(0, MediaAssetTokenNonceLength);
+            var ciphertext = tokenBytes.AsSpan(MediaAssetTokenNonceLength, ciphertextLength);
+            var tag = tokenBytes.AsSpan(tokenBytes.Length - MediaAssetTokenTagLength, MediaAssetTokenTagLength);
+            var plaintext = new byte[ciphertextLength];
+            var encryptionKey = GetMediaAssetEncryptionKey();
+            try
             {
-                payload = null;
-                return false;
+                using var aesGcm = new AesGcm(encryptionKey, MediaAssetTokenTagLength);
+                aesGcm.Decrypt(nonce, ciphertext, tag, plaintext);
+                return TryDeserializeMediaAssetTokenPayload(plaintext, out payload);
             }
-
-            return true;
+            finally
+            {
+                CryptographicOperations.ZeroMemory(encryptionKey);
+                CryptographicOperations.ZeroMemory(plaintext);
+            }
         }
         catch (FormatException)
         {
             payload = null;
             return false;
         }
-        catch (JsonException)
+        catch (CryptographicException)
+        {
+            payload = null;
+            return false;
+        }
+        catch (IOException)
         {
             payload = null;
             return false;
@@ -233,9 +229,89 @@ public class FileContext
     }
 
     /// <summary>
-    /// 获取媒体资源访问 Token 签名密钥
+    /// 加密媒体资源访问 Token
     /// </summary>
-    private static string GetMediaAssetSigningKey()
+    private static string EncryptMediaAssetToken(MediaAssetTokenPayload payload)
+    {
+        var plaintext = SerializeMediaAssetTokenPayload(payload);
+        var encryptionKey = GetMediaAssetEncryptionKey();
+        var nonce = RandomNumberGenerator.GetBytes(MediaAssetTokenNonceLength);
+        var ciphertext = new byte[plaintext.Length];
+        var tag = new byte[MediaAssetTokenTagLength];
+        try
+        {
+            using var aesGcm = new AesGcm(encryptionKey, MediaAssetTokenTagLength);
+            aesGcm.Encrypt(nonce, plaintext, ciphertext, tag);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(encryptionKey);
+            CryptographicOperations.ZeroMemory(plaintext);
+        }
+
+        // 格式：[12 字节随机 Nonce][密文][16 字节认证标签]
+        var tokenBytes = new byte[nonce.Length + ciphertext.Length + tag.Length];
+        Buffer.BlockCopy(nonce, 0, tokenBytes, 0, nonce.Length);
+        Buffer.BlockCopy(ciphertext, 0, tokenBytes, nonce.Length, ciphertext.Length);
+        Buffer.BlockCopy(tag, 0, tokenBytes, nonce.Length + ciphertext.Length, tag.Length);
+        return WebEncoders.Base64UrlEncode(tokenBytes);
+    }
+
+    /// <summary>
+    /// 序列化媒体资源访问 Token 载荷
+    /// </summary>
+    private static byte[] SerializeMediaAssetTokenPayload(MediaAssetTokenPayload payload)
+    {
+        using var stream = new MemoryStream();
+        using var writer = new BinaryWriter(stream, Encoding.UTF8, true);
+        writer.Write(payload.FileId);
+        writer.Write(payload.ExpiresAt);
+        writer.Write((long) payload.DeviceType);
+        writer.Write(payload.AppNo);
+        writer.Write(payload.TenantNo);
+        writer.Write(payload.EmployeeNo);
+        writer.Write(payload.SessionId);
+        writer.Flush();
+        return stream.ToArray();
+    }
+
+    /// <summary>
+    /// 反序列化并验证媒体资源访问 Token 载荷
+    /// </summary>
+    private static bool TryDeserializeMediaAssetTokenPayload(byte[] plaintext, out MediaAssetTokenPayload payload)
+    {
+        using var stream = new MemoryStream(plaintext, false);
+        using var reader = new BinaryReader(stream, Encoding.UTF8, true);
+        payload = new MediaAssetTokenPayload
+        {
+            FileId = reader.ReadInt64(),
+            ExpiresAt = reader.ReadInt64(),
+            DeviceType = (AppEnvironmentEnum) reader.ReadInt64(),
+            AppNo = reader.ReadString(),
+            TenantNo = reader.ReadString(),
+            EmployeeNo = reader.ReadString(),
+            SessionId = reader.ReadString()
+        };
+
+        if (stream.Position != stream.Length
+            || payload.FileId <= 0
+            || string.IsNullOrWhiteSpace(payload.AppNo)
+            || string.IsNullOrWhiteSpace(payload.TenantNo)
+            || string.IsNullOrWhiteSpace(payload.EmployeeNo)
+            || string.IsNullOrWhiteSpace(payload.SessionId)
+            || payload.ExpiresAt <= DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+        {
+            payload = null;
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 获取媒体资源访问 Token 加密密钥
+    /// </summary>
+    private static byte[] GetMediaAssetEncryptionKey()
     {
         var configuration = FastContext.GetService<IConfiguration>();
         var issuerSigningKey = configuration["JWTSettings:IssuerSigningKey"];
@@ -244,6 +320,6 @@ public class FileContext
             throw new InvalidOperationException("JWT签名密钥未配置，无法签发或验证媒体资源访问 Token。");
         }
 
-        return CryptoUtil.HMACSHA256Encrypt(MediaAssetTokenSigningPurpose, issuerSigningKey);
+        return Convert.FromHexString(CryptoUtil.HMACSHA256Encrypt(MediaAssetTokenEncryptionPurpose, issuerSigningKey));
     }
 }
