@@ -73,6 +73,32 @@ export const fileApi = {
 		});
 	},
 	/**
+	 * 上传音频资源
+	 */
+	uploadAudioAsset(data: FormData, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void): Promise<string> {
+		return axiosUtil.request<string>({
+			url: "/file/uploadAudioAsset",
+			method: "post",
+			data,
+			onUploadProgress,
+			cancelDuplicateRequest: false,
+			requestType: "upload",
+		});
+	},
+	/**
+	 * 上传封面
+	 */
+	uploadCover(data: FormData, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void): Promise<string> {
+		return axiosUtil.request<string>({
+			url: "/file/uploadCover",
+			method: "post",
+			data,
+			onUploadProgress,
+			cancelDuplicateRequest: false,
+			requestType: "upload",
+		});
+	},
+	/**
 	 * 上传富文本
 	 */
 	uploadEditor(data: FormData, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void): Promise<string> {

@@ -28,4 +28,73 @@ namespace Fast.Core;
 /// <remarks>自己的业务权限放这里</remarks>
 public static partial class PermissionConst
 {
+    /// <summary>激活码</summary>
+    public static class ActivationCode
+    {
+        /// <summary>激活码列表</summary>
+        public const string Paged = "ActivationCode:Paged";
+
+        /// <summary>激活码详情</summary>
+        public const string Detail = "ActivationCode:Detail";
+
+        /// <summary>激活码生成</summary>
+        public const string Generate = "ActivationCode:Generate";
+    }
+
+    /// <summary>音频资源</summary>
+    public static class AudioAsset
+    {
+        /// <summary>音频资源列表</summary>
+        public const string Paged = "AudioAsset:Paged";
+
+        /// <summary>音频资源详情</summary>
+        public const string Detail = "AudioAsset:Detail";
+
+        /// <summary>音频资源新增</summary>
+        public const string Add = "AudioAsset:Add";
+
+        /// <summary>音频资源编辑</summary>
+        public const string Edit = "AudioAsset:Edit";
+
+        /// <summary>音频资源删除</summary>
+        public const string Delete = "AudioAsset:Delete";
+    }
+
+    /// <summary>教材</summary>
+    public static class Book
+    {
+        /// <summary>教材列表</summary>
+        public const string Paged = "Book:Paged";
+
+        /// <summary>教材详情</summary>
+        public const string Detail = "Book:Detail";
+
+        /// <summary>教材新增</summary>
+        public const string Add = "Book:Add";
+
+        /// <summary>教材编辑</summary>
+        public const string Edit = "Book:Edit";
+
+        /// <summary>教材删除</summary>
+        public const string Delete = "Book:Delete";
+    }
+
+    /// <summary>课程</summary>
+    public static class Lesson
+    {
+        /// <summary>课程列表</summary>
+        public const string Paged = "Lesson:Paged";
+
+        /// <summary>课程详情</summary>
+        public const string Detail = "Lesson:Detail";
+
+        /// <summary>课程新增</summary>
+        public const string Add = "Lesson:Add";
+
+        /// <summary>课程编辑</summary>
+        public const string Edit = "Lesson:Edit";
+
+        /// <summary>课程删除</summary>
+        public const string Delete = "Lesson:Delete";
+    }
 }

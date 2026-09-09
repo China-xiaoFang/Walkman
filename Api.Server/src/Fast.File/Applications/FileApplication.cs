@@ -364,6 +364,28 @@ public class FileApplication : IDynamicApplication
     }
 
     /// <summary>
+    /// 上传音频资源
+    /// </summary>
+    [HttpPost]
+    [ApiInfo("上传音频资源", HttpRequestActionEnum.Upload)]
+    [RequestSizeLimit(11 * 1024 * 1024)]
+    public async Task<string> UploadAudioAsset(IFormFile file)
+    {
+        return await LocalUploadFile(file, _uploadFileSettingsOptions.AudioAsset);
+    }
+
+    /// <summary>
+    /// 上传封面
+    /// </summary>
+    [HttpPost]
+    [ApiInfo("上传封面", HttpRequestActionEnum.Upload)]
+    [RequestSizeLimit(3 * 1024 * 1024)]
+    public async Task<string> UploadCover(IFormFile file)
+    {
+        return await LocalUploadFile(file, _uploadFileSettingsOptions.Cover);
+    }
+
+    /// <summary>
     /// 上传富文本
     /// </summary>
     [HttpPost]

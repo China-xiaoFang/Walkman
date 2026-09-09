@@ -20,70 +20,71 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Walkman.Domain;
+namespace Fast.Walkman.Service.ActivationCode.Dto;
 
 /// <summary>
-/// 激活码表Model类
+/// 获取激活码详情输出
 /// </summary>
-[SugarTable("ActivationCode", "激活码表")]
-[SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(Code)}", nameof(Code), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(UserId)}", nameof(UserId), OrderByType.Asc)]
-public class ActivationCodeModel : IUpdateVersion
+public class QueryActivationCodeDetailOutput
 {
     /// <summary>
     /// 激活码Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "激活码Id", IsPrimaryKey = true)]
     public long ActivationCodeId { get; set; }
 
     /// <summary>
     /// 激活码
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "激活码", Length = 35)]
     public string Code { get; set; }
 
     /// <summary>
     /// 过期时间
     /// </summary>
     /// <remarks>为空则表示不过期</remarks>
-    [SugarColumn(ColumnDescription = "过期时间")]
     public DateTime? ExpireTime { get; set; }
 
     /// <summary>
     /// 客户端用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "客户端用户Id")]
     public long? UserId { get; set; }
+
+    /// <summary>
+    /// 手机
+    /// </summary>
+    public string Mobile { get; set; }
+
+    /// <summary>
+    /// 唯一用户标识
+    /// </summary>
+    public string OpenId { get; set; }
+
+    /// <summary>
+    /// 昵称
+    /// </summary>
+    public string NickName { get; set; }
+
+    /// <summary>
+    /// 头像
+    /// </summary>
+    public string Avatar { get; set; }
 
     /// <summary>
     /// 激活时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "激活时间")]
     public DateTime? ActivationTime { get; set; }
-
-    /// <summary>
-    /// 创建者用户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
-    public long? CreatedUserId { get; set; }
 
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    [Required, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
     public long RowVersion { get; set; }
 }

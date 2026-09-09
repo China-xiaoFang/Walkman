@@ -48,6 +48,16 @@ public class UploadFileSettingsOptions : IPostConfigure
     public UploadFileInfoSettings IdPhoto { get; set; }
 
     /// <summary>
+    /// 音频资源
+    /// </summary>
+    public UploadFileInfoSettings AudioAsset { get; set; }
+
+    /// <summary>
+    /// 封面
+    /// </summary>
+    public UploadFileInfoSettings Cover { get; set; }
+
+    /// <summary>
     /// 富文本
     /// </summary>
     public UploadFileInfoSettings Editor { get; set; }
@@ -92,6 +102,24 @@ public class UploadFileSettingsOptions : IPostConfigure
         {
             Path = "Upload/IdPhoto",
             MaxSize = 5120,
+            ContentType =
+            [
+                "image/jpg", "image/jpeg", "image/png"
+            ]
+        };
+        AudioAsset ??= new UploadFileInfoSettings
+        {
+            Path = "Upload/AudioAsset",
+            MaxSize = 10240,
+            ContentType =
+            [
+                "audio/mpeg", "audio/wav", "audio/ogg", "audio/mp4", "audio/flac"
+            ]
+        };
+        Cover ??= new UploadFileInfoSettings
+        {
+            Path = "Upload/Cover",
+            MaxSize = 2048,
             ContentType =
             [
                 "image/jpg", "image/jpeg", "image/png"
