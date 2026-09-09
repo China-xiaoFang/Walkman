@@ -31,4 +31,9 @@ public class QueryActivationCodePagedInput : PagedInput
     /// 是否已使用
     /// </summary>
     public bool? IsUsed { get; set; }
+
+    /// <summary>
+    /// 激活时间
+    /// </summary>
+    public List<DateTime> ActivationTimeList { get; set; }
 }

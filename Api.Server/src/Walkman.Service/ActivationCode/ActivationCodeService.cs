@@ -38,11 +38,13 @@ namespace Fast.Walkman.Service.ActivationCode;
 public partial class ActivationCodeService : IDynamicApplication
 {
     private readonly IUser _user;
+    private readonly ISqlSugarClient _sqlSugarClient;
     private readonly ISqlSugarRepository<ActivationCodeModel> _repository;
 
-    public ActivationCodeService(IUser user, ISqlSugarRepository<ActivationCodeModel> repository)
+    public ActivationCodeService(IUser user, ISqlSugarClient sqlSugarClient, ISqlSugarRepository<ActivationCodeModel> repository)
     {
         _user = user;
+        _sqlSugarClient = sqlSugarClient;
         _repository = repository;
     }
 
@@ -56,6 +58,8 @@ public partial class ActivationCodeService : IDynamicApplication
     {
         return await _repository.Entities.WhereIF(input.IsUsed == true, wh => wh.UserId != null)
             .WhereIF(input.IsUsed == false, wh => wh.UserId == null)
+            .WhereIF(input.ActivationTimeList?.Count >= 2,
+                wh => wh.ActivationTime >= input.ActivationTimeList[0] && wh.ActivationTime <= input.ActivationTimeList[1])
             .OrderByDescending(ob => ob.CreatedTime)
             .OrderByDescending(ob => ob.ActivationCodeId)
             .Select(sl => new QueryActivationCodePagedOutput
@@ -81,28 +85,35 @@ public partial class ActivationCodeService : IDynamicApplication
     public async Task<QueryActivationCodeDetailOutput> QueryActivationCodeDetail(
         [Required(ErrorMessage = "激活码Id不能为空")] long? activationCodeId)
     {
-        var result = await _repository.Entities.LeftJoin<ClientUserModel>((t1, t2) => t1.UserId == t2.UserId)
-            .Where(t1 => t1.ActivationCodeId == activationCodeId)
-            .Select((t1, t2) => new QueryActivationCodeDetailOutput
+        var result = await _repository.Entities
+            .Where(wh => wh.ActivationCodeId == activationCodeId)
+            .Select(sl => new QueryActivationCodeDetailOutput
             {
-                ActivationCodeId = t1.ActivationCodeId,
-                Code = t1.Code,
-                ExpireTime = t1.ExpireTime,
-                UserId = t1.UserId,
-                Mobile = t2.Mobile,
-                OpenId = t2.OpenId,
-                NickName = t2.NickName,
-                Avatar = t2.Avatar,
-                ActivationTime = t1.ActivationTime,
-                CreatedUserName = t1.CreatedUserName,
-                CreatedTime = t1.CreatedTime,
-                RowVersion = t1.RowVersion
+                ActivationCodeId = sl.ActivationCodeId,
+                Code = sl.Code,
+                ExpireTime = sl.ExpireTime,
+                UserId = sl.UserId,
+                ActivationTime = sl.ActivationTime,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                RowVersion = sl.RowVersion
             })
             .SingleAsync();
 
         if (result == null)
         {
             throw new UserFriendlyException("数据不存在！");
+        }
+
+        if (result.UserId != null)
+        {
+            var clientUserModel = await _sqlSugarClient.Queryable<ClientUserModel>()
+                .Where(wh => wh.UserId == result.UserId)
+                .SingleAsync();
+            result.Mobile = clientUserModel.Mobile;
+            result.OpenId = clientUserModel.OpenId;
+            result.NickName = clientUserModel.NickName;
+            result.Avatar = clientUserModel.Avatar;
         }
 
         return result;
