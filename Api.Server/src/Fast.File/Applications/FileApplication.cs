@@ -562,6 +562,13 @@ public class FileApplication : IDynamicApplication
         // 数据库存储统一使用“/”，保证路径记录可以在 Windows、Linux 和 macOS 之间迁移
         filePath = filePath.Replace('\\', '/');
 
+        // 获取文件访问地址
+        var publicDomain = _uploadFileSettingsOptions.PublicDomain;
+        if (string.IsNullOrWhiteSpace(publicDomain))
+        {
+            publicDomain = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host}";
+        }
+
         var fileInfoModel = new FileModel
         {
             FileId = fileId,
@@ -571,7 +578,7 @@ public class FileApplication : IDynamicApplication
             FileMimeType = normalizedContentType,
             FileSizeKb = fileSizeKb,
             FilePath = filePath,
-            FileLocation = FileContext.GetFileLocation(fileObjectName, _uploadFileSettingsOptions),
+            FileLocation = $"{publicDomain}/file/{fileObjectName}",
             FileHash = fileHash
         };
         // 获取设备信息

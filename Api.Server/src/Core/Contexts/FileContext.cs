@@ -23,7 +23,6 @@
 using System.Security.Cryptography;
 using Fast.Center.Domain;
 using Fast.SqlSugar;
-using Microsoft.Extensions.Options;
 
 namespace Fast.Core;
 
@@ -107,31 +106,12 @@ public class FileContext
     }
 
     /// <summary>
-    /// 获取文件访问地址
-    /// </summary>
-    public static string GetFileLocation(string fileObjectName, UploadFileSettingsOptions uploadFileSettingsOptions = null)
-    {
-        var _httpContext = FastContext.HttpContext;
-        uploadFileSettingsOptions ??= FastContext.GetService<IOptions<UploadFileSettingsOptions>>()
-            .Value;
-        var publicDomain = uploadFileSettingsOptions.PublicDomain;
-        if (string.IsNullOrWhiteSpace(publicDomain))
-        {
-            publicDomain = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host}";
-        }
-
-        return $"{publicDomain}/file/{fileObjectName}";
-    }
-
-    /// <summary>
     /// 创建媒体资源临时访问票据
     /// </summary>
     /// <param name="fileUrl">媒体文件地址</param>
     /// <param name="lifetimeMinutes">票据有效期，单位：分钟，限制为 15～120 分钟</param>
-    /// <param name="uploadFileSettingsOptions">文件上传配置</param>
     /// <returns>媒体资源临时访问地址</returns>
-    public static async Task<string> CreateMediaAssetTicket(string fileUrl, double lifetimeMinutes,
-        UploadFileSettingsOptions uploadFileSettingsOptions = null)
+    public static async Task<string> CreateMediaAssetTicket(string fileUrl, double lifetimeMinutes)
     {
         if (string.IsNullOrWhiteSpace(fileUrl))
         {
@@ -141,24 +121,14 @@ public class FileContext
         // 限制媒体票据有效期，避免调用方传入异常值导致票据长期有效
         lifetimeMinutes = Math.Clamp(lifetimeMinutes, 15L, 120L);
 
-        // 提取文件路径。
-        // 支持完整 Url 和相对路径，并忽略 QueryString、Fragment。
-        var path = fileUrl;
-        if (Uri.TryCreate(fileUrl, UriKind.Absolute, out var uri))
+        // 提取文件路径，仅支持完整的地址
+        if (!Uri.TryCreate(fileUrl, UriKind.Absolute, out var uri))
         {
-            path = uri.AbsolutePath;
-        }
-        else
-        {
-            var separatorIndex = fileUrl.IndexOfAny(['?', '#']);
-            if (separatorIndex >= 0)
-            {
-                path = fileUrl[..separatorIndex];
-            }
+            throw new UserFriendlyException("文件地址格式不正确！");
         }
 
         // 获取文件Id
-        var fileName = Path.GetFileNameWithoutExtension(path.TrimEnd('/'));
+        var fileName = Path.GetFileNameWithoutExtension(uri.AbsolutePath.TrimEnd('/'));
         if (!long.TryParse(fileName, out var fileId))
         {
             throw new UserFriendlyException("文件地址不受支持！");
@@ -190,15 +160,6 @@ public class FileContext
                 SessionId = _user.SessionId
             }, TimeSpan.FromMinutes(lifetimeMinutes));
 
-        var _httpContext = FastContext.HttpContext;
-        uploadFileSettingsOptions ??= FastContext.GetService<IOptions<UploadFileSettingsOptions>>()
-            .Value;
-        var publicDomain = uploadFileSettingsOptions.PublicDomain;
-        if (string.IsNullOrWhiteSpace(publicDomain))
-        {
-            publicDomain = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host}";
-        }
-
-        return $"{publicDomain}/file/media/{token}";
+        return $"{uri.GetLeftPart(UriPartial.Authority)}/file/media/{token}";
     }
 }
