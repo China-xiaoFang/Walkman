@@ -63,7 +63,8 @@ public class LessonService : IDynamicApplication
                 t1.BookId,
                 t2.BookName,
                 t2.Status,
-                t1.LessonTitle
+                t1.LessonTitle,
+                t1.LessonNumber
             })
             .ToPagedListAsync(input);
 
@@ -72,7 +73,7 @@ public class LessonService : IDynamicApplication
             Value = sl.LessonId,
             Label = sl.LessonTitle,
             Disabled = sl.Status == CommonStatusEnum.Disable,
-            Data = new {sl.BookId, sl.BookName}
+            Data = new {sl.BookId, sl.BookName, sl.LessonNumber}
         });
     }
 

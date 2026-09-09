@@ -71,7 +71,7 @@ public class AudioAssetService : IDynamicApplication
                 LessonTitle = t3.LessonTitle,
                 LessonNumber = t3.LessonNumber,
                 AudioType = t1.AudioType,
-                AudioUrl = t1.AudioUrl,
+                AudioUrl = FileContext.CreateMediaAssetTicket(t1.AudioUrl, Math.Ceiling(t1.AudioDuration.TotalMinutes) + 10),
                 AudioDuration = t1.AudioDuration,
                 CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
@@ -159,6 +159,20 @@ public class AudioAssetService : IDynamicApplication
             throw new UserFriendlyException("歌词文档时间范围无效！");
         }
 
+        if (input.LyricDocumentList.Any(a => a.EndTime > input.AudioDuration))
+        {
+            throw new UserFriendlyException("歌词文档时间不能超过音频时长！");
+        }
+
+        var orderedLyricDocumentList = input.LyricDocumentList.OrderBy(ob => ob.StartTime)
+            .ToList();
+        if (orderedLyricDocumentList.Skip(1)
+            .Where((item, index) => orderedLyricDocumentList[index].EndTime > item.StartTime)
+            .Any())
+        {
+            throw new UserFriendlyException("歌词文档时间不能重叠！");
+        }
+
         if (!await _repository.Queryable<LessonModel>()
                 .AnyAsync(a => a.LessonId == input.LessonId && a.BookId == input.BookId))
         {
@@ -227,6 +241,20 @@ public class AudioAssetService : IDynamicApplication
         if (input.LyricDocumentList.Any(a => a.StartTime < TimeSpan.Zero || a.EndTime <= a.StartTime))
         {
             throw new UserFriendlyException("歌词文档时间范围无效！");
+        }
+
+        if (input.LyricDocumentList.Any(a => a.EndTime > input.AudioDuration))
+        {
+            throw new UserFriendlyException("歌词文档时间不能超过音频时长！");
+        }
+
+        var orderedLyricDocumentList = input.LyricDocumentList.OrderBy(ob => ob.StartTime)
+            .ToList();
+        if (orderedLyricDocumentList.Skip(1)
+            .Where((item, index) => orderedLyricDocumentList[index].EndTime > item.StartTime)
+            .Any())
+        {
+            throw new UserFriendlyException("歌词文档时间不能重叠！");
         }
 
         if (!await _repository.Queryable<LessonModel>()
