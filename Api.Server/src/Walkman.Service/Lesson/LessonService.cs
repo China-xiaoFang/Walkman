@@ -32,7 +32,7 @@ namespace Fast.Walkman.Service.Lesson;
 /// <summary>
 /// 课程服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "lesson")]
+[ApiDescriptionSettings(ApiGroupConst.Walkman, Name = "lesson")]
 public class LessonService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<LessonModel> _repository;

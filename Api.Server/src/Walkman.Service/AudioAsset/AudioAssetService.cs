@@ -33,7 +33,7 @@ namespace Fast.Walkman.Service.AudioAsset;
 /// <summary>
 /// 音频资源服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "audioAsset")]
+[ApiDescriptionSettings(ApiGroupConst.Walkman, Name = "audioAsset")]
 public class AudioAssetService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<AudioAssetModel> _repository;

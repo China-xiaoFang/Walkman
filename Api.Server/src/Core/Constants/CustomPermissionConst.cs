@@ -41,25 +41,6 @@ public static partial class PermissionConst
         public const string Generate = "ActivationCode:Generate";
     }
 
-    /// <summary>音频资源</summary>
-    public static class AudioAsset
-    {
-        /// <summary>音频资源列表</summary>
-        public const string Paged = "AudioAsset:Paged";
-
-        /// <summary>音频资源详情</summary>
-        public const string Detail = "AudioAsset:Detail";
-
-        /// <summary>音频资源新增</summary>
-        public const string Add = "AudioAsset:Add";
-
-        /// <summary>音频资源编辑</summary>
-        public const string Edit = "AudioAsset:Edit";
-
-        /// <summary>音频资源删除</summary>
-        public const string Delete = "AudioAsset:Delete";
-    }
-
     /// <summary>教材</summary>
     public static class Book
     {
@@ -96,5 +77,24 @@ public static partial class PermissionConst
 
         /// <summary>课程删除</summary>
         public const string Delete = "Lesson:Delete";
+    }
+
+    /// <summary>音频资源</summary>
+    public static class AudioAsset
+    {
+        /// <summary>音频资源列表</summary>
+        public const string Paged = "AudioAsset:Paged";
+
+        /// <summary>音频资源详情</summary>
+        public const string Detail = "AudioAsset:Detail";
+
+        /// <summary>音频资源新增</summary>
+        public const string Add = "AudioAsset:Add";
+
+        /// <summary>音频资源编辑</summary>
+        public const string Edit = "AudioAsset:Edit";
+
+        /// <summary>音频资源删除</summary>
+        public const string Delete = "AudioAsset:Delete";
     }
 }

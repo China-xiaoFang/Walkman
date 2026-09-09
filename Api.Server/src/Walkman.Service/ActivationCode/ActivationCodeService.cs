@@ -34,7 +34,7 @@ namespace Fast.Walkman.Service.ActivationCode;
 /// <summary>
 /// 激活码服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "activationCode")]
+[ApiDescriptionSettings(ApiGroupConst.Walkman, Name = "activationCode")]
 public partial class ActivationCodeService : IDynamicApplication
 {
     private readonly IUser _user;

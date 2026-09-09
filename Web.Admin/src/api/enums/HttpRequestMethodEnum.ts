@@ -3,6 +3,10 @@
  */
 export enum HttpRequestMethodEnum {
 	/**
+	 * 未知请求
+	 */
+	Unknown = 0,
+	/**
 	 * Get请求
 	 */
 	Get = 1,

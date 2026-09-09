@@ -53,4 +53,9 @@ public static class ApiGroupConst
     /// 调度作业
     /// </summary>
     public const string Scheduler = "Scheduler";
+
+    /// <summary>
+    /// 概念随听
+    /// </summary>
+    public const string Walkman = "Walkman";
 }

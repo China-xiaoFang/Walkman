@@ -57,6 +57,13 @@
         "Description": "一个持续集百家所长 众多黑科技的 .NET Web应用框架。<br/>前后端分离架构，开箱即用，紧随前沿技术。<br/>作者By 小方<br/><a href='https://gitee.com/FastDotnet/Fast.Admin'>https://gitee.com/FastDotnet/Fast.Admin</a>",
         "Version": "3.0.0",
         "Order": 996
+      },
+      {
+        "Group": "Walkman",
+        "Title": "概念随听",
+        "Description": "概念随听业务接口",
+        "Version": "3.0.0",
+        "Order": 995
       }
     ]
   }

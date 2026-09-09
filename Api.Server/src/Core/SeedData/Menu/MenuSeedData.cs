@@ -69,5 +69,8 @@ internal static partial class MenuSeedData
 
         await SeedOrganizationManagement(db, applicationModel, dateTime);
         await SeedLogManagement(db, applicationModel, dateTime);
+
+
+        await SHisModuleSeedData(db, applicationModel, dateTime);
     }
 }

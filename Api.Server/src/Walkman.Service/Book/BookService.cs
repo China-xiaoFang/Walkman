@@ -32,7 +32,7 @@ namespace Fast.Walkman.Service.Book;
 /// <summary>
 /// 教材服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "book")]
+[ApiDescriptionSettings(ApiGroupConst.Walkman, Name = "book")]
 public class BookService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<BookModel> _repository;
