@@ -38,7 +38,7 @@
 			</template>
 
 			<template #audioUrl="{ row }: { row?: QueryAudioAssetPagedOutput }">
-				<audio v-if="row?.audioUrl" style="display: block; width: 240px; height: 32px" :src="row.audioUrl" controls preload="none" />
+				<audio v-if="row?.audioUrl" style="display: block; width: 260px; height: 32px" :src="row.audioUrl" controls preload="none" />
 			</template>
 
 			<template #operation="{ row }: { row: QueryAudioAssetPagedOutput }">

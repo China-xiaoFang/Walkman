@@ -2,7 +2,6 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1200"
-		full-height
 		:title="state.dialogTitle"
 		:show-confirm-button="!state.formDisabled"
 		:show-before-close="!state.formDisabled"
@@ -60,16 +59,16 @@
 					@error="handleAudioUploadError"
 					@remove="handleAudioRemove"
 				/>
-				<audio
-					v-if="state.formData.audioUrl"
-					style="display: block; width: min(100%, 520px); margin-top: 8px"
-					:src="state.formData.audioUrl"
-					controls
-					preload="metadata"
-				/>
+			</FaFormItem>
+			<FaFormItem v-if="state.formData.audioTicketUrl" prop="audioTicketUrl" label="音频" span="2">
+				<audio style="display: block; width: 100%; height: 48px" :src="state.formData.audioTicketUrl" controls preload="none" />
 			</FaFormItem>
 			<FaFormItem prop="lyricDocumentList" label="歌词文档" span="2">
-				<LyricTable v-model="state.formData.lyricDocumentList" :disabled="state.formDisabled" />
+				<LyricTable
+					v-model="state.formData.lyricDocumentList"
+					:audio-duration="state.formData.audioDuration"
+					:disabled="state.formDisabled"
+				/>
 			</FaFormItem>
 		</FaForm>
 	</FaDialog>
@@ -113,6 +112,9 @@ const validateLyricDocumentList = (_rule: unknown, value: EditLyricDocumentInput
 		}
 		if (parseDuration(item.endTime) <= parseDuration(item.startTime)) {
 			return callback(new Error(`第 ${index + 1} 条歌词的结束时间必须晚于开始时间`));
+		}
+		if (index > 0 && parseDuration(item.startTime) < parseDuration(value[index - 1].endTime ?? "")) {
+			return callback(new Error(`第 ${index + 1} 条歌词与上一条歌词时间重叠`));
 		}
 	}
 	callback();
@@ -172,6 +174,10 @@ const handleBeforeAudioUpload = async (file: UploadRawFile) => {
 
 const handleAudioUploadSuccess = () => {
 	if (pendingAudioDuration) state.formData.audioDuration = pendingAudioDuration;
+	if (state.formData.lyricDocumentList?.length) {
+		state.formData.lyricDocumentList = [];
+		ElMessage.warning("音频文件已变更，请重新选择对应的 LRC 文件！");
+	}
 	pendingAudioDuration = undefined;
 };
 
@@ -182,6 +188,8 @@ const handleAudioUploadError = () => {
 const handleAudioRemove = () => {
 	pendingAudioDuration = undefined;
 	state.formData.audioDuration = undefined;
+	state.formData.audioTicketUrl = undefined;
+	state.formData.lyricDocumentList = [];
 };
 
 const handleConfirm = () => {
