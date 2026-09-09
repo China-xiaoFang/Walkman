@@ -40,7 +40,7 @@ public class CaptchaService : ICaptchaService, ISingletonDependency
     /// <summary>
     /// 缓存
     /// </summary>
-    private readonly ICache<CenterCCL> _centerCache;
+    private readonly ICache _cache;
 
     /// <summary>
     /// 日志
@@ -50,9 +50,9 @@ public class CaptchaService : ICaptchaService, ISingletonDependency
     /// <summary>
     /// 初始化验证码服务
     /// </summary>
-    public CaptchaService(ICache<CenterCCL> centerCache, ILogger<IMailService> logger)
+    public CaptchaService(ICache cache, ILogger<IMailService> logger)
     {
-        _centerCache = centerCache;
+        _cache = cache;
         _logger = logger;
     }
 
@@ -90,7 +90,7 @@ public class CaptchaService : ICaptchaService, ISingletonDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.ImageCaptcha, captchaKey);
-        await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+        await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
 
         // 背景颜色
         var backgroundColor = Color.ParseHex("EEF4FF");
@@ -252,20 +252,20 @@ public class CaptchaService : ICaptchaService, ISingletonDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.ImageCaptcha, captchaKey);
-        using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 10);
+        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 10);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var dto = await _centerCache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        var dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
         if (dto == null || dto.ClientIdentity != GlobalContext.ClientIdentity)
         {
             throw new UserFriendlyException("验证码无效或已过期！");
         }
 
         // 图片验证码验证一次后立即失效
-        await _centerCache.DelAsync(cacheKey);
+        await _cache.DelAsync(cacheKey);
 
         // 忽略大小写
         if (!string.Equals(dto.VerificationCode, verificationCode, StringComparison.OrdinalIgnoreCase))

@@ -39,7 +39,7 @@ public class SMSService : ISmsService, ISingletonDependency
     /// <summary>
     /// 缓存
     /// </summary>
-    private readonly ICache<CenterCCL> _centerCache;
+    private readonly ICache _cache;
 
     /// <summary>
     /// 日志
@@ -49,9 +49,9 @@ public class SMSService : ISmsService, ISingletonDependency
     /// <summary>
     /// 初始化短信服务
     /// </summary>
-    public SMSService(ICache<CenterCCL> centerCache, ILogger<ISmsService> logger)
+    public SMSService(ICache cache, ILogger<ISmsService> logger)
     {
-        _centerCache = centerCache;
+        _cache = cache;
         _logger = logger;
     }
 
@@ -87,7 +87,7 @@ public class SMSService : ISmsService, ISingletonDependency
     {
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Sms, smsType.ToString(), mobile.Trim()
             .ToLowerInvariant());
-        return (int) Math.Max(0, await _centerCache.Client.TtlAsync($"{cacheKey}:SendCooldown"));
+        return (int) Math.Max(0, await _cache.Client.TtlAsync($"{cacheKey}:SendCooldown"));
     }
 
     /// <inheritdoc />
@@ -102,11 +102,11 @@ public class SMSService : ISmsService, ISingletonDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Sms, smsType.ToString(), mobile);
-        using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 120);
+        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             // 仅抢锁失败时读取锁剩余时间，毫秒向上取整，避免不足1秒被显示为0。
-            var lockMilliseconds = await _centerCache.Client.PTtlAsync($"CSRedisClientLock:{cacheKey}:Lock");
+            var lockMilliseconds = await _cache.Client.PTtlAsync($"CSRedisClientLock:{cacheKey}:Lock");
             var lockSeconds = (int) Math.Ceiling(lockMilliseconds / 1000d);
             throw new UserFriendlyException(lockSeconds > 0
                 ? $"操作过于频繁，请在 {TimeSpan.FromSeconds(lockSeconds).ToDescription()} 后重试！"
@@ -117,8 +117,8 @@ public class SMSService : ISmsService, ISingletonDependency
         if (retryAfterSeconds > 0)
             throw new UserFriendlyException($"操作过于频繁，请在 {TimeSpan.FromSeconds(retryAfterSeconds).ToDescription()} 后重试！");
         // 发送前占用冷却，失败时保留重试限制，成功后重新计时。
-        await _centerCache.Client.SetAsync($"{cacheKey}:SendCooldown", "1", 60);
-        var dto = await _centerCache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        await _cache.Client.SetAsync($"{cacheKey}:SendCooldown", "1", 60);
+        var dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
 
         // 生成验证码
         dto ??= new VerificationCodeCacheDto();
@@ -131,8 +131,8 @@ public class SMSService : ISmsService, ISingletonDependency
         // 获取模板Code
         var templateCode = await ConfigContext.GetConfig(ConfigConst.SmsVerificationTemplateCode);
         await SendSms(mobile, templateCode, new {Code = dto.VerificationCode});
-        await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
-        await _centerCache.Client.SetAsync($"{cacheKey}:SendCooldown", "1", 60);
+        await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+        await _cache.Client.SetAsync($"{cacheKey}:SendCooldown", "1", 60);
     }
 
     /// <inheritdoc/>
@@ -149,13 +149,13 @@ public class SMSService : ISmsService, ISingletonDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Sms, smsType.ToString(), mobile);
-        using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 30);
+        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var dto = await _centerCache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        var dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
         if (dto is not {ErrorCount: < 5}
             || dto.ClientIdentity != GlobalContext.ClientIdentity
             || dto.SendTime.AddMinutes(5) <= DateTime.Now)
@@ -169,18 +169,18 @@ public class SMSService : ISmsService, ISingletonDependency
             // 错误次数达到上限后删除验证码
             if (dto.ErrorCount >= 5)
             {
-                await _centerCache.DelAsync(cacheKey);
+                await _cache.DelAsync(cacheKey);
             }
             else
             {
                 // // 更新错误次数并保持原有过期时间
-                await _centerCache.SetAsync(cacheKey, dto, dto.SendTime.AddMinutes(5) - DateTime.Now);
+                await _cache.SetAsync(cacheKey, dto, dto.SendTime.AddMinutes(5) - DateTime.Now);
             }
 
             throw new UserFriendlyException("短信验证码无效或已过期！");
         }
 
-        await _centerCache.DelAsync(cacheKey);
+        await _cache.DelAsync(cacheKey);
     }
 
     /// <inheritdoc />

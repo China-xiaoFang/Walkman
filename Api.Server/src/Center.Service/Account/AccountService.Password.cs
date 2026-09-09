@@ -356,7 +356,7 @@ public partial class AccountService
         var cacheKey = CacheConst.GetCacheKey(CacheConst.PasswordReset, verificationKey);
         // 所有合法格式的账号均返回同样的凭据；未实际发送的凭据不能用于重置密码。
         var dto = new PasswordResetCacheDto {Channel = sendChannel, ClientIdentity = GlobalContext.ClientIdentity};
-        await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+        await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
 
         var output = new SendPasswordResetCodeOutput
         {
@@ -397,7 +397,7 @@ public partial class AccountService
             dto.Email = accountModel.Email;
             dto.PasswordHash = Convert.ToHexString(
                 SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password ?? string.Empty)));
-            await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+            await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
         }
 
         return output;
@@ -416,13 +416,13 @@ public partial class AccountService
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.PasswordReset, input.VerificationKey);
-        using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 30);
+        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var dto = await _centerCache.GetAsync<PasswordResetCacheDto>(cacheKey);
+        var dto = await _cache.GetAsync<PasswordResetCacheDto>(cacheKey);
         if (dto == null || dto.AccountId == null || dto.ClientIdentity != GlobalContext.ClientIdentity)
         {
             throw new UserFriendlyException("验证码无效或已过期！");
@@ -454,7 +454,7 @@ public partial class AccountService
         }
 
         // 正常验证码只能消费一次，即使后续密码策略校验失败也需要重新发送
-        await _centerCache.DelAsync(cacheKey);
+        await _cache.DelAsync(cacheKey);
 
         await EnsurePasswordNotReused(accountModel.AccountId, input.NewPassword);
 

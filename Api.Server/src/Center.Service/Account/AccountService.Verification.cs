@@ -147,14 +147,14 @@ public partial class AccountService
         // 不同客户端独立保存校验进度，发送与提交共用锁，避免覆盖已验证的结果。
         var clientIdentity = GlobalContext.ClientIdentity;
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification, accountModel.AccountKey, clientIdentity);
-        using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 120);
+        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
         var passwordHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password)));
-        var dto = await _centerCache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+        var dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
         if (dto == null
             || dto.AccountId != accountModel.AccountId
             || dto.ClientIdentity != clientIdentity
@@ -184,7 +184,7 @@ public partial class AccountService
         }
 
         // 重发只重置当前通道，另一通道的校验结果仍受其原始过期时间限制。
-        await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+        await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
     }
 
     /// <summary>
@@ -230,13 +230,13 @@ public partial class AccountService
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification, accountModel.AccountKey,
             GlobalContext.ClientIdentity);
-        using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 120);
+        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var dto = await _centerCache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+        var dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
         if (dto == null || dto.AccountId != accountModel.AccountId || dto.ClientIdentity != GlobalContext.ClientIdentity)
         {
             throw new UserFriendlyException("验证码无效或已过期！");
@@ -260,14 +260,14 @@ public partial class AccountService
         {
             await _smsService.VerifyVerificationCode(SmsTypeEnum.Validity, mobile, input.MobileVerificationCode);
             dto.MobileVerified = true;
-            await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+            await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
         }
 
         if (!dto.EmailVerified)
         {
             await _mailService.VerifyVerificationCode(MailTypeEnum.Validity, email, input.EmailVerificationCode);
             dto.EmailVerified = true;
-            await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+            await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
         }
 
         // 更新手机号，邮箱，校验标识
@@ -279,7 +279,7 @@ public partial class AccountService
             .UpdateColumns(e => new {e.Mobile, e.Email, e.IdentityVerification})
             .ExecuteCommandWithOptLockAsync(true);
 
-        await _centerCache.DelAsync(cacheKey);
+        await _cache.DelAsync(cacheKey);
 
         // 退出登录
         await _user.Logout();
@@ -354,14 +354,14 @@ public partial class AccountService
         // 不同客户端独立保存校验进度，发送与提交共用锁，避免覆盖已验证的结果。
         var clientIdentity = GlobalContext.ClientIdentity;
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification, accountModel.AccountKey, clientIdentity);
-        using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 120);
+        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
         var passwordHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password)));
-        var dto = await _centerCache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+        var dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
         if (dto == null
             || dto.AccountId != accountModel.AccountId
             || dto.ClientIdentity != clientIdentity
@@ -391,6 +391,6 @@ public partial class AccountService
         }
 
         // 重发只重置当前通道，另一通道的校验结果仍受其原始过期时间限制。
-        await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+        await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
     }
 }

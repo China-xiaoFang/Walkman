@@ -44,24 +44,6 @@ public static class CacheConst
     public const string AuthUser = "{0}:{1}:Auth:{2}:{3}:{4}";
 
     /// <summary>
-    /// 图片验证码
-    /// </summary>
-    /// <remarks>{0}验证码Key</remarks>
-    public const string ImageCaptcha = "Captcha:{0}";
-
-    /// <summary>
-    /// 邮件
-    /// </summary>
-    /// <remarks>{0}类型，{1}邮箱</remarks>
-    public const string Mail = "Mail:{0}:{1}";
-
-    /// <summary>
-    /// 短信
-    /// </summary>
-    /// <remarks>{0}类型，{1}手机号</remarks>
-    public const string Sms = "SMS:{0}:{1}";
-
-    /// <summary>
     /// 租户登录凭证
     /// </summary>
     /// <remarks>{0}凭据Key</remarks>
@@ -84,6 +66,30 @@ public static class CacheConst
     /// </summary>
     /// <remarks>{0}账号Key，{1}客户端标识</remarks>
     public const string EditAccountVerification = "Account:EditVerification:{0}:{1}";
+
+    /// <summary>
+    /// 媒体资源播放票据
+    /// </summary>
+    /// <remarks>{0}随机票据</remarks>
+    public const string MediaAssetTicket = "MediaAsset:Ticket:{0}";
+
+    /// <summary>
+    /// 图片验证码
+    /// </summary>
+    /// <remarks>{0}验证码Key</remarks>
+    public const string ImageCaptcha = "Captcha:{0}";
+
+    /// <summary>
+    /// 邮件
+    /// </summary>
+    /// <remarks>{0}类型，{1}邮箱</remarks>
+    public const string Mail = "Mail:{0}:{1}";
+
+    /// <summary>
+    /// 短信
+    /// </summary>
+    /// <remarks>{0}类型，{1}手机号</remarks>
+    public const string Sms = "SMS:{0}:{1}";
 
     /// <summary>
     /// 管理后台
