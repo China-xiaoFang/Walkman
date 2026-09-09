@@ -177,11 +177,17 @@ public class FileApplication : IDynamicApplication
     /// <returns>文件预览响应</returns>
     private async Task<IActionResult> LocalPreview(string fileName, string size = null)
     {
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            return new NotFoundResult();
+        }
+
         if (!string.IsNullOrWhiteSpace(size))
         {
             if (!ImageSizes.ContainsKey(size))
             {
-                throw new UserFriendlyException("不支持的图片尺寸！");
+                // 不支持的图片尺寸
+                return new NotFoundResult();
             }
 
             size = $"@{size}";
@@ -195,30 +201,40 @@ public class FileApplication : IDynamicApplication
         var fileSuffix = Path.GetExtension(fileName);
         var fileIdStr = fileName[..^fileSuffix.Length];
         if (!long.TryParse(fileIdStr, out var fileId))
-            throw new UserFriendlyException("文件不存在！");
+        {
+            // 文件不存在
+            return new NotFoundResult();
+        }
 
         // 这里作为预览文件，必须禁用 AOP，所以直接使用 NEW 的方式
         using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
         var fileInfoModel = await db.Queryable<FileModel>()
             .InSingleAsync(fileId);
         if (fileInfoModel == null)
-            throw new UserFriendlyException("文件不存在！");
+        {
+            // 文件不存在
+            return new NotFoundResult();
+        }
 
         // 匿名预览仅允许图片。文档、压缩包和 HTML 等文件必须通过租户鉴权下载
         // 防止通过可猜测的 FileId 越权读取或在同源下执行活动内容
         if (!FileContext.Images.Contains(fileInfoModel.FileMimeType.ToLowerInvariant()))
         {
-            throw new UserFriendlyException("该文件不支持公开预览，请登录后下载！");
+            // 该文件不支持公开预览，请登录后下载
+            return new NotFoundResult();
         }
 
-        _httpContext.Response.Headers.CacheControl = "public,max-age=31536000";
+        _httpContext.Response.Headers.CacheControl = "public, max-age=31536000, immutable";
         _httpContext.Response.Headers.XContentTypeOptions = "nosniff";
 
         var localFileName = $"{fileInfoModel.FileId}{size}.{fileInfoModel.FileSuffix}";
 
         var localFilePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, localFileName);
         if (!System.IO.File.Exists(localFilePath))
-            throw new UserFriendlyException("文件丢失或已被删除！");
+        {
+            // 文件丢失或已被删除
+            return new NotFoundResult();
+        }
 
         var stream = new FileStream(localFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
         return new FileStreamResult(stream, fileInfoModel.FileMimeType);
@@ -231,11 +247,11 @@ public class FileApplication : IDynamicApplication
     [HttpGet("/file/media/{token}")]
     [ApiInfo("播放媒体资源", HttpRequestActionEnum.Download)]
     [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
-    public async Task<IActionResult> PreviewAudio([FromRoute, Required(ErrorMessage = "Token不能为空")] string token)
+    public async Task<IActionResult> PreviewMedia([FromRoute, Required(ErrorMessage = "Token不能为空")] string token)
     {
         if (string.IsNullOrWhiteSpace(token) || token.Length != 64)
         {
-            throw new UserFriendlyException("文件不存在！");
+            return new NotFoundResult();
         }
 
         var _cache = _httpContext.RequestServices.GetService<ICache>();
@@ -243,7 +259,8 @@ public class FileApplication : IDynamicApplication
         var ticketInfo = await _cache.GetAsync<MediaAssetTicketCacheInfo>(cacheKey);
         if (ticketInfo == null)
         {
-            throw new UserFriendlyException("文件不存在！");
+            // Ticket 不存在或已过期
+            return new NotFoundResult();
         }
 
         var _authCache = _httpContext.RequestServices.GetService<ICache<AuthCCL>>();
@@ -261,25 +278,30 @@ public class FileApplication : IDynamicApplication
             .InSingleAsync(ticketInfo.FileId);
         if (fileInfoModel == null)
         {
-            throw new UserFriendlyException("文件不存在！");
+            // 文件不存在
+            return new NotFoundResult();
         }
 
         // 仅允许音频、视频
         if (!FileContext.Audios.Contains(fileInfoModel.FileMimeType.ToLowerInvariant())
             && !FileContext.Videos.Contains(fileInfoModel.FileMimeType.ToLowerInvariant()))
         {
-            throw new UserFriendlyException("文件不存在！");
+            // 文件不存在
+            return new NotFoundResult();
         }
 
-        _httpContext.Response.Headers.CacheControl = "private,no-store";
+        _httpContext.Response.Headers.CacheControl = "private, no-store";
         _httpContext.Response.Headers.XContentTypeOptions = "nosniff";
 
         var localFilePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, fileInfoModel.FileObjectName);
         if (!System.IO.File.Exists(localFilePath))
-            throw new UserFriendlyException("文件丢失或已被删除！");
+        {
+            // 文件丢失或已被删除
+            return new NotFoundResult();
+        }
 
         var stream = new FileStream(localFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920,
-            FileOptions.Asynchronous | FileOptions.SequentialScan);
+            FileOptions.Asynchronous);
         return new FileStreamResult(stream, fileInfoModel.FileMimeType) {EnableRangeProcessing = true};
     }
 
