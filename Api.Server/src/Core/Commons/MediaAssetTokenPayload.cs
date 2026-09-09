@@ -23,9 +23,9 @@
 namespace Fast.Core;
 
 /// <summary>
-/// 媒体资源播放票据缓存信息
+/// 媒体资源访问 Token 载荷
 /// </summary>
-public class MediaAssetTicketCacheInfo
+public class MediaAssetTokenPayload
 {
     /// <summary>
     /// 文件Id
@@ -56,4 +56,9 @@ public class MediaAssetTicketCacheInfo
     /// 会话Id
     /// </summary>
     public string SessionId { get; set; }
+
+    /// <summary>
+    /// 过期时间戳，单位：秒
+    /// </summary>
+    public long ExpiresAt { get; set; }
 }

@@ -21,8 +21,12 @@
 // ------------------------------------------------------------------------
 
 using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using Fast.Center.Domain;
 using Fast.SqlSugar;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 
 namespace Fast.Core;
 
@@ -32,6 +36,9 @@ namespace Fast.Core;
 [SuppressSniffer]
 public class FileContext
 {
+    private const string MediaAssetTokenVersion = "v1";
+    private const string MediaAssetTokenSigningPurpose = "Fast:MediaAssetToken:v1";
+
     /// <summary>
     /// 图片
     /// </summary>
@@ -106,10 +113,10 @@ public class FileContext
     }
 
     /// <summary>
-    /// 创建媒体资源临时访问票据
+    /// 创建媒体资源临时访问 Token
     /// </summary>
     /// <param name="fileUrl">媒体文件地址</param>
-    /// <param name="lifetimeMinutes">票据有效期，单位：分钟，限制为 15～120 分钟</param>
+    /// <param name="lifetimeMinutes">Token 有效期，单位：分钟，限制为 15～120 分钟</param>
     /// <returns>媒体资源临时访问地址</returns>
     public static async Task<string> CreateMediaAssetTicket(string fileUrl, double lifetimeMinutes)
     {
@@ -118,7 +125,12 @@ public class FileContext
             throw new UserFriendlyException("文件地址不能为空！");
         }
 
-        // 限制媒体票据有效期，避免调用方传入异常值导致票据长期有效
+        if (!double.IsFinite(lifetimeMinutes))
+        {
+            throw new UserFriendlyException("Token有效期不正确！");
+        }
+
+        // 限制媒体 Token 有效期，避免调用方传入异常值导致 Token 长期有效
         lifetimeMinutes = Math.Clamp(lifetimeMinutes, 15L, 120L);
 
         // 提取文件路径，仅支持完整的地址
@@ -143,23 +155,95 @@ public class FileContext
         }
 
         var _user = FastContext.GetService<IUser>();
-        var _cache = FastContext.GetService<ICache>();
-
-        // 使用 256 bit 加密安全随机数生成媒体票据。
-        // Hex 编码后为 64 个字符，无法通过枚举方式有效猜测。
-        var token = Convert.ToHexStringLower(RandomNumberGenerator.GetBytes(32));
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.MediaAssetTicket, token);
-        await _cache.SetAsync(cacheKey,
-            new MediaAssetTicketCacheInfo
-            {
-                FileId = fileId,
-                AppNo = _user.AppNo,
-                TenantNo = _user.TenantNo,
-                DeviceType = _user.DeviceType,
-                EmployeeNo = _user.EmployeeNo,
-                SessionId = _user.SessionId
-            }, TimeSpan.FromMinutes(lifetimeMinutes));
+        var payload = new MediaAssetTokenPayload
+        {
+            FileId = fileId,
+            AppNo = _user.AppNo,
+            TenantNo = _user.TenantNo,
+            DeviceType = _user.DeviceType,
+            EmployeeNo = _user.EmployeeNo,
+            SessionId = _user.SessionId,
+            ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(lifetimeMinutes)
+                .ToUnixTimeSeconds()
+        };
+        var payloadText = WebEncoders.Base64UrlEncode(JsonSerializer.SerializeToUtf8Bytes(payload));
+        var signingInput = $"{MediaAssetTokenVersion}.{payloadText}";
+        var signature = CryptoUtil.HMACSHA256Encrypt(signingInput, GetMediaAssetSigningKey());
+        var token = $"{signingInput}.{signature}";
 
         return $"{uri.GetLeftPart(UriPartial.Authority)}/file/media/{token}";
+    }
+
+    /// <summary>
+    /// 验证并解析媒体资源访问 Token
+    /// </summary>
+    /// <param name="token">媒体资源访问 Token</param>
+    /// <param name="payload">验证成功后的 Token 载荷</param>
+    /// <returns>Token 签名、格式和有效期均有效时返回 <c>true</c></returns>
+    public static bool TryValidateMediaAssetToken(string token, out MediaAssetTokenPayload payload)
+    {
+        payload = null;
+        if (string.IsNullOrWhiteSpace(token) || token.Length > 2048)
+        {
+            return false;
+        }
+
+        var tokenParts = token.Split('.');
+        if (tokenParts.Length != 3 || tokenParts[0] != MediaAssetTokenVersion)
+        {
+            return false;
+        }
+
+        try
+        {
+            var signingInput = $"{tokenParts[0]}.{tokenParts[1]}";
+            var actualSignature = Encoding.ASCII.GetBytes(tokenParts[2]);
+            var expectedSignature = Encoding.ASCII.GetBytes(
+                CryptoUtil.HMACSHA256Encrypt(signingInput, GetMediaAssetSigningKey()));
+            if (!CryptographicOperations.FixedTimeEquals(actualSignature, expectedSignature))
+            {
+                return false;
+            }
+
+            payload = JsonSerializer.Deserialize<MediaAssetTokenPayload>(WebEncoders.Base64UrlDecode(tokenParts[1]));
+            if (payload == null
+                || payload.FileId <= 0
+                || string.IsNullOrWhiteSpace(payload.AppNo)
+                || string.IsNullOrWhiteSpace(payload.TenantNo)
+                || string.IsNullOrWhiteSpace(payload.EmployeeNo)
+                || string.IsNullOrWhiteSpace(payload.SessionId)
+                || payload.ExpiresAt <= DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            {
+                payload = null;
+                return false;
+            }
+
+            return true;
+        }
+        catch (FormatException)
+        {
+            payload = null;
+            return false;
+        }
+        catch (JsonException)
+        {
+            payload = null;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 获取媒体资源访问 Token 签名密钥
+    /// </summary>
+    private static string GetMediaAssetSigningKey()
+    {
+        var configuration = FastContext.GetService<IConfiguration>();
+        var issuerSigningKey = configuration["JWTSettings:IssuerSigningKey"];
+        if (string.IsNullOrWhiteSpace(issuerSigningKey))
+        {
+            throw new InvalidOperationException("JWT签名密钥未配置，无法签发或验证媒体资源访问 Token。");
+        }
+
+        return CryptoUtil.HMACSHA256Encrypt(MediaAssetTokenSigningPurpose, issuerSigningKey);
     }
 }

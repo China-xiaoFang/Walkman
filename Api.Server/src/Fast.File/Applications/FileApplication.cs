@@ -249,23 +249,15 @@ public class FileApplication : IDynamicApplication
     [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
     public async Task<IActionResult> PreviewMedia([FromRoute, Required(ErrorMessage = "Token不能为空")] string token)
     {
-        if (string.IsNullOrWhiteSpace(token) || token.Length != 64)
+        if (!FileContext.TryValidateMediaAssetToken(token, out var tokenPayload))
         {
-            return new NotFoundResult();
-        }
-
-        var _cache = _httpContext.RequestServices.GetService<ICache>();
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.MediaAssetTicket, token);
-        var ticketInfo = await _cache.GetAsync<MediaAssetTicketCacheInfo>(cacheKey);
-        if (ticketInfo == null)
-        {
-            // Ticket 不存在或已过期
+            // Token 格式、签名或有效期无效
             return new NotFoundResult();
         }
 
         var _authCache = _httpContext.RequestServices.GetService<ICache<AuthCCL>>();
-        var sessionCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, ticketInfo.AppNo, ticketInfo.TenantNo,
-            ticketInfo.DeviceType.ToString(), ticketInfo.EmployeeNo, ticketInfo.SessionId);
+        var sessionCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, tokenPayload.AppNo, tokenPayload.TenantNo,
+            tokenPayload.DeviceType.ToString(), tokenPayload.EmployeeNo, tokenPayload.SessionId);
         if (!await _authCache.ExistsAsync(sessionCacheKey))
         {
             // 这里是401
@@ -275,7 +267,7 @@ public class FileApplication : IDynamicApplication
         // 这里作为预览文件，必须禁用 AOP，所以直接使用 NEW 的方式
         using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
         var fileInfoModel = await db.Queryable<FileModel>()
-            .InSingleAsync(ticketInfo.FileId);
+            .InSingleAsync(tokenPayload.FileId);
         if (fileInfoModel == null)
         {
             // 文件不存在
