@@ -20,7 +20,7 @@
   "CorsAccessorSettings": {
     // 允许来源域名
     "WithOrigins": [
-      "http://127.0.0.1:2001"
+      "http://127.0.0.1:3001"
     ],
     // 客户端可获取的响应标头
     "WithExposedHeaders": [ "Fast-Response-Encipher" ]
