@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { onMounted, reactive } from "vue";
 import { PictureRounded } from "@element-plus/icons-vue";
 import { RegExps } from "fast-element-plus";
@@ -48,41 +47,37 @@ defineOptions({
 
 const props = withDefaults(
 	defineProps<{
-		modelValue?: string;
-		/** 图形验证码Key */
-		captchaKey?: string;
-		/** 绑定的属性名称 @default 'captchaCode' */
+		/** 表单校验字段名。 @default "captchaCode" */
 		prop?: string;
-		/** 是否强制启用；false 时由后端登录验证码开关决定。 */
+		/** 是否强制启用；false 时由后端登录验证码开关决定 */
 		isForce?: boolean;
-		/** 业务请求期间禁用输入与手动刷新。 */
+		/** 业务请求期间禁用输入与手动刷新 */
 		disabled?: boolean;
 	}>(),
 	{
-		modelValue: undefined,
-		captchaKey: undefined,
 		prop: "captchaCode",
 		isForce: false,
 		disabled: false,
 	}
 );
 
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:captchaKey": (_value: string) => true,
-});
-
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const captchaKey = useVModel(props, "captchaKey", emit, { passive: false });
+/** 用户输入的图形验证码 */
+const modelValue = defineModel<string>();
+/** 当前图形验证码的服务端标识 */
+const captchaKey = defineModel<string>("captchaKey");
 
 const state = reactive({
+	/** 是否显示图形验证码 */
 	enabled: true,
+	/** 是否正在获取验证码 */
 	loading: false,
+	/** 最近一次验证码请求是否失败 */
 	loadFailed: false,
+	/** 图形验证码图片地址或 Data URL */
 	captchaImage: undefined,
 });
 
-/** 重新获取图形验证码并清空旧答案。 */
+/** 重新获取图形验证码并清空旧答案 */
 const refresh = async () => {
 	state.loading = true;
 	state.loadFailed = false;
@@ -103,10 +98,11 @@ const refresh = async () => {
 };
 
 onMounted(() => {
-	void refresh();
+	refresh();
 });
 
 defineExpose({
+	/** 重新获取图形验证码 */
 	refresh,
 });
 </script>

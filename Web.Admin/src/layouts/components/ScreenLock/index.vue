@@ -51,8 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { tryOnMounted, tryOnUnmounted } from "@vueuse/core";
-import { reactive } from "vue";
+import { onMounted, onUnmounted, reactive } from "vue";
 import { Lock, UserFilled } from "@element-plus/icons-vue";
 import { dayjs } from "element-plus";
 import { useConfig, useUserInfo } from "@/stores";
@@ -119,14 +118,14 @@ const handleKeyDown = (event: KeyboardEvent) => {
 	}
 };
 
-tryOnMounted(() => {
+onMounted(() => {
 	handleUpdate();
 	timer && clearInterval(timer);
 	timer = setInterval(handleUpdate, 1000);
 	window.addEventListener("keydown", handleKeyDown);
 });
 
-tryOnUnmounted(() => {
+onUnmounted(() => {
 	timer && clearInterval(timer);
 	timer = null;
 	window.removeEventListener("keydown", handleKeyDown);

@@ -168,7 +168,7 @@ const handleTemplateIdDelete = (index: number) => {
 };
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -185,7 +185,7 @@ const handleConfirm = () => {
 };
 
 const detail = (recordId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await applicationOpenIdApi.queryApplicationOpenIdDetail(recordId);
 		state.formData = apiRes;
@@ -194,7 +194,7 @@ const detail = (recordId: string) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加应用OpenId";
 		state.formDisabled = false;
@@ -209,7 +209,7 @@ const add = () => {
 };
 
 const edit = (recordId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await applicationOpenIdApi.queryApplicationOpenIdDetail(recordId);

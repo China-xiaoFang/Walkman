@@ -76,9 +76,9 @@ const detectVersionUpdate = async (currentVersion: string): Promise<void> => {
  */
 export const checkVersionUpdate = (currentVersion: string, delay = 10 * 60 * 1000): void => {
 	logger.log("App", `当前版本 ${currentVersion}`);
-	void detectVersionUpdate(currentVersion);
+	detectVersionUpdate(currentVersion);
 
 	window.setInterval(() => {
-		void detectVersionUpdate(currentVersion);
+		detectVersionUpdate(currentVersion);
 	}, delay);
 };

@@ -1,18 +1,24 @@
 import { NavigationFailureType, isNavigationFailure } from "vue-router";
 import { ElNotification } from "element-plus";
 import { logger, randomString } from "@fast-china/utils";
-import { cloneDeep, pick } from "lodash";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import router from "@/router";
 import { useUserInfo } from "@/stores";
 import { layoutRoute } from "../modules/layoutRoute";
-import type { NavigationFailure, RouteLocationNormalized, RouteLocationRaw, RouteRecordRaw, RouteRecordSingleView, Router } from "vue-router";
+import type { NavigationFailure, RouteLocationNormalized, RouteLocationRaw, RouteRecordRaw, Router } from "vue-router";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
 
 const modules = import.meta.glob("/src/views/**/*.vue");
 
+/** 复制路由配置，同时保留组件加载函数。 */
+const cloneRoute = (route: RouteRecordRaw): RouteRecordRaw => ({
+	...route,
+	...(route.meta && { meta: { ...route.meta } }),
+	...(route.children && { children: route.children.map(cloneRoute) }),
+});
+
 /** 加载组件 */
-const loadComponent = (component: string): RouteRecordSingleView["component"] => {
+const loadComponent = (component: string) => {
 	if (component) {
 		if (component.includes("/")) {
 			return modules[`/src/views/${component}.vue`];
@@ -24,7 +30,7 @@ const loadComponent = (component: string): RouteRecordSingleView["component"] =>
 };
 
 /** 加载组件名称 */
-const loadComponentName = (name: string): string => {
+const loadComponentName = (name: string) => {
 	if (name) {
 		if (name.includes("/")) {
 			const cArr = name.replace(/(^|\/)index(?=\/|$)/gi, "").split("/");
@@ -43,7 +49,7 @@ const loadComponentName = (name: string): string => {
 /**
  * 组装路由
  */
-const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
+const packageMenu = (menuList: AuthMenuInfoDto[]) => {
 	const routeList: RouteRecordRaw[] = [];
 
 	for (const item of menuList) {
@@ -86,20 +92,20 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 export const handleDynamicRoute = (): void => {
 	const userInfoStore = useUserInfo();
 
-	const deepLayoutRoute = cloneDeep(layoutRoute);
+	const layoutRouteCopy = cloneRoute(layoutRoute);
 
 	// 组装路由，循环添加到 layout 中
 	const layoutRoutes = packageMenu(userInfoStore.menuList);
 	layoutRoutes.forEach((rItem) => {
-		deepLayoutRoute.children.push(rItem);
+		layoutRouteCopy.children.push(rItem);
 	});
 
 	// 尝试移除
-	if (router.hasRoute(deepLayoutRoute.name)) {
-		router.removeRoute(deepLayoutRoute.name);
+	if (router.hasRoute(layoutRouteCopy.name)) {
+		router.removeRoute(layoutRouteCopy.name);
 	}
 
-	router.addRoute(deepLayoutRoute);
+	router.addRoute(layoutRouteCopy);
 };
 
 /**
@@ -112,10 +118,6 @@ export const routerUtil = {
 	 * @param to 导航位置，同 router.push
 	 */
 	routePushSafe(router: Router, to: RouteLocationRaw): Promise<NavigationFailure | void> {
-		if (!router) {
-			logger.error("routerUtil", "useRouter undefined.");
-			return Promise.resolve();
-		}
 		return router
 			.push(to)
 			.then((failure) => {
@@ -134,7 +136,7 @@ export const routerUtil = {
 				}
 				return failure;
 			})
-			.catch((error) => {
+			.catch((error: unknown) => {
 				ElNotification({
 					message: "导航失败，路由无效！",
 					type: "error",
@@ -147,7 +149,8 @@ export const routerUtil = {
 	 * route 部分属性，解决警告
 	 */
 	pickByRoute(route: Partial<RouteLocationNormalized>): Partial<RouteLocationNormalized> {
-		return pick(route, ["name", "path", "query", "fullPath", "meta", "params"]);
+		const keys: (keyof RouteLocationNormalized)[] = ["name", "path", "query", "fullPath", "meta", "params"];
+		return Object.fromEntries(keys.filter((key) => key in route).map((key) => [key, route[key]]));
 	},
 	/**
 	 * 扁平化路由

@@ -37,10 +37,10 @@ const handleMenuClick = () => {
 		case MenuTypeEnum.Catalog:
 			break;
 		case MenuTypeEnum.Menu:
-			void router.push(props.menu.router);
+			router.push(props.menu.router);
 			break;
 		case MenuTypeEnum.Internal:
-			void router.push({
+			router.push({
 				path: "/iframe",
 				query: { url: props.menu.link },
 			});

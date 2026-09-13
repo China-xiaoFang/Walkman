@@ -13,5 +13,5 @@ const route = useRoute();
 const router = useRouter();
 
 const redirectPath = Array.isArray(route.params.path) ? route.params.path.join("/") : route.params.path;
-void router.replace({ path: `/${redirectPath}`, query: route.query });
+router.replace({ path: `/${redirectPath}`, query: route.query });
 </script>

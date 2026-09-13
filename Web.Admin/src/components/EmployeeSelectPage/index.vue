@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { employeeApi } from "@/api/services/Admin/employee";
 import type { ElSelectorOutput } from "fast-element-plus";
 
@@ -33,25 +32,14 @@ defineOptions({
 	name: "EmployeeSelectPage",
 });
 
-const props = defineProps<{
-	modelValue?: string;
-	employeeName?: string;
-	employeeNo?: string;
-	mobile?: string;
+const emit = defineEmits<{
+	change: [value: ElSelectorOutput | undefined];
 }>();
 
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:employeeName": (_value: string) => true,
-	"update:employeeNo": (_value: string) => true,
-	"update:mobile": (_value: string) => true,
-	change: (_value: ElSelectorOutput) => true,
-});
-
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const employeeName = useVModel(props, "employeeName", emit, { passive: false });
-const employeeNo = useVModel(props, "employeeNo", emit, { passive: true });
-const mobile = useVModel(props, "mobile", emit, { passive: true });
+const modelValue = defineModel<string>();
+const employeeName = defineModel<string>("employeeName");
+const employeeNo = defineModel<string>("employeeNo");
+const mobile = defineModel<string>("mobile");
 
 const handleChange = (data: ElSelectorOutput | ElSelectorOutput[]) => {
 	if (Array.isArray(data)) return;

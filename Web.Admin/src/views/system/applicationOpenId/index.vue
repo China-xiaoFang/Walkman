@@ -57,7 +57,7 @@ const handleApplicationChange = async (data: ElSelectorOutput) => {
 /** 处理删除 */
 const handleDelete = (row: QueryApplicationOpenIdPagedOutput) => {
 	const { recordId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除应用OpenId？", {
+	ElMessageBox.confirm("确定要删除应用OpenId？", {
 		type: "warning",
 	}).then(async () => {
 		await applicationOpenIdApi.deleteApplicationOpenId({ recordId, rowVersion });

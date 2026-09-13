@@ -28,7 +28,7 @@
 							more-detail
 							:request-api="loginApi.queryLoginUser"
 							@change="handleTenantChange"
-							@data-change-call-back="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
+							@data-change="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
 						>
 							<template #default="data">
 								<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">
@@ -147,7 +147,7 @@ const handleMenuChange = (menu: AuthMenuInfoDto) => {
 };
 
 const handleRefreshSystem = () => {
-	void ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
+	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
 		type: "warning",
 	}).then(() => {
 		Local.removeByPrefix("HTTP_CACHE_");
@@ -172,7 +172,7 @@ const handleTenantChange = async (data: ElSelectorOutput | ElSelectorOutput[] | 
 };
 
 const handleScreenLock = () => {
-	void ElMessageBox.prompt("请输入锁屏密码", {
+	ElMessageBox.prompt("请输入锁屏密码", {
 		showClose: false,
 		confirmButtonText: "锁定",
 		closeOnPressEscape: true,
@@ -191,7 +191,7 @@ const handleScreenLock = () => {
 };
 
 const handleLogout = () => {
-	void ElMessageBox.confirm(`确定要退出登录？`, { type: "warning" }).then(async () => {
+	ElMessageBox.confirm(`确定要退出登录？`, { type: "warning" }).then(async () => {
 		await userInfoStore.logout();
 		ElMessage.success(`退出登录成功`);
 	});

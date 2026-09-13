@@ -233,7 +233,7 @@ const handleComponentChange = (value: CascaderValue) => {
 };
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		const { formData, dialogState } = state;
 		if (formData.roleTypes?.length > 0) {
@@ -275,7 +275,7 @@ const handleFlagsEnum = () => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加菜单";
 		state.formDisabled = false;
@@ -298,7 +298,7 @@ const add = () => {
 };
 
 const edit = (menuId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await menuApi.queryMenuDetail(menuId);

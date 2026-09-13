@@ -134,7 +134,7 @@ const initWebSocket = async (): Promise<void> => {
 			// 登录失败监听
 			connection.on("LoginFail", (message: string) => {
 				userInfoStore.logoutClear();
-				void ElMessageBox.alert(message, {
+				ElMessageBox.alert(message, {
 					type: "warning",
 				});
 			});
@@ -189,8 +189,6 @@ const initWebSocket = async (): Promise<void> => {
 	} catch (error) {
 		logger.error("WebSocket", "发生异常", error);
 	}
-
-	return Promise.resolve();
 };
 
 /**
@@ -206,7 +204,6 @@ const closeWebSocket = async (): Promise<void> => {
 		}
 		await connection.stop();
 	}
-	return Promise.resolve();
 };
 
 export { connection as signalR, initWebSocket, closeWebSocket };

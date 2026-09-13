@@ -33,7 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { inject, onBeforeUnmount, shallowRef, watch } from "vue";
 import { ElMessage, formContextKey } from "element-plus";
 import { addCssUnit, definePropType, logger } from "@fast-china/utils";
@@ -47,60 +46,37 @@ defineOptions({
 });
 
 const props = defineProps({
-	/** @description v-model绑定值 */
-	modelValue: {
-		type: String,
-		default: undefined,
-	},
-	/** @description 模式 */
+	/** @description 编辑器工具栏模式 */
 	mode: {
 		type: definePropType<"default" | "simple">(String),
 		default: "default",
 	},
-	/** @description 占位符 */
+	/** @description 编辑区占位文本 */
 	placeholder: String,
-	/** @description 只读 */
+	/** @description 是否使用只读模式 */
 	readOnly: Boolean,
-	/** @description 禁用 */
+	/** @description 是否禁用编辑器 */
 	disabled: Boolean,
-	/** @description 高度 */
+	/** @description 编辑区高度 */
 	height: {
 		type: [String, Number],
 		default: 300,
 	},
 });
 
-const emit = defineEmits({
-	/** @description v-model 回调 */
-	"update:modelValue": (_value: string) => true,
-});
+/** @description 编辑器 HTML 内容 */
+const modelValue = defineModel<string>();
 
-// 编辑器实例，必须用 shallowRef，重要！
-const editorRef = shallowRef<IDomEditor>();
+/** 编辑器实例；使用 shallowRef 避免代理第三方编辑器对象 */
+const editorRef = shallowRef<IDomEditor | null>(null);
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-
-// 获取 el-form 组件上下文
+/** 所属 Element Plus 表单上下文 */
 const formContext = inject(formContextKey, undefined);
 
-watch(
-	() => formContext?.disabled,
-	(newValue) => {
-		if (newValue) editorRef.value.disable();
-		else editorRef.value.enable();
-	}
-);
-
-watch(
-	() => props.disabled,
-	(newValue) => {
-		if (newValue) editorRef.value.disable();
-		else editorRef.value.enable();
-	}
-);
-
+/** WangEditor 自定义上传成功后的资源插入函数 */
 type InsertFnType = (url: string, alt: string, href: string) => void;
 
+/** 上传图片并将返回的资源地址插入编辑器 */
 const handleUploadImage = async (file: File, insertFn: InsertFnType) => {
 	if (file.size > 5 * 1024 * 1024) {
 		ElMessage.error(`文件过大，最大允许 5MB`);
@@ -117,6 +93,7 @@ const handleUploadImage = async (file: File, insertFn: InsertFnType) => {
 	}
 };
 
+/** 上传视频并将返回的资源地址插入编辑器 */
 const handleUploadVideo = async (file: File, insertFn: InsertFnType) => {
 	if (file.size > 10 * 1024 * 1024) {
 		ElMessage.error(`文件过大，最大允许 10MB`);
@@ -133,12 +110,12 @@ const handleUploadVideo = async (file: File, insertFn: InsertFnType) => {
 	}
 };
 
-// 编辑器回调函数
+/** 保存 WangEditor 创建完成后的实例 */
 const handleCreated = (editor: IDomEditor) => {
-	// 记录 editor 实例，重要！
 	editorRef.value = editor;
 };
 
+/** 将 WangEditor 的自定义提示映射为 Element Plus 消息 */
 const handleCustomAlert = (info: string, type: string) => {
 	switch (type) {
 		case "success":
@@ -157,14 +134,32 @@ const handleCustomAlert = (info: string, type: string) => {
 	}
 };
 
-/** @description 插入文字 */
+/** @description 在当前光标位置插入文本 */
 const insertText = (text: string) => {
 	const editor = editorRef.value;
 	if (editor == null) return;
 	editor.insertText(text);
 };
 
-// 组件销毁时，也及时销毁编辑器，重要！
+/** 跟随所属表单的禁用状态切换编辑器可用性 */
+watch(
+	() => formContext?.disabled,
+	(newValue) => {
+		if (newValue) editorRef.value?.disable();
+		else editorRef.value?.enable();
+	}
+);
+
+/** 跟随组件 disabled 属性切换编辑器可用性 */
+watch(
+	() => props.disabled,
+	(newValue) => {
+		if (newValue) editorRef.value?.disable();
+		else editorRef.value?.enable();
+	}
+);
+
+/** 组件卸载时销毁第三方编辑器实例 */
 onBeforeUnmount(() => {
 	const editor = editorRef.value;
 	if (editor == null) return;
@@ -172,8 +167,9 @@ onBeforeUnmount(() => {
 });
 
 defineExpose({
+	/** 编辑器实例 */
 	editorRef,
-	/** @description 插入文字 */
+	/** @description 在当前光标位置插入文本 */
 	insertText,
 });
 </script>

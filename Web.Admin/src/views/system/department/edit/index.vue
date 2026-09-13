@@ -102,7 +102,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -119,7 +119,7 @@ const handleConfirm = () => {
 };
 
 const detail = (departmentId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await departmentApi.queryDepartmentDetail(departmentId);
 		if (apiRes.parentId === "0") {
@@ -131,7 +131,7 @@ const detail = (departmentId: string) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加部门";
 		state.formDisabled = false;
@@ -144,7 +144,7 @@ const add = () => {
 };
 
 const edit = (departmentId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await departmentApi.queryDepartmentDetail(departmentId);

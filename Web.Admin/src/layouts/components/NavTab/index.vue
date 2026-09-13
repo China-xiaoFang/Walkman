@@ -115,12 +115,11 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from "@vueuse/core";
 import { markRaw, nextTick, onMounted, reactive, ref, useTemplateRef } from "vue";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 import { ArrowDown, ArrowLeft, ArrowRight, Close, DArrowLeft, DArrowRight, Minus, Monitor, PriceTag, Refresh } from "@element-plus/icons-vue";
 import { Exit, FullScreen, FullScreenExit } from "@fast-element-plus/icons-vue";
-import { addCssUnit, withDefineType } from "@fast-china/utils";
+import { addCssUnit, useResizeObserver, withDefineType } from "@fast-china/utils";
 import { routerUtil } from "@/router";
 import { useConfig, useNavTabs } from "@/stores";
 import type { DropdownInstance, ElScrollbar } from "element-plus";
@@ -294,7 +293,7 @@ const handleScroll = ({ scrollLeft }: { scrollLeft: number }) => {
  * 移动到目标位置
  */
 const handleMoveTo = (to?: RouteLocationNormalized) => {
-	void nextTick(() => {
+	nextTick(() => {
 		const curTo = to ?? route;
 		const findTagRef = tagRefs.value?.find((element) => element?.dataset.path === curTo.path);
 		if (findTagRef) {
@@ -321,7 +320,7 @@ const handleMoveTo = (to?: RouteLocationNormalized) => {
 const handleTabClick = (_event: MouseEvent, tag: INavTab) => {
 	if (tag.path === route.path) return;
 	// 左键
-	void routerUtil.routePushSafe(router, { path: tag.path, query: tag.query });
+	routerUtil.routePushSafe(router, { path: tag.path, query: tag.query });
 };
 
 const handleContextMenuList = (tag: INavTab, index: number) => {
@@ -364,7 +363,7 @@ onMounted(() => {
 	navTabsStore.addTab(router.currentRoute.value);
 	navTabsStore.setActiveRoute(router.currentRoute.value);
 	handleMoveTo(router.currentRoute.value);
-	void nextTick(() => {
+	nextTick(() => {
 		const wrapRef = scrollbarRef.value?.wrapRef;
 		if (!wrapRef) return;
 

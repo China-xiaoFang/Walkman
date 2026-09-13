@@ -104,7 +104,7 @@ const editFormRef = useTemplateRef<InstanceType<typeof AccountEdit>>("editFormRe
 /** 处理重置密码 */
 const handleResetPassword = (row: QueryAccountPagedOutput) => {
 	const { accountId, rowVersion } = row;
-	void ElMessageBox.confirm("确定重置密码？", {
+	ElMessageBox.confirm("确定重置密码？", {
 		type: "warning",
 	}).then(async () => {
 		await accountApi.resetPassword({
@@ -119,7 +119,7 @@ const handleResetPassword = (row: QueryAccountPagedOutput) => {
 /** 处理解锁 */
 const handleUnlock = (row: QueryAccountPagedOutput) => {
 	const { accountId, rowVersion } = row;
-	void ElMessageBox.confirm("确定解锁账号？", {
+	ElMessageBox.confirm("确定解锁账号？", {
 		type: "warning",
 	}).then(async () => {
 		await accountApi.unlock({
@@ -134,7 +134,7 @@ const handleUnlock = (row: QueryAccountPagedOutput) => {
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryAccountPagedOutput) => {
 	const { accountId, status, rowVersion } = row;
-	void ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}账号？`, {
+	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}账号？`, {
 		type: "warning",
 	}).then(async () => {
 		await accountApi.changeStatus({

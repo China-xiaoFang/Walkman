@@ -88,7 +88,7 @@ const state = reactive({
 
 const handleConfirm = async () => {
 	await faFormRef.value.validateScrollToField();
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await accountApi.changePassword(state.formData);
 		await ElMessageBox.alert("修改成功，请重新登录！", {
 			type: "success",
@@ -99,7 +99,7 @@ const handleConfirm = async () => {
 };
 
 const open = () => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		const apiRes = await accountApi.queryEditAccountDetail();
 		state.formData = {
 			rowVersion: apiRes.rowVersion,
@@ -111,7 +111,7 @@ watch(
 	() => state.formData.newPassword,
 	() => {
 		if (state.formData.confirmPassword) {
-			void faFormRef.value.validateField("confirmPassword");
+			faFormRef.value.validateField("confirmPassword");
 		} else {
 			faFormRef.value.clearValidate("confirmPassword");
 		}

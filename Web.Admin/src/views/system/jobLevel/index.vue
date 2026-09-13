@@ -47,7 +47,7 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryJobLevelP
 /** 处理删除 */
 const handleDelete = (row: QueryJobLevelPagedOutput) => {
 	const { jobLevelId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除职级？", {
+	ElMessageBox.confirm("确定要删除职级？", {
 		type: "warning",
 	}).then(async () => {
 		await jobLevelApi.deleteJobLevel({ jobLevelId, rowVersion });

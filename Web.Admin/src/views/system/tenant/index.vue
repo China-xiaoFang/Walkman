@@ -58,7 +58,7 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryTenantPag
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryTenantPagedOutput) => {
 	const { tenantId, status, rowVersion } = row;
-	void ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}租户？`, {
+	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}租户？`, {
 		type: "warning",
 	}).then(async () => {
 		await tenantApi.changeStatus({

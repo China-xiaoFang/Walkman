@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import * as FastElementPlusIconsVue from "@fast-element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
@@ -26,17 +25,12 @@ defineOptions({
 
 const props = withDefaults(
 	defineProps<{
-		modelValue?: string;
 		placeholder?: string;
 	}>(),
 	{
 		placeholder: "请选择图标",
 	}
 );
-
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-});
 
 const iconList = withDefineType<ElSelectorOutput<string>[]>([
 	{
@@ -59,5 +53,5 @@ const iconList = withDefineType<ElSelectorOutput<string>[]>([
 	},
 ]);
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+const modelValue = defineModel<string>();
 </script>

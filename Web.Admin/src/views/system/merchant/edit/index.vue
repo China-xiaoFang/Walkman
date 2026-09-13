@@ -76,7 +76,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -93,7 +93,7 @@ const handleConfirm = () => {
 };
 
 const detail = (merchantId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await merchantApi.queryMerchantDetail(merchantId);
 		state.formData = apiRes;
@@ -102,7 +102,7 @@ const detail = (merchantId: string) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加商户号";
 		state.formDisabled = false;
@@ -113,7 +113,7 @@ const add = () => {
 };
 
 const edit = (merchantId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await merchantApi.queryMerchantDetail(merchantId);

@@ -230,10 +230,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useWindowSize } from "@vueuse/core";
 import { computed, useTemplateRef } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
-import { withDefineType } from "@fast-china/utils";
+import { useWindowSize, withDefineType } from "@fast-china/utils";
 import { useConfig } from "@/stores";
 import type { componentSizes } from "element-plus";
 import type { ElSelectorOutput, FaDrawerInstance, FaTableDataRange } from "fast-element-plus";
@@ -360,10 +359,9 @@ const dataSearchRangeList: Readonly<ElSelectorOutput<FaTableDataRange>[]> = [
 ];
 
 const open = () => {
-	void faDrawerRef.value.open();
+	faDrawerRef.value.open();
 };
 
-// 暴露给父组件使用
 defineExpose({ open });
 </script>
 

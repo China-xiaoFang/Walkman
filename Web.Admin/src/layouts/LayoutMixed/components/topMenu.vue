@@ -43,9 +43,9 @@ const userInfoStore = useUserInfo();
 
 const activeMenu = ref("/dashboard");
 
-const emit = defineEmits({
-	menuChange: (_menu: AuthMenuInfoDto) => true,
-});
+const emit = defineEmits<{
+	menuChange: [menu: AuthMenuInfoDto];
+}>();
 
 /** 查找第一个叶子菜单 */
 const findFirstLeaf = (menu: AuthMenuInfoDto): AuthMenuInfoDto => {
@@ -100,10 +100,10 @@ const handleMenuClick = (item: AuthMenuInfoDto & { firstChild: AuthMenuInfoDto }
 		case MenuTypeEnum.Catalog:
 			break;
 		case MenuTypeEnum.Menu:
-			void router.push(item.firstChild.router);
+			router.push(item.firstChild.router);
 			break;
 		case MenuTypeEnum.Internal:
-			void router.push({
+			router.push({
 				path: "/iframe",
 				query: { url: item.firstChild.link },
 			});

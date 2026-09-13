@@ -52,7 +52,7 @@
 				</template>
 
 				<template #link="{ row }: { row?: QueryMenuPagedOutput }">
-					<el-link type="info" target="_blank" :href="row.link">{{ row.link }}</el-link>
+					<el-link type="info" target="_blank" rel="noopener noreferrer" :href="row.link">{{ row.link }}</el-link>
 				</template>
 
 				<!-- 表格操作 -->
@@ -98,13 +98,13 @@ const editFormRef = useTemplateRef<InstanceType<typeof MenuEdit>>("editFormRef")
 /** 应用更改 */
 const handleApplicationChange = (data: ElSelectorOutput) => {
 	fastTableRef.value.searchParam.appId = data.value;
-	void fastTableRef.value.refresh();
+	fastTableRef.value.refresh();
 };
 
 /** 处理删除 */
 const handleDelete = (row: QueryMenuPagedOutput) => {
 	const { menuId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除菜单？", {
+	ElMessageBox.confirm("确定要删除菜单？", {
 		type: "warning",
 	}).then(async () => {
 		await menuApi.deleteMenu({ menuId, rowVersion });
@@ -116,7 +116,7 @@ const handleDelete = (row: QueryMenuPagedOutput) => {
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryMenuPagedOutput) => {
 	const { menuId, status, rowVersion } = row;
-	void ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}菜单？`, {
+	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}菜单？`, {
 		type: "warning",
 	}).then(async () => {
 		await menuApi.changeStatus({

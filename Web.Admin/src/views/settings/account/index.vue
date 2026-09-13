@@ -159,11 +159,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useNow } from "@vueuse/core";
 import { computed, inject, onMounted, reactive, useTemplateRef, watch } from "vue";
 import { ElMessage, dayjs } from "element-plus";
 import { type FaButtonInstance, type FaFormInstance, RegExps } from "fast-element-plus";
-import { withDefineType } from "@fast-china/utils";
+import { useNow, withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { accountApi } from "@/api/services/Center/account";
 import { fileApi } from "@/api/services/File";
@@ -231,7 +230,7 @@ const state = reactive({
 	}),
 });
 
-const now = useNow({ interval: 1000 });
+const now = useNow();
 const mobileChanged = computed(() => state.accountFormData.mobile?.trim() !== state.initialMobile);
 const emailChanged = computed(() => state.accountFormData.email?.trim().toLowerCase() !== state.initialEmail);
 /** 手机验证码重新发送倒计时 */
@@ -243,7 +242,7 @@ const emailCountdown = computed(() => Math.min(60, Math.max(0, Math.ceil((state.
 const handleSendVerificationCode = (channel: "mobile" | "email", done?: () => void) => {
 	if (channel === "mobile" && mobileCountdown.value <= 0) {
 		const { mobile, mobileCaptchaKey, mobileCaptchaCode } = state.accountFormData;
-		void accountFaFormRef.value.validateField(["mobile", "mobileCaptchaKey", "mobileCaptchaCode"], async (isValid) => {
+		accountFaFormRef.value.validateField(["mobile", "mobileCaptchaKey", "mobileCaptchaCode"], async (isValid) => {
 			if (!isValid) {
 				done?.();
 				return;
@@ -255,7 +254,7 @@ const handleSendVerificationCode = (channel: "mobile" | "email", done?: () => vo
 					captchaCode: mobileCaptchaCode,
 				})
 				.finally(() => {
-					void mobileCaptchaRef.value?.refresh();
+					mobileCaptchaRef.value?.refresh();
 					done?.();
 				});
 			state.mobileNextSendAt = Date.now() + 60_000;
@@ -264,7 +263,7 @@ const handleSendVerificationCode = (channel: "mobile" | "email", done?: () => vo
 		});
 	} else if (channel === "email" && emailCountdown.value <= 0) {
 		const { email, emailCaptchaKey, emailCaptchaCode } = state.accountFormData;
-		void accountFaFormRef.value.validateField(["email", "emailCaptchaKey", "emailCaptchaCode"], async (isValid) => {
+		accountFaFormRef.value.validateField(["email", "emailCaptchaKey", "emailCaptchaCode"], async (isValid) => {
 			if (!isValid) {
 				done?.();
 				return;
@@ -276,7 +275,7 @@ const handleSendVerificationCode = (channel: "mobile" | "email", done?: () => vo
 					captchaCode: emailCaptchaCode,
 				})
 				.finally(() => {
-					void emailCaptchaRef.value?.refresh();
+					emailCaptchaRef.value?.refresh();
 					done?.();
 				});
 			state.emailNextSendAt = Date.now() + 60_000;

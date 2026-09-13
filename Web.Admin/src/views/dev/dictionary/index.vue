@@ -110,7 +110,7 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryDictionar
 /** 处理删除 */
 const handleDelete = (row: QueryDictionaryPagedOutput) => {
 	const { dictionaryId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除数据字典？", {
+	ElMessageBox.confirm("确定要删除数据字典？", {
 		type: "warning",
 	}).then(async () => {
 		await dictionaryApi.deleteDictionary({ dictionaryId, rowVersion });

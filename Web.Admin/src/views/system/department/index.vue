@@ -96,7 +96,7 @@ const state = reactive({
 			click: (_, { data }: { data?: ElTreeOutput }) => {
 				if (!data || typeof data.value !== "string") return;
 				const { value: orgId, data: orgData } = data;
-				void ElMessageBox.confirm("确定要删除机构？", {
+				ElMessageBox.confirm("确定要删除机构？", {
 					type: "warning",
 				}).then(async () => {
 					await organizationApi.deleteOrganization({ orgId, rowVersion: orgData?.rowVersion });
@@ -137,7 +137,7 @@ const handleOrgContextmenu = (event: MouseEvent, data: ElTreeOutput) => {
 /** 处理删除 */
 const handleDelete = (row: QueryDepartmentPagedOutput) => {
 	const { departmentId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除部门？", {
+	ElMessageBox.confirm("确定要删除部门？", {
 		type: "warning",
 	}).then(async () => {
 		await departmentApi.deleteDepartment({ departmentId, rowVersion });

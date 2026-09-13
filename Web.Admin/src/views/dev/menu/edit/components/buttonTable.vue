@@ -26,11 +26,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
-import { definePropType } from "@fast-china/utils";
 import { useApp } from "@/stores";
 import DevMenuEditButtonEdit from "./buttonEdit.vue";
 import type { EditMenuButtonInput } from "@/api/services/Center/menu/models/EditMenuButtonInput";
@@ -42,23 +40,20 @@ defineOptions({
 const props = defineProps({
 	/** @description 是否禁用 */
 	disabled: Boolean,
-	/** @description v-model绑定值 */
-	modelValue: definePropType<EditMenuButtonInput[]>([Array]),
 });
-
-const emit = defineEmits(["update:modelValue"]);
 
 const appStore = useApp();
 const editionEnum = appStore.getDictionary("EditionEnum");
 const booleanEnum = appStore.getDictionary("BooleanEnum");
 const commonStatusEnum = appStore.getDictionary("CommonStatusEnum");
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description v-model绑定值 */
+const modelValue = defineModel<EditMenuButtonInput[]>({ required: true });
 
 const editFormRef = useTemplateRef<InstanceType<typeof DevMenuEditButtonEdit>>("editFormRef");
 
 const handleDelete = (_row: EditMenuButtonInput, index: number) => {
-	void ElMessageBox.confirm("确定要删除按钮？", {
+	ElMessageBox.confirm("确定要删除按钮？", {
 		type: "warning",
 	}).then(() => {
 		modelValue.value.splice(index, 1);

@@ -79,7 +79,7 @@ const jsonContent = computed<JSONDataType | undefined>(() => {
 });
 
 const detail = (recordId?: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		const apiRes = await messageSendRecordApi.queryMessageSendRecordDetail(recordId);
 		state.formData = apiRes;
 		state.dialogTitle = `消息记录详情 - ${apiRes.receiver}`;

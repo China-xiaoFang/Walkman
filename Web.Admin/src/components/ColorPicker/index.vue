@@ -3,19 +3,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { defaultThemeColor } from "@/stores";
 
 defineOptions({
 	name: "ColorPicker",
-});
-
-const props = defineProps<{
-	modelValue?: string;
-}>();
-
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
 });
 
 const predefineColorList = [
@@ -31,5 +22,5 @@ const predefineColorList = [
 	"#AD6DEF", // 紫色
 ];
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+const modelValue = defineModel<string>();
 </script>

@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { departmentApi } from "@/api/services/Admin/department";
 import type { ElSelectorOutput } from "fast-element-plus";
 
@@ -22,18 +21,14 @@ defineOptions({
 });
 
 const props = defineProps<{
-	modelValue?: string | string[];
-	departmentName?: string;
 	orgId?: string;
 	placeholder?: string;
 }>();
 
-const emit = defineEmits({
-	"update:modelValue": (_value: string | string[]) => true,
-	"update:departmentName": (_value: string | string[]) => true,
-	change: (_value: ElSelectorOutput) => true,
-});
+const emit = defineEmits<{
+	change: [value: ElSelectorOutput];
+}>();
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const departmentName = useVModel(props, "departmentName", emit, { passive: false });
+const modelValue = defineModel<string | string[]>();
+const departmentName = defineModel<string>("departmentName");
 </script>

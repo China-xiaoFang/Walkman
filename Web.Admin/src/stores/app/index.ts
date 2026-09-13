@@ -1,4 +1,3 @@
-import { useTitle } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { reactive, shallowRef, toRefs } from "vue";
 import { ElMessageBox } from "element-plus";
@@ -53,7 +52,7 @@ export const useApp = defineStore(
 		const tableColumns = shallowRef<Map<string, FaTableColumnCtx[]>>(new Map());
 
 		/** Launch */
-		const launch = async (): Promise<void> => {
+		const launch = async () => {
 			try {
 				const publicPath = import.meta.env.VITE_PUBLIC_PATH.endsWith("/")
 					? import.meta.env.VITE_PUBLIC_PATH
@@ -90,7 +89,7 @@ export const useApp = defineStore(
 				logger.error("App", "发生异常", error);
 				// 避免 Launch 接口出现问题，如果存在缓存，也正常进入
 				if (!state.hasLaunch) {
-					void ElMessageBox.alert("系统初始化失败，请稍后刷新浏览器重试。", {
+					ElMessageBox.alert("系统初始化失败，请稍后刷新浏览器重试。", {
 						title: "系统错误",
 						type: "error",
 						showClose: false,
@@ -102,11 +101,9 @@ export const useApp = defineStore(
 				// 判断是否存在 Launch 数据
 				if (state.hasLaunch) {
 					/** 刷新页面标题 */
-					const title = useTitle();
-					title.value = state.appName;
+					document.title = state.appName;
 
-					const fastAxios = useFastAxios();
-					fastAxios.setOptions({
+					useFastAxios().setOptions({
 						timeout: state.requestTimeout,
 						requestCipher: state.requestEncipher,
 					});
@@ -151,7 +148,7 @@ export const useApp = defineStore(
 		};
 
 		/** 设置或更新表格列 */
-		const setTableColumns = (tableKey: string, columns: FaTableColumnCtx[]): void => {
+		const setTableColumns = (tableKey: string, columns: FaTableColumnCtx[]) => {
 			if (tableColumns.value.has(tableKey)) {
 				tableColumns.value.delete(tableKey);
 			}
@@ -159,7 +156,7 @@ export const useApp = defineStore(
 		};
 
 		/** 删除表格列 */
-		const deleteTableColumns = (tableKey: string): void => {
+		const deleteTableColumns = (tableKey: string) => {
 			if (tableColumns.value.has(tableKey)) {
 				tableColumns.value.delete(tableKey);
 			}

@@ -8,7 +8,7 @@ import type { App, ComponentPublicInstance } from "vue";
 
 export function loadPlugins(app: App): void {
 	// 全局异常捕获
-	app.config.errorHandler = (err, _instance: ComponentPublicInstance, _info: string): void => {
+	app.config.errorHandler = (err, _instance: ComponentPublicInstance, _info: string) => {
 		if (!err) return;
 		const errorMap: Record<string, string> = {
 			InternalError: "Javascript引擎内部错误",
@@ -34,7 +34,7 @@ export function loadPlugins(app: App): void {
 		} else {
 			const errorMessage = (errorName && errorMap[errorName]) || "未知错误";
 			console.error(err);
-			void nextTick(() => {
+			nextTick(() => {
 				ElNotification({
 					title: "系统错误",
 					message: errorMessage,

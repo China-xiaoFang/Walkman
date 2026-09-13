@@ -32,23 +32,15 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { Plus } from "@element-plus/icons-vue";
-import { definePropType } from "@fast-china/utils";
 import type { FaTableColumnAdvancedCtx } from "@/api/services/Center/table/models/FaTableColumnAdvancedCtx";
 
 defineOptions({
 	name: "DevTableConfigObjectTable",
 });
 
-const props = defineProps({
-	/** @description v-model绑定值 */
-	modelValue: definePropType<FaTableColumnAdvancedCtx[]>([Array]),
-});
-
-const emit = defineEmits(["update:modelValue"]);
-
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description v-model绑定值 */
+const modelValue = defineModel<FaTableColumnAdvancedCtx[]>({ required: true });
 
 /** 处理新增行 */
 const handleTableRowAdd = () => {

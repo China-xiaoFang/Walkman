@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" table-key="R8FWK6WH52Q" row-key="recordId" :request-api="messageSendRecordApi.queryMessageSendRecordPaged">
+		<FastTable table-key="R8FWK6WH52Q" row-key="recordId" :request-api="messageSendRecordApi.queryMessageSendRecordPaged">
 			<template #os="{ row }: { row?: QueryMessageSendRecordPagedOutput }">
 				<span>设备：{{ row.device }}</span>
 				<br />

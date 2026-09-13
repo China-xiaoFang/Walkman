@@ -53,7 +53,7 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryRolePaged
 /** 处理删除 */
 const handleDelete = (row: QueryRolePagedOutput) => {
 	const { roleId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除角色？", {
+	ElMessageBox.confirm("确定要删除角色？", {
 		type: "warning",
 	}).then(async () => {
 		await roleApi.deleteRole({ roleId, rowVersion });

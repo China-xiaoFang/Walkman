@@ -17,7 +17,6 @@
 import { computed } from "vue";
 import { tagEmits, tagProps } from "element-plus";
 import { useProps } from "@fast-china/utils";
-import { isNil } from "lodash";
 import { useApp } from "@/stores";
 
 defineOptions({
@@ -25,19 +24,21 @@ defineOptions({
 });
 
 const props = defineProps({
+	// eslint-disable-next-line @typescript-eslint/no-deprecated -- Element Plus 2.x 暂无等价的公开运行时 Props 对象替代。
 	...tagProps,
 	/** @description 字典名称 */
 	name: {
 		type: String,
 		required: true,
 	},
-	/** @description 值 */
+	/** @description 用于匹配字典项的值 */
 	value: {
 		type: [Number, String, Boolean],
 		default: undefined,
 	},
 });
 
+// eslint-disable-next-line @typescript-eslint/no-deprecated -- Element Plus 2.x 暂无等价的公开运行时 Props 对象替代。
 const elTagProps = useProps(props, tagProps, ["type"]);
 
 const emit = defineEmits({
@@ -46,8 +47,8 @@ const emit = defineEmits({
 
 const appStore = useApp();
 
-/** 字典 */
+/** 指定名称对应的字典项列表 */
 const dictionaries = computed(() => (props.name ? appStore.getDictionary(props.name) : []));
-/** 字典值 */
-const dictionary = computed(() => (isNil(props.value) ? null : dictionaries.value.find((f) => f.value === props.value)));
+/** 与当前值匹配的字典项 */
+const dictionary = computed(() => (props.value == null ? null : dictionaries.value.find((f) => f.value === props.value)));
 </script>

@@ -133,11 +133,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useNow } from "@vueuse/core";
 import { computed, reactive, useTemplateRef, watch } from "vue";
 import { ElMessage } from "element-plus";
 import { RegExps } from "fast-element-plus";
-import { withDefineType } from "@fast-china/utils";
+import { useNow, withDefineType } from "@fast-china/utils";
 import { accountApi } from "@/api/services/Center/account";
 import ImageCaptcha from "@/components/ImageCaptcha/index.vue";
 import type { FormRules } from "element-plus";
@@ -188,7 +187,7 @@ const state = reactive({
 		],
 	}),
 });
-const now = useNow({ interval: 1000 });
+const now = useNow();
 /** 验证码重新发送倒计时 */
 const countdown = computed(() => Math.min(60, Math.max(0, Math.ceil((state.nextSendAt - now.value.getTime()) / 1000))));
 
@@ -199,16 +198,16 @@ const handleChannelChange = () => {
 	state.formData.verificationCode = "";
 	state.formData.newPassword = "";
 	state.formData.confirmPassword = "";
-	void captchaRef.value?.refresh();
+	captchaRef.value?.refresh();
 };
 
 /** 发送密码重置验证码 */
 const handleSend = () => {
 	if (countdown.value > 0) return;
 	const { account, captchaKey, captchaCode } = state.formData;
-	void faFormRef.value.validateField(["account", "captchaKey", "captchaCode"], (isValid) => {
+	faFormRef.value.validateField(["account", "captchaKey", "captchaCode"], (isValid) => {
 		if (!isValid) return;
-		void faDialogRef.value
+		faDialogRef.value
 			.doLoading(async () => {
 				const apiRes = await accountApi.sendPasswordResetCode({
 					account,
@@ -221,7 +220,7 @@ const handleSend = () => {
 				ElMessage.success(apiRes.message);
 			})
 			.finally(() => {
-				void captchaRef.value?.refresh();
+				captchaRef.value?.refresh();
 			});
 	});
 };
@@ -229,9 +228,9 @@ const handleSend = () => {
 const handleConfirm = () => {
 	if (!state.verificationKey) return;
 	const { verificationCode, newPassword, confirmPassword } = state.formData;
-	void faFormRef.value.validateField(["verificationCode", "newPassword", "confirmPassword"], (isValid) => {
+	faFormRef.value.validateField(["verificationCode", "newPassword", "confirmPassword"], (isValid) => {
 		if (!isValid) return;
-		void faDialogRef.value.close(async () => {
+		faDialogRef.value.close(async () => {
 			await accountApi.resetPasswordByVerificationCode({
 				verificationKey: state.verificationKey,
 				verificationCode,
@@ -249,7 +248,7 @@ const handleClose = () => {
 };
 
 const open = () => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		handleClose();
 	});
 };
@@ -258,7 +257,7 @@ watch(
 	() => state.formData.newPassword,
 	() => {
 		if (state.formData.confirmPassword) {
-			void faFormRef.value.validateField("confirmPassword");
+			faFormRef.value.validateField("confirmPassword");
 		} else {
 			faFormRef.value.clearValidate("confirmPassword");
 		}

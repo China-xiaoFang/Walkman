@@ -145,7 +145,7 @@ let tableWatch: WatchHandle;
 const handleBack = () => {
 	tableWatch();
 	if (state.change) {
-		void ElMessageBox.confirm("确定要取消编辑？", {
+		ElMessageBox.confirm("确定要取消编辑？", {
 			type: "warning",
 		}).then(() => {
 			emit("back");
@@ -212,7 +212,7 @@ const handleOrderChange = () => {
 
 /** 处理保存 */
 const handleSave = () => {
-	void ElMessageBox.confirm("确认要保存表格配置？", {
+	ElMessageBox.confirm("确认要保存表格配置？", {
 		type: "warning",
 	}).then(async () => {
 		await tableApi.editTableColumnConfig({
@@ -232,7 +232,7 @@ const edit = (tableId: string, tableName: string, rowVersion: string) => {
 	state.tableName = tableName;
 	state.rowVersion = rowVersion;
 	state.change = false;
-	void faTableRef.value.doLoading(async () => {
+	faTableRef.value.doLoading(async () => {
 		state.tableData = await tableApi.queryTableColumnConfigDetail(tableId);
 
 		tableWatch = watch(

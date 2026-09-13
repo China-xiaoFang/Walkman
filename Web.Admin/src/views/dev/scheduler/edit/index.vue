@@ -296,7 +296,7 @@ const handleClose = () => {
 };
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		const { dialogState, formData, requestHeaderObj, requestParamsObj } = state;
 		if (formData.mailMessages?.length > 0) {
@@ -386,7 +386,7 @@ const handleCronRefer = () => {
 };
 
 const handleCronVerify = () => {
-	void faFormRef.value.validateField("cron", async (isValid) => {
+	faFormRef.value.validateField("cron", async (isValid) => {
 		if (!isValid) return;
 		const { cron } = state.formData;
 		state.cronLogs = await schedulerApi.runVerifyCron(cron);
@@ -411,7 +411,7 @@ const add = (tenantId: string, jobGroup: SchedulerJobGroupEnum) => {
 };
 
 const edit = (tenantId: string, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		const apiRes = await schedulerApi.querySchedulerJob(tenantId, {
 			jobName,
@@ -427,7 +427,7 @@ const edit = (tenantId: string, jobName: string, jobGroup: SchedulerJobGroupEnum
 };
 
 const copy = (tenantId: string, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "copy";
 		const apiRes = await schedulerApi.querySchedulerJob(tenantId, {
 			jobName,

@@ -114,7 +114,7 @@ const handleSpellName = (value: string) => {
 };
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -131,7 +131,7 @@ const handleConfirm = () => {
 };
 
 const detail = (tenantId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await tenantApi.queryTenantDetail(tenantId);
 		state.formData = apiRes;
@@ -140,7 +140,7 @@ const detail = (tenantId: string) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加租户";
 		state.formDisabled = false;
@@ -152,7 +152,7 @@ const add = () => {
 };
 
 const edit = (tenantId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await tenantApi.queryTenantDetail(tenantId);

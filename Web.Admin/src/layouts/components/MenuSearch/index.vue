@@ -145,7 +145,7 @@ const handleOpen = () => {
 
 /** dialog 打开完成 */
 const handleDialogOpened = () => {
-	void nextTick(() => {
+	nextTick(() => {
 		inputRef.value?.focus();
 	});
 };
@@ -169,12 +169,15 @@ const handleSelect = (item: ISearchItem) => {
 	state.visible = false;
 
 	switch (item.menuType) {
+		case MenuTypeEnum.Catalog:
+			break;
+
 		case MenuTypeEnum.Menu:
-			void router.push(item.router);
+			router.push(item.router);
 			break;
 
 		case MenuTypeEnum.Internal:
-			void router.push({
+			router.push({
 				path: "/iframe",
 				query: { url: item.link },
 			});
@@ -188,7 +191,7 @@ const handleSelect = (item: ISearchItem) => {
 
 /** 滚动到选中项 */
 const scrollToActive = () => {
-	void nextTick(() => {
+	nextTick(() => {
 		const el = itemRefs.value[state.activeIndex];
 		if (!el) return;
 
@@ -197,11 +200,6 @@ const scrollToActive = () => {
 		});
 	});
 };
-
-watch(
-	() => state.activeIndex,
-	() => scrollToActive()
-);
 
 /** 键盘控制 */
 const handleKeydown = (event: KeyboardEvent) => {
@@ -232,6 +230,11 @@ const handleKeydown = (event: KeyboardEvent) => {
 			break;
 	}
 };
+
+watch(
+	() => state.activeIndex,
+	() => scrollToActive()
+);
 
 onMounted(() => {
 	document.addEventListener("keydown", handleKeydown);

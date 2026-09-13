@@ -57,7 +57,7 @@
 							more-detail
 							:request-api="loginApi.queryLoginUser"
 							@change="handleTenantChange"
-							@data-change-call-back="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
+							@data-change="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
 						>
 							<template #default="data">
 								<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">
@@ -136,12 +136,11 @@
 </template>
 
 <script setup lang="ts">
-import { useWindowSize } from "@vueuse/core";
 import { computed, inject, ref, useTemplateRef, watch } from "vue";
 import { RouterView, useRouter } from "vue-router";
 import { Expand, Fold, Key, Lock, Refresh, Search, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Local, addCssUnit } from "@fast-china/utils";
+import { Local, addCssUnit, useWindowSize } from "@fast-china/utils";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { changePasswordKey, layoutConfigKey, menuSearchKey } from "@/layouts";
@@ -175,13 +174,6 @@ const useDrawerMenu = computed(() => windowSize.width.value < 992);
 /** 移动端菜单可见性 */
 const mobileMenuVisible = ref(false);
 
-watch(
-	() => router.currentRoute.value.path,
-	() => {
-		mobileMenuVisible.value = false;
-	}
-);
-
 /** 菜单切换 */
 const handleMenuToggle = () => {
 	if (useDrawerMenu.value) {
@@ -192,7 +184,7 @@ const handleMenuToggle = () => {
 };
 
 const handleRefreshSystem = () => {
-	void ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
+	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
 		type: "warning",
 	}).then(() => {
 		// 删除 HTTP 缓存数据
@@ -221,7 +213,7 @@ const handleTenantChange = async (data: ElSelectorOutput | ElSelectorOutput[]) =
 };
 
 const handleScreenLock = () => {
-	void ElMessageBox.prompt("请输入锁屏密码", {
+	ElMessageBox.prompt("请输入锁屏密码", {
 		showClose: false,
 		confirmButtonText: "锁定",
 		closeOnPressEscape: true,
@@ -240,11 +232,18 @@ const handleScreenLock = () => {
 };
 
 const handleLogout = () => {
-	void ElMessageBox.confirm(`确定要退出登录？`, { type: "warning" }).then(async () => {
+	ElMessageBox.confirm(`确定要退出登录？`, { type: "warning" }).then(async () => {
 		await userInfoStore.logout();
 		ElMessage.success(`退出登录成功`);
 	});
 };
+
+watch(
+	() => router.currentRoute.value.path,
+	() => {
+		mobileMenuVisible.value = false;
+	}
+);
 </script>
 
 <style scoped lang="scss">

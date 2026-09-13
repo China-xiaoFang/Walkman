@@ -6,9 +6,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useWindowSize } from "@vueuse/core";
 import { onMounted, reactive, watch } from "vue";
 import { RouterView } from "vue-router";
+import { useWindowSize } from "@fast-china/utils";
 import { useConfig } from "@/stores";
 import type { ConfigProviderProps } from "element-plus";
 

@@ -79,7 +79,7 @@ const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
 /** 处理强制下线 */
 const handleForceOffline = (row: TenantOnlineUserModel) => {
 	const { connectionId, mobile } = row;
-	void ElMessageBox.confirm(`确定踢掉账号：【${mobile}】`, {
+	ElMessageBox.confirm(`确定踢掉账号：【${mobile}】`, {
 		type: "warning",
 	}).then(async () => {
 		await tenantOnlineUserApi.forceOffline({

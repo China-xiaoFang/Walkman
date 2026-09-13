@@ -81,7 +81,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -98,7 +98,7 @@ const handleConfirm = () => {
 };
 
 const detail = (roleId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await roleApi.queryRoleDetail(roleId);
 		state.formData = apiRes;
@@ -108,7 +108,7 @@ const detail = (roleId: string) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加角色";
 		state.formDisabled = false;
@@ -125,7 +125,7 @@ const add = () => {
 };
 
 const edit = (roleId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await roleApi.queryRoleDetail(roleId);

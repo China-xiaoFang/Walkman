@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
 import { computed } from "vue";
 import { radioGroupEmits, radioGroupProps } from "element-plus";
 import { useProps } from "@fast-china/utils";
@@ -37,8 +36,9 @@ defineOptions({
 });
 
 const props = defineProps({
+	// eslint-disable-next-line @typescript-eslint/no-deprecated -- Element Plus 2.x 暂无等价的公开运行时 Props 对象替代。
 	...radioGroupProps,
-	/** @description 按钮 */
+	/** @description 是否使用按钮样式 */
 	button: {
 		type: Boolean,
 		default: false,
@@ -48,22 +48,19 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	/** @description v-model绑定值 */
-	modelValue: {
-		type: [String, Number, Boolean],
-		default: CommonStatusEnum.Enable,
-	},
 });
 
+// eslint-disable-next-line @typescript-eslint/no-deprecated -- Element Plus 2.x 暂无等价的公开运行时 Props 对象替代。
 const elRadioGroupProps = useProps(props, radioGroupProps, ["modelValue"]);
 
 const emit = defineEmits({
 	...radioGroupEmits,
 });
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description 当前选中的字典值 */
+const modelValue = defineModel<string | number | boolean>({ default: CommonStatusEnum.Enable });
 
 const appStore = useApp();
-/** 字典 */
+/** 当前字典中允许显示的选项 */
 const dictionaries = computed(() => (props.name ? appStore.getDictionary(props.name).filter((f) => f.show) : []));
 </script>

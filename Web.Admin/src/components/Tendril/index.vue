@@ -1,5 +1,5 @@
 <template>
-	<canvas id="canvas" ref="canvasRef" />
+	<canvas ref="canvasRef" id="canvas" />
 </template>
 
 <script setup lang="ts">
@@ -11,7 +11,7 @@ defineOptions({
 });
 
 const props = defineProps({
-	/** @description 摩擦力 */
+	/** @description 节点速度的摩擦衰减系数 */
 	friction: {
 		type: Number,
 		default: 0.5,
@@ -26,20 +26,23 @@ const props = defineProps({
 		type: Number,
 		default: 50,
 	},
-	/** @description 阻尼系数 */
+	/** @description 前一节点速度对后一节点的影响系数 */
 	dampening: {
 		type: Number,
 		default: 0.25,
 	},
-	/** @description 弹性衰减 */
+	/** @description 弹力沿节点链逐步衰减的系数 */
 	tension: {
 		type: Number,
 		default: 0.98,
 	},
 });
 
+/** 动画画布 */
 const canvasRef = useTemplateRef<HTMLCanvasElement>("canvasRef");
+/** 画布二维渲染上下文 */
 let ctx: CanvasRenderingContext2D = null;
+/** 当前动画帧请求标识 */
 let animationFrameId: number = null;
 
 const state = reactive({
@@ -48,15 +51,17 @@ const state = reactive({
 		x: window.innerWidth / 2,
 		y: window.innerHeight / 2,
 	},
-	// 所有丝带
+	/** 所有丝带 */
 	tendrils: withDefineType<Tendril[]>([]),
-	// 颜色震荡器
+	/** 控制丝带色相变化的振荡器 */
 	hue: withDefineType<Oscillator>(),
-	// 动画运行标志
+	/** 动画是否允许继续运行 */
 	running: true,
-	// 社会主义核心价值观
+	/** 点击画布时循环展示的文字 */
 	socialistCoreValues: ["富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善"],
+	/** 下一条点击文字的索引 */
 	socialistCoreValueIndex: 0,
+	/** 正在上浮并淡出的点击文字 */
 	floatingTexts: withDefineType<
 		{
 			text: string;
@@ -71,7 +76,7 @@ const state = reactive({
 class Oscillator {
 	/** 当前相位 */
 	phase = 0;
-	/** 基础偏移*/
+	/** 基础偏移 */
 	offset = 0;
 	/** 振荡频率 */
 	frequency = 0.001;
@@ -115,9 +120,8 @@ class Tendril {
 	nodes: TendrilNode[];
 
 	constructor(options: { spring: number }) {
-		// 随机化弹力
+		/* 轻微随机化弹力和摩擦力，使多条丝带的运动轨迹产生差异。 */
 		this.spring = options.spring + Math.random() * 0.1 - 0.05;
-		// 随机化摩擦力
 		this.friction = props.friction + Math.random() * 0.01 - 0.005;
 		this.nodes = [];
 		for (let i = 0; i < props.size; i++) {
@@ -180,7 +184,7 @@ const reset = () => {
 	state.tendrils = [];
 	for (let i = 0; i < props.trails; i++) {
 		const tendril = new Tendril({ spring: 0.45 + 0.025 * (i / props.trails) });
-		// 初始化节点位置
+		/* 新丝带从当前目标点开始，避免首次绘制跨越整个画布。 */
 		tendril.nodes.forEach((node) => {
 			node.x = state.target.x;
 			node.y = state.target.y;
@@ -189,29 +193,25 @@ const reset = () => {
 	}
 };
 
-/** 动画循环 */
+/** 更新并绘制丝带与上浮文字，然后安排下一动画帧 */
 const loop = () => {
 	animationFrameId = null;
 	if (!state.running || !ctx) return;
 
-	// 背景填充
+	/* 清除上一帧并使用 lighter 混合模式叠加丝带颜色。 */
 	ctx.globalCompositeOperation = "source-over";
-	// ctx.fillStyle = "rgba(8,5,16,0.4)";
-	// ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-	// 设置叠加模式
 	ctx.globalCompositeOperation = "lighter";
 	ctx.strokeStyle = `hsla(${Math.round(state.hue.update())}, 90%, 50%, 0.25)`;
 	ctx.lineWidth = 1;
 
-	// 更新并绘制每条丝带
 	for (const tendril of state.tendrils) {
 		tendril.update();
 		tendril.draw();
 	}
 
-	// 漂浮文字更新和绘制
+	/* 更新并绘制点击产生的上浮文字。 */
 	ctx.globalCompositeOperation = "source-over";
 	ctx.font = "bold 18px Arial";
 	ctx.textBaseline = "top";
@@ -260,7 +260,7 @@ const resize = () => {
 	ctx.canvas.height = window.innerHeight;
 };
 
-/** 初始化动画 */
+/** 在首次指针交互时绑定持续事件并启动动画 */
 const init = (event: MouseEvent | TouchEvent) => {
 	document.removeEventListener("mousemove", init);
 	document.removeEventListener("touchstart", init);
@@ -274,12 +274,14 @@ const init = (event: MouseEvent | TouchEvent) => {
 	if (state.running && animationFrameId === null) loop();
 };
 
+/** 页面重新获得焦点时恢复动画 */
 const start = () => {
 	if (state.running && animationFrameId !== null) return;
 	state.running = true;
 	loop();
 };
 
+/** 页面失去焦点或组件卸载时停止动画帧 */
 const stop = () => {
 	state.running = false;
 	if (animationFrameId !== null) {
@@ -288,6 +290,7 @@ const stop = () => {
 	}
 };
 
+/** 在点击位置添加下一条上浮文字 */
 const handleClick = (event: PointerEvent) => {
 	const rect = canvasRef.value.getBoundingClientRect();
 
@@ -304,7 +307,7 @@ const handleClick = (event: PointerEvent) => {
 onMounted(() => {
 	if (!canvasRef.value) return;
 
-	// 获取 2D 绘图上下文
+	/* 获取 2D 绘图上下文；不支持时不再初始化动画。 */
 	ctx = canvasRef.value.getContext("2d");
 	if (!ctx) return;
 
@@ -316,7 +319,7 @@ onMounted(() => {
 		offset: 285,
 	});
 
-	// 首次鼠标/触摸交互时启动动画
+	/* 首次鼠标或触摸交互时再启动动画，减少未交互页面的资源消耗。 */
 	document.addEventListener("mousemove", init);
 	document.addEventListener("touchstart", init);
 	document.body.addEventListener("orientationchange", resize);
@@ -324,7 +327,7 @@ onMounted(() => {
 	window.addEventListener("focus", start);
 	window.addEventListener("blur", stop);
 
-	// 设置画布尺寸
+	/* 初始化画布像素尺寸。 */
 	resize();
 });
 
@@ -342,8 +345,10 @@ onUnmounted(() => {
 	ctx = null;
 });
 
-// 暴露给父组件使用
-defineExpose({ click: handleClick });
+defineExpose({
+	/** 在指定指针位置添加上浮文字 */
+	click: handleClick,
+});
 </script>
 
 <style scoped lang="scss">

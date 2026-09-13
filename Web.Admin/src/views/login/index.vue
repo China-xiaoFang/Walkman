@@ -135,7 +135,7 @@ const handleDropdownClick = (command: string) => {
 			configStore.switchAutoThemMode();
 			break;
 		case "重置系统":
-			void ElMessageBox.confirm(
+			ElMessageBox.confirm(
 				`确定重置系统？<br/><span class="el-text el-text--danger">重置系统将清除所有缓存信息，系统将进行初始化处理，确定要继续执行吗？</span>`,
 				{
 					dangerouslyUseHTMLString: true,

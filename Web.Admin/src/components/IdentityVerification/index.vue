@@ -98,11 +98,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useNow } from "@vueuse/core";
 import { computed, nextTick, reactive, useTemplateRef, watch } from "vue";
 import { ElMessage } from "element-plus";
 import { RegExps } from "fast-element-plus";
-import { withDefineType } from "@fast-china/utils";
+import { useNow, withDefineType } from "@fast-china/utils";
 import { accountApi } from "@/api/services/Center/account";
 import { useUserInfo } from "@/stores";
 import type { FormRules } from "element-plus";
@@ -128,7 +127,9 @@ type IFormData = AccountVerificationInput & {
 };
 
 const state = reactive({
+	/** 下次允许发送手机验证码的时间戳 */
 	mobileNextSendAt: 0,
+	/** 下次允许发送邮箱验证码的时间戳 */
 	emailNextSendAt: 0,
 	formData: withDefineType<IFormData>({}),
 	formRules: withDefineType<FormRules<IFormData>>({
@@ -152,7 +153,7 @@ const state = reactive({
 	}),
 });
 
-const now = useNow({ interval: 1000 });
+const now = useNow();
 /** 手机验证码重新发送倒计时 */
 const mobileCountdown = computed(() => Math.min(60, Math.max(0, Math.ceil((state.mobileNextSendAt - now.value.getTime()) / 1000))));
 /** 邮箱验证码重新发送倒计时 */
@@ -162,9 +163,9 @@ const emailCountdown = computed(() => Math.min(60, Math.max(0, Math.ceil((state.
 const handleSend = (channel: "mobile" | "email") => {
 	if (channel === "mobile" && mobileCountdown.value <= 0) {
 		const { mobile, mobileCaptchaKey, mobileCaptchaCode } = state.formData;
-		void faFormRef.value.validateField(["mobile", "mobileCaptchaKey", "mobileCaptchaCode"], (isValid) => {
+		faFormRef.value.validateField(["mobile", "mobileCaptchaKey", "mobileCaptchaCode"], (isValid) => {
 			if (!isValid) return;
-			void faDialogRef.value
+			faDialogRef.value
 				.doLoading(async () => {
 					await accountApi.sendAccountVerificationCode({
 						account: mobile,
@@ -176,14 +177,14 @@ const handleSend = (channel: "mobile" | "email") => {
 					ElMessage.success("短信验证码已发送，5分钟内有效");
 				})
 				.finally(() => {
-					void mobileCaptchaRef.value?.refresh();
+					mobileCaptchaRef.value?.refresh();
 				});
 		});
 	} else if (channel === "email" && emailCountdown.value <= 0) {
 		const { email, emailCaptchaKey, emailCaptchaCode } = state.formData;
-		void faFormRef.value.validateField(["email", "emailCaptchaKey", "emailCaptchaCode"], (isValid) => {
+		faFormRef.value.validateField(["email", "emailCaptchaKey", "emailCaptchaCode"], (isValid) => {
 			if (!isValid) return;
-			void faDialogRef.value
+			faDialogRef.value
 				.doLoading(async () => {
 					await accountApi.sendAccountVerificationCode({
 						account: email,
@@ -195,7 +196,7 @@ const handleSend = (channel: "mobile" | "email") => {
 					ElMessage.success("邮箱验证码已发送，5分钟内有效");
 				})
 				.finally(() => {
-					void emailCaptchaRef.value?.refresh();
+					emailCaptchaRef.value?.refresh();
 				});
 		});
 	}
@@ -204,9 +205,9 @@ const handleSend = (channel: "mobile" | "email") => {
 /** 完成手机号和邮箱校验 */
 const handleConfirm = () => {
 	const { mobile, mobileVerificationCode, email, emailVerificationCode } = state.formData;
-	void faFormRef.value.validateField(["mobile", "mobileVerificationCode", "email", "emailVerificationCode"], (isValid) => {
+	faFormRef.value.validateField(["mobile", "mobileVerificationCode", "email", "emailVerificationCode"], (isValid) => {
 		if (!isValid) return;
-		void faDialogRef.value.close(async () => {
+		faDialogRef.value.close(async () => {
 			await accountApi.accountVerification({
 				mobile,
 				mobileVerificationCode,
@@ -219,13 +220,13 @@ const handleConfirm = () => {
 	});
 };
 
-/** 监听校验状态 */
+/** 在账号需要安全校验时打开弹窗并加载当前联系方式 */
 watch(
 	() => userInfoStore.identityVerification,
 	(newValue) => {
 		if (!newValue) return;
-		void nextTick(() => {
-			void faDialogRef.value.open(async () => {
+		nextTick(() => {
+			faDialogRef.value.open(async () => {
 				const apiRes = await accountApi.queryEditAccountDetail();
 				state.formData.mobile = apiRes.mobile;
 				state.formData.email = apiRes.email;

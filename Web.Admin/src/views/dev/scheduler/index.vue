@@ -344,7 +344,7 @@ const startInterval = () => {
 		state.interval = setTimeout(() => {
 			state.lastUpdateTime = new Date();
 			fetchData()
-				.catch((error) => logger.error("Admin", "刷新调度器数据失败。", error))
+				.catch((error: unknown) => logger.error("Admin", "刷新调度器数据失败。", error))
 				.finally(schedule);
 		}, 5000);
 	};
@@ -360,7 +360,7 @@ const handleJobGroupChange = async (value: SchedulerJobGroupEnum) => {
 
 /** 调度程序启动 */
 const handleStart = () => {
-	void ElMessageBox.confirm(`确定要启动【${state.schedulerDetail.schedulerName}】？`, {
+	ElMessageBox.confirm(`确定要启动【${state.schedulerDetail.schedulerName}】？`, {
 		type: "warning",
 	}).then(async () => {
 		await schedulerApi.startScheduler(state.tenantId);
@@ -372,7 +372,7 @@ const handleStart = () => {
 
 /** 调度程序停止 */
 const handleStop = () => {
-	void ElMessageBox.confirm(`确定要待机【${state.schedulerDetail.schedulerName}】？`, {
+	ElMessageBox.confirm(`确定要待机【${state.schedulerDetail.schedulerName}】？`, {
 		type: "warning",
 	}).then(async () => {
 		await schedulerApi.stopScheduler(state.tenantId);
@@ -391,7 +391,7 @@ const handleShowException = (row: SchedulerJobInfoDto) => {
 
 /** 异常删除 */
 const handleDelException = (row: SchedulerJobInfoDto) => {
-	void ElMessageBox.confirm(`确定要删除【${row.jobName}】的异常信息？`, {
+	ElMessageBox.confirm(`确定要删除【${row.jobName}】的异常信息？`, {
 		type: "warning",
 	}).then(async () => {
 		await schedulerApi.deleteSchedulerJobException(state.tenantId, {
@@ -421,7 +421,7 @@ const handleLogs = async (row: SchedulerJobInfoDto) => {
 
 /** 暂停调度作业 */
 const handleStopJob = (row: SchedulerJobInfoDto) => {
-	void ElMessageBox.confirm(`确定要暂停【${row.jobName}】？`, {
+	ElMessageBox.confirm(`确定要暂停【${row.jobName}】？`, {
 		type: "warning",
 	}).then(async () => {
 		await schedulerApi.stopSchedulerJob(state.tenantId, {
@@ -435,7 +435,7 @@ const handleStopJob = (row: SchedulerJobInfoDto) => {
 
 /** 恢复调度作业 */
 const handleResumeJob = (row: SchedulerJobInfoDto) => {
-	void ElMessageBox.confirm(`确定要恢复【${row.jobName}】？`, {
+	ElMessageBox.confirm(`确定要恢复【${row.jobName}】？`, {
 		type: "warning",
 	}).then(async () => {
 		await schedulerApi.resumeSchedulerJob(state.tenantId, {
@@ -449,7 +449,7 @@ const handleResumeJob = (row: SchedulerJobInfoDto) => {
 
 /** 执行调度作业 */
 const handleTriggerJob = (row: SchedulerJobInfoDto) => {
-	void ElMessageBox.confirm(`确定要立即执行【${row.jobName}】？`, {
+	ElMessageBox.confirm(`确定要立即执行【${row.jobName}】？`, {
 		type: "warning",
 	}).then(async () => {
 		await schedulerApi.triggerSchedulerJob(state.tenantId, {
@@ -463,7 +463,7 @@ const handleTriggerJob = (row: SchedulerJobInfoDto) => {
 
 /** 删除调度作业 */
 const handleDelJob = (row: SchedulerJobInfoDto) => {
-	void ElMessageBox.confirm(`确定要删除【${row.jobName}】？`, {
+	ElMessageBox.confirm(`确定要删除【${row.jobName}】？`, {
 		type: "warning",
 	}).then(async () => {
 		await schedulerApi.deleteSchedulerJob(state.tenantId, {
@@ -482,7 +482,7 @@ const activate = (showLoading = false) => {
 	const session = ++activeSession;
 	if (showLoading) state.loading = true;
 	fetchData()
-		.catch((error) => logger.error("Admin", "加载调度器数据失败。", error))
+		.catch((error: unknown) => logger.error("Admin", "加载调度器数据失败。", error))
 		.finally(() => {
 			if (!isActive || session !== activeSession) return;
 			state.loading = false;

@@ -1,6 +1,6 @@
 import { computed, inject, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { type FaButtonInstance, formUtil } from "fast-element-plus";
+import { type FaButtonInstance, formUtil, useOverlay } from "fast-element-plus";
 import { Local } from "@fast-china/utils";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
@@ -29,8 +29,7 @@ export type ITenantData = {
 export type IFormStep = "Account" | "TenantAccount" | "SelectTenant" | "NewAccount";
 
 /** 登录服务 */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
-export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButtonInstance>, captchaRef: Ref<InstanceType<typeof ImageCaptcha>>) => {
+const createLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButtonInstance>, captchaRef: Ref<InstanceType<typeof ImageCaptcha>>) => {
 	const userInfoStore = useUserInfo();
 
 	/** 表单数据 */
@@ -48,7 +47,7 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 	const currentTenant = computed<LoginTenantOutput>(() => tenantList.value.find((item) => item.tenant.userKey === formData.value.userKey)?.tenant);
 
 	/** 租户改变 */
-	const handleTenantChange = (value: string): void => {
+	const handleTenantChange = (value: string) => {
 		const fInfo = tenantList.value.find((f) => f.tenant.userKey === value);
 		if (!fInfo) {
 			ElMessage.error("租户信息不存在");
@@ -58,7 +57,7 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 	};
 
 	/** 租户刷新 */
-	const handleRefreshTenant = (): void => {
+	const handleRefreshTenant = () => {
 		if (tenantList.value.length === 0) {
 			formData.value = { captchaKey: formData.value.captchaKey, rememberMe: false };
 			Local.remove(cFormKey);
@@ -71,8 +70,8 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 	};
 
 	/** 租户删除 */
-	const handleTenantRemove = (index: number, value: ITenantData): void => {
-		void ElMessageBox.confirm("您确定要移除此登录信息吗？", {
+	const handleTenantRemove = (index: number, value: ITenantData) => {
+		ElMessageBox.confirm("您确定要移除此登录信息吗？", {
 			dangerouslyUseHTMLString: true,
 		}).then(() => {
 			if (value.tenant.userKey === formData.value.userKey) {
@@ -84,25 +83,25 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 	};
 
 	/** 新账号 */
-	const handleNewAccount = (): void => {
+	const handleNewAccount = () => {
 		formStep.value = "NewAccount";
 		formData.value = { captchaKey: formData.value.captchaKey, rememberMe: false };
 	};
 
 	/** 新账号返回 */
-	const handleNewAccountBack = (): void => {
+	const handleNewAccountBack = () => {
 		handleRefreshTenant();
 		formStep.value = tenantList.value.length > 0 ? "TenantAccount" : "Account";
 	};
 
 	/** 账号改变 */
-	const handleAccountChange = (): void => {
+	const handleAccountChange = () => {
 		formData.value.password = undefined;
 		formData.value.loginTicket = undefined;
 	};
 
 	/** 登录 */
-	const handleLogin = async (_event: MouseEvent, done: () => void): Promise<void> => {
+	const handleLogin = async (_event: MouseEvent, done: () => void) => {
 		const { account, password, loginTicket, userKey, rememberMe, captchaKey, captchaCode } = formData.value;
 		// 这里判断登录凭据和密码是否都为空，如果是，则提示用户输入密码
 		if (!loginTicket && !password) {
@@ -148,6 +147,8 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 					formData.value.loginTicket = apiRes.loginTicket;
 					formStep.value = "SelectTenant";
 					break;
+				case LoginStatusEnum.AuthExpired:
+				case LoginStatusEnum.NotAccount:
 				default:
 					ElMessage.error(apiRes.message || "登录失败，请稍后重试");
 			}
@@ -160,16 +161,21 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 	};
 
 	/** 表单登录 */
-	const handleFormLogin = (event: MouseEvent, done?: () => void): void => {
-		void formUtil.validate(elFormRef).then(
+	const handleFormLogin = (event: MouseEvent, done?: () => void) => {
+		formUtil.validate(elFormRef).then(
 			() => handleLogin(event, done),
 			() => done?.()
 		);
 	};
 
 	/** 回车键摁下 */
-	const handleKeyupEnter = (): void => {
-		void faButtonRef.value.doLoading(() => handleFormLogin(null));
+	const handleKeyupEnter = () => {
+		useOverlay.show();
+		faButtonRef.value.loading = true;
+		handleFormLogin(null, () => {
+			useOverlay.hide();
+			faButtonRef.value.loading = false;
+		});
 	};
 
 	return {
@@ -188,3 +194,9 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 		handleKeyupEnter,
 	};
 };
+
+export const useLogin = (
+	elFormRef: Ref<FormInstance>,
+	faButtonRef: Ref<FaButtonInstance>,
+	captchaRef: Ref<InstanceType<typeof ImageCaptcha>>
+): ReturnType<typeof createLogin> => createLogin(elFormRef, faButtonRef, captchaRef);

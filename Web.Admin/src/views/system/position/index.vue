@@ -47,7 +47,7 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryPositionP
 /** 处理删除 */
 const handleDelete = (row: QueryPositionPagedOutput) => {
 	const { positionId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除职位？", {
+	ElMessageBox.confirm("确定要删除职位？", {
 		type: "warning",
 	}).then(async () => {
 		await positionApi.deletePosition({ positionId, rowVersion });

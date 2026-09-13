@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { accountApi } from "@/api/services/Center/account";
 import type { ElSelectorOutput } from "fast-element-plus";
 
@@ -33,25 +32,14 @@ defineOptions({
 	name: "AccountSelectPage",
 });
 
-const props = defineProps<{
-	modelValue?: string;
-	mobile?: string;
-	email?: string;
-	accountKey?: string;
+const emit = defineEmits<{
+	change: [value: ElSelectorOutput | undefined];
 }>();
 
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:mobile": (_value: string) => true,
-	"update:email": (_value: string) => true,
-	"update:accountKey": (_value: string) => true,
-	change: (_value: ElSelectorOutput) => true,
-});
-
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const mobile = useVModel(props, "mobile", emit, { passive: false });
-const email = useVModel(props, "email", emit, { passive: true });
-const accountKey = useVModel(props, "accountKey", emit, { passive: true });
+const modelValue = defineModel<string>();
+const mobile = defineModel<string>("mobile");
+const email = defineModel<string>("email");
+const accountKey = defineModel<string>("accountKey");
 
 const handleChange = (data: ElSelectorOutput | ElSelectorOutput[]) => {
 	if (Array.isArray(data)) return;

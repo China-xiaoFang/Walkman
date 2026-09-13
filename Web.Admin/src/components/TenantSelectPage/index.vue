@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { tenantApi } from "@/api/services/Center/tenant";
 import Tag from "../Tag/index.vue";
 import type { ElSelectorOutput } from "fast-element-plus";
@@ -34,24 +33,14 @@ defineOptions({
 	name: "TenantSelectPage",
 });
 
-const props = defineProps<{
-	modelValue?: string;
-	tenantName?: string;
-	tenantNo?: string;
-	tenantCode?: string;
+const emit = defineEmits<{
+	change: [value: ElSelectorOutput | undefined];
 }>();
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:tenantName": (_value: string) => true,
-	"update:tenantNo": (_value: string) => true,
-	"update:tenantCode": (_value: string) => true,
-	change: (_value: ElSelectorOutput) => true,
-});
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const tenantName = useVModel(props, "tenantName", emit, { passive: false });
-const tenantNo = useVModel(props, "tenantNo", emit, { passive: true });
-const tenantCode = useVModel(props, "tenantCode", emit, { passive: true });
+const modelValue = defineModel<string>();
+const tenantName = defineModel<string>("tenantName");
+const tenantNo = defineModel<string>("tenantNo");
+const tenantCode = defineModel<string>("tenantCode");
 
 const handleChange = (data: ElSelectorOutput | ElSelectorOutput[]) => {
 	if (Array.isArray(data)) return;

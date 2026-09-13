@@ -47,7 +47,7 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryMerchantP
 /** 处理删除缓存 */
 const handleDelete = (row: QueryMerchantPagedOutput) => {
 	const { merchantId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除商户号？", {
+	ElMessageBox.confirm("确定要删除商户号？", {
 		type: "warning",
 	}).then(async () => {
 		await merchantApi.deleteMerchant({ merchantId, rowVersion });

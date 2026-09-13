@@ -48,7 +48,7 @@ const handleCustomCellClick = (_: string, { row }: { row: QueryConfigPagedOutput
 /** 处理删除缓存 */
 const handleDelete = (row: QueryConfigPagedOutput) => {
 	const { configCode } = row;
-	void ElMessageBox.confirm("确定要删除缓存？", {
+	ElMessageBox.confirm("确定要删除缓存？", {
 		type: "warning",
 	}).then(async () => {
 		await configApi.deleteConfigCache({ configCode });
@@ -59,7 +59,7 @@ const handleDelete = (row: QueryConfigPagedOutput) => {
 
 /** 处理删除全部缓存 */
 const handleDeleteAll = () => {
-	void ElMessageBox.confirm("确定要删除全部缓存？", {
+	ElMessageBox.confirm("确定要删除全部缓存？", {
 		type: "warning",
 	}).then(async () => {
 		await configApi.deleteAllConfigCache();

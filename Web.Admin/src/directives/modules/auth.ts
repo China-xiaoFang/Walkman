@@ -33,7 +33,7 @@ interface AuthVNode extends VNode {
 /**
  * 无权限提示
  */
-const notAuthMsg = (): void => {
+const notAuthMsg = () => {
 	ElMessage({
 		type: "warning",
 		message: "无操作权限",
@@ -44,7 +44,7 @@ const notAuthMsg = (): void => {
 /**
  * 无权限操作
  */
-const notAuthAction = (el: AuthElement, vNode: AuthVNode): void => {
+const notAuthAction = (el: AuthElement, vNode: AuthVNode) => {
 	const authType = vNode.props.authType || "hide";
 	el.__authType = authType;
 	// 不存在权限，根据系统配置执行

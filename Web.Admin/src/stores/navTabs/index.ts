@@ -4,30 +4,31 @@ import { withDefineType } from "@fast-china/utils";
 import router, { routerUtil } from "@/router";
 import type { RouteLocationNormalized, Router } from "vue-router";
 
+/** 导航页签保留的路由信息 */
 export type INavTab = Partial<Pick<RouteLocationNormalized, "name" | "path" | "query" | "fullPath" | "meta" | "params">>;
 
 export const useNavTabs = defineStore(
 	"navTabs",
 	() => {
 		const state = reactive({
-			/** 激活tab的index */
+			/** 当前激活页签索引 */
 			activeIndex: -1,
-			/** 最后一个激活tab的index */
+			/** 上一个激活页签索引 */
 			lastActiveIndex: -1,
-			/** 激活的tab */
+			/** 当前激活页签 */
 			activeTab: withDefineType<INavTab>(null),
-			/** 导航栏tab列表 */
+			/** 导航页签列表 */
 			navTabs: withDefineType<INavTab[]>([]),
-			/** keep-alive缓存组件名称集合 */
+			/** KeepAlive 缓存的组件名称列表 */
 			keepAliveComponentNameList: withDefineType<string[]>([]),
 			/** 内容区放大 */
 			contentLarge: false,
-			/** 当前tab是否全屏 */
+			/** 当前页签内容是否全屏 */
 			contentFull: false,
 		});
 
-		/** 重置 */
-		const $reset = (): void => {
+		/** 重置全部页签状态 */
+		const $reset = () => {
 			state.activeIndex = -1;
 			state.lastActiveIndex = -1;
 			state.activeTab = null;
@@ -37,20 +38,20 @@ export const useNavTabs = defineStore(
 			state.contentFull = false;
 		};
 
-		/** 刷新 Tab */
-		const refreshTab = (route: INavTab): void => {
+		/** 移除当前页面缓存并通过重定向重新加载页签 */
+		const refreshTab = (route: INavTab) => {
 			const fIdx = state.keepAliveComponentNameList.findIndex((f) => f === route.name.toString());
 			if (fIdx >= 0) {
 				state.keepAliveComponentNameList.splice(fIdx, 1);
 			}
-			void routerUtil.routePushSafe(router, { path: `/redirect${route.path}`, query: route.query });
+			routerUtil.routePushSafe(router, { path: `/redirect${route.path}`, query: route.query });
 		};
 
-		/** 添加 Tab */
-		const addTab = (route: INavTab): void => {
+		/** 添加或更新页签，并同步 KeepAlive 缓存 */
+		const addTab = (route: INavTab) => {
 			if (route.meta?.tab === false) return;
 			const fRouteIdx = state.navTabs.findIndex((f) => f.path === route.path);
-			//  判断警告页面数量
+			// 不存在时新增页签，已存在时更新对应路由信息
 			if (fRouteIdx === -1) {
 				state.navTabs.push(routerUtil.pickByRoute(route));
 				if (route.meta.keepAlive !== false) {
@@ -64,7 +65,6 @@ export const useNavTabs = defineStore(
 					}
 				}
 			} else {
-				// 存在更新
 				state.navTabs[fRouteIdx] = routerUtil.pickByRoute(route);
 				if (route.meta.keepAlive !== false) {
 					if (!state.keepAliveComponentNameList.includes(route.name.toString())) {
@@ -79,18 +79,18 @@ export const useNavTabs = defineStore(
 			}
 		};
 
-		/** 前往最后一个 Tab */
-		const toLastTab = (): void => {
+		/** 导航到最后一个页签；无页签时返回首页 */
+		const toLastTab = () => {
 			const lastTab = state.navTabs.slice(-1)[0];
 			if (lastTab) {
-				void router.push(lastTab?.fullPath ?? lastTab?.path);
+				router.push(lastTab?.fullPath ?? lastTab?.path);
 			} else {
-				void router.push({ path: "/" });
+				router.push({ path: "/" });
 			}
 		};
 
-		/** 关闭 Tab */
-		const closeTab = (route: INavTab): void => {
+		/** 关闭非固定页签并导航到合适的剩余页签 */
+		const closeTab = (route: INavTab) => {
 			if (route?.meta?.affix === true) return;
 			const findIndex = state.navTabs.findIndex((f) => f.path === route.path);
 			if (findIndex >= 0) {
@@ -102,18 +102,18 @@ export const useNavTabs = defineStore(
 			}
 			if (state.lastActiveIndex !== -1 && state.lastActiveIndex !== state.activeIndex && state.lastActiveIndex < state.navTabs.length) {
 				const lastTab = state.navTabs[state.lastActiveIndex];
-				void router.push(lastTab?.fullPath ?? lastTab?.path);
+				router.push(lastTab?.fullPath ?? lastTab?.path);
 			} else {
 				toLastTab();
 			}
 		};
 
 		/**
-		 * 关闭多个 Tab
-		 * @param retainRoute 保留的路由，否则关闭全部标签
-		 * @param direction 方向，可选：'left' | 'right' | false
+		 * 批量关闭页签，并始终保留固定页签
+		 * @param retainRoute 需要保留的路由，传入 false 时仅保留固定页签
+		 * @param direction 相对于保留路由关闭的方向，传入 false 时仅保留该路由
 		 */
-		const closeTabs = (retainRoute: INavTab | false = false, direction: "left" | "right" | false = false): void => {
+		const closeTabs = (retainRoute: INavTab | false = false, direction: "left" | "right" | false = false) => {
 			const affixNavTabs = state.navTabs.filter((f) => f?.meta?.affix === true);
 			if (retainRoute) {
 				const retainRouteIndex = state.navTabs.findIndex((f) => f.path === retainRoute.path);
@@ -139,8 +139,8 @@ export const useNavTabs = defineStore(
 			toLastTab();
 		};
 
-		/** 设置活动路由 */
-		const setActiveRoute = (route: INavTab): void => {
+		/** 更新当前和上一个激活页签 */
+		const setActiveRoute = (route: INavTab) => {
 			const fIdx = state.navTabs.findIndex((f) => f.path === route.path);
 			if (fIdx === -1) return;
 			state.activeTab = routerUtil.pickByRoute(route);
@@ -148,25 +148,25 @@ export const useNavTabs = defineStore(
 			state.activeIndex = fIdx;
 		};
 
-		/** 设置放大 */
-		const setContentLarge = (contentLarge: boolean): void => {
+		/** 设置内容区放大状态 */
+		const setContentLarge = (contentLarge: boolean) => {
 			state.contentLarge = contentLarge;
 		};
 
-		/** 设置全屏 */
-		const setContentFull = (contentFull: boolean): void => {
+		/** 设置当前页签内容全屏状态 */
+		const setContentFull = (contentFull: boolean) => {
 			state.contentFull = contentFull;
 		};
 
-		/** 初始化 */
-		const initNavTabs = (router: Router): void => {
-			// 直接默认查找 layout 下的路由，其余的直接忽略
+		/** 合并布局路由中的固定页签与已持久化的普通页签 */
+		const initNavTabs = (router: Router) => {
+			// 仅从 layout 的可见子路由中收集页签
 			const allRoutes = router
 				.getRoutes()
 				.find((f) => f.name === "layout")
 				?.children.filter((f) => !f.meta.hide);
 
-			// 扁平化获取固定的标签
+			// 扁平化嵌套路由后提取固定页签
 			const flRoutes = routerUtil.flattenRoutes(allRoutes);
 
 			const affixNavTabs = flRoutes.filter((f) => f.meta?.affix);

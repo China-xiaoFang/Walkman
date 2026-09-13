@@ -51,7 +51,7 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryDatabaseP
 /** 处理删除 */
 const handleDelete = (row: QueryDatabasePagedOutput) => {
 	const { mainId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除数据库？", {
+	ElMessageBox.confirm("确定要删除数据库？", {
 		type: "warning",
 	}).then(async () => {
 		await databaseApi.deleteDatabase({ mainId, rowVersion });
@@ -64,7 +64,7 @@ const handleDelete = (row: QueryDatabasePagedOutput) => {
 const handleInitDatabase = (row: QueryDatabasePagedOutput) => {
 	const { tenantId, databaseType, isInitialized } = row;
 	if (isInitialized) return;
-	void ElMessageBox.confirm("确定要初始化数据库？", {
+	ElMessageBox.confirm("确定要初始化数据库？", {
 		type: "warning",
 	}).then(async () => {
 		await tenantDatabaseApi.initDatabase({ tenantId, databaseType });

@@ -54,7 +54,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -71,7 +71,7 @@ const handleConfirm = () => {
 };
 
 const detail = (jobLevelId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await jobLevelApi.queryJobLevelDetail(jobLevelId);
 		state.formData = apiRes;
@@ -80,7 +80,7 @@ const detail = (jobLevelId: string) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加职级";
 		state.formDisabled = false;
@@ -89,7 +89,7 @@ const add = () => {
 };
 
 const edit = (jobLevelId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await jobLevelApi.queryJobLevelDetail(jobLevelId);

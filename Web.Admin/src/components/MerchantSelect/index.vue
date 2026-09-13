@@ -20,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { merchantApi } from "@/api/services/Center/merchant";
 import type { ElSelectorOutput } from "fast-element-plus";
 import type { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
@@ -30,17 +29,13 @@ defineOptions({
 });
 
 const props = defineProps<{
-	modelValue?: string;
-	merchantNo?: string;
 	merchantType?: PaymentChannelEnum;
 }>();
 
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:merchantNo": (_value: string) => true,
-	change: (_value: ElSelectorOutput) => true,
-});
+const emit = defineEmits<{
+	change: [value: ElSelectorOutput];
+}>();
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const merchantNo = useVModel(props, "merchantNo", emit, { passive: false });
+const modelValue = defineModel<string>();
+const merchantNo = defineModel<string>("merchantNo");
 </script>

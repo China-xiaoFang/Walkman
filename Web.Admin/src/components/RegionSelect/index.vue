@@ -12,7 +12,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { onMounted, reactive } from "vue";
 import { withDefineType } from "@fast-china/utils";
 import { regionApi } from "@/api/services/Center/region";
@@ -23,25 +22,14 @@ defineOptions({
 	name: "RegionSelect",
 });
 
-const props = defineProps<{
-	modelValue?: string;
-	provinceName?: string;
-	cityName?: string;
-	districtName?: string;
+const emit = defineEmits<{
+	change: [value: ElSelectorOutput<string> | undefined];
 }>();
 
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:provinceName": (_value: string) => true,
-	"update:cityName": (_value: string) => true,
-	"update:districtName": (_value: string) => true,
-	change: (_value: ElSelectorOutput<string>) => true,
-});
-
-const modelValue = useVModel(props, "modelValue", emit);
-const provinceName = useVModel(props, "provinceName", emit, { passive: true });
-const cityName = useVModel(props, "cityName", emit, { passive: true });
-const districtName = useVModel(props, "districtName", emit, { passive: true });
+const modelValue = defineModel<string>();
+const provinceName = defineModel<string>("provinceName");
+const cityName = defineModel<string>("cityName");
+const districtName = defineModel<string>("districtName");
 
 const state = reactive({
 	regionList: withDefineType<ElSelectorOutput<string>[]>([]),
@@ -56,13 +44,13 @@ const handleChange = (val: CascaderValue) => {
 		cityName.value = cityInfo?.label;
 		const districtInfo = cityInfo?.children?.find((f) => f.value === value[2]);
 		districtName.value = districtInfo?.label;
-		emit("update:modelValue", value[2]);
+		modelValue.value = value[2];
 		emit("change", districtInfo);
 	} else {
 		provinceName.value = null;
 		cityName.value = null;
 		districtName.value = null;
-		emit("update:modelValue", null);
+		modelValue.value = null;
 		emit("change", undefined);
 	}
 };

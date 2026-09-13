@@ -183,7 +183,7 @@ const handleChangeStatus = (row: QueryEmployeePagedOutput, status: EmployeeStatu
 		row.status === EmployeeStatusEnum.Resigned
 			? `确定恢复职员【${row.employeeName}】的在职状态？恢复后仍需单独启用登录账号。`
 			: `确定修改职员【${row.employeeName}】的状态？`;
-	void ElMessageBox.confirm(message, {
+	ElMessageBox.confirm(message, {
 		type: "warning",
 	}).then(async () => {
 		await employeeApi.changeStatus({
@@ -199,7 +199,7 @@ const handleChangeStatus = (row: QueryEmployeePagedOutput, status: EmployeeStatu
 /** 处理状态变更 */
 const handleChangeAccountStatus = (row: QueryEmployeePagedOutput) => {
 	const { employeeId, accountStatus, rowVersion } = row;
-	void ElMessageBox.confirm(`确定${accountStatus === CommonStatusEnum.Enable ? "禁用" : "启用"}职员【${row.employeeName}】的登录账号？`, {
+	ElMessageBox.confirm(`确定${accountStatus === CommonStatusEnum.Enable ? "禁用" : "启用"}职员【${row.employeeName}】的登录账号？`, {
 		type: "warning",
 	}).then(async () => {
 		await employeeApi.changeLoginStatus({

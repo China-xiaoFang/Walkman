@@ -53,7 +53,7 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryApplicati
 /** 处理删除 */
 const handleDelete = (row: QueryApplicationPagedOutput) => {
 	const { appId, rowVersion } = row;
-	void ElMessageBox.confirm("确定要删除应用？", {
+	ElMessageBox.confirm("确定要删除应用？", {
 		type: "warning",
 	}).then(async () => {
 		await applicationApi.deleteApplication({ appId, rowVersion });

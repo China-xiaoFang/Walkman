@@ -44,10 +44,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { reactive, useTemplateRef } from "vue";
 import { FaDialog } from "fast-element-plus";
-import { definePropType, withDefineType } from "@fast-china/utils";
+import { withDefineType } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
@@ -60,17 +59,11 @@ defineOptions({
 	name: "DevMenuEditButtonEdit",
 });
 
-const props = defineProps({
-	/** @description v-model绑定值 */
-	modelValue: definePropType<EditMenuButtonInput[]>([Array]),
-});
-
-const emit = defineEmits(["update:modelValue"]);
-
 const appStore = useApp();
 const roleTypeEnum = appStore.getDictionary("RoleTypeEnum");
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description v-model绑定值 */
+const modelValue = defineModel<EditMenuButtonInput[]>({ required: true });
 
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
@@ -93,7 +86,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		const { formData, dialogState } = state;
 		if (formData.roleTypes?.length > 0) {
@@ -132,7 +125,7 @@ const handleFlagsEnum = () => {
 };
 
 const detail = (row: EditMenuButtonInput) => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.formDisabled = true;
 		state.formData = { ...row };
 		state.dialogTitle = `按钮详情 - ${row.buttonName}`;
@@ -141,7 +134,7 @@ const detail = (row: EditMenuButtonInput) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加按钮";
 		state.formDisabled = false;
@@ -157,7 +150,7 @@ const add = () => {
 };
 
 const edit = (row: EditMenuButtonInput, index: number) => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		state.tableIndex = index;

@@ -48,7 +48,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		await employeeApi.employeeResigned(state.formData);
 		ElMessage.success("离职成功！");
@@ -57,7 +57,7 @@ const handleConfirm = () => {
 };
 
 const open = (employeeId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = {
 			employeeId: apiRes.employeeId,

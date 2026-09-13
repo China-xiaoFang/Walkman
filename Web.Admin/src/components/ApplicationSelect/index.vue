@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { applicationApi } from "@/api/services/Center/application";
 import type { ElSelectorOutput } from "fast-element-plus";
 
@@ -33,17 +32,10 @@ defineOptions({
 	name: "ApplicationSelect",
 });
 
-const props = defineProps<{
-	modelValue?: string;
-	appName?: string;
+const emit = defineEmits<{
+	change: [value: ElSelectorOutput];
 }>();
 
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:appName": (_value: string) => true,
-	change: (_value: ElSelectorOutput) => true,
-});
-
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const appName = useVModel(props, "appName", emit, { passive: false });
+const modelValue = defineModel<string>();
+const appName = defineModel<string>("appName");
 </script>

@@ -22,9 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { useWindowSize } from "@vueuse/core";
 import { computed, defineAsyncComponent, provide, useTemplateRef } from "vue";
-import { withDefineType } from "@fast-china/utils";
+import { useWindowSize, withDefineType } from "@fast-china/utils";
 import ChangePassword from "@/layouts/components/ChangePassword/index.vue";
 import LayoutConfig from "@/layouts/components/Config/index.vue";
 import MenuSearch from "@/layouts/components/MenuSearch/index.vue";

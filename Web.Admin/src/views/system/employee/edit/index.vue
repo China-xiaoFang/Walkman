@@ -130,7 +130,6 @@ import { fileApi } from "@/api/services/File";
 import type { CheckboxValueType, FormRules } from "element-plus";
 import type { AddEmployeeInput } from "@/api/services/Admin/employee/models/AddEmployeeInput";
 import type { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
-import type { EmployeeOrgModel } from "@/api/services/Admin/employee/models/EmployeeOrgModel";
 import type { QueryEmployeeDetailOutput } from "@/api/services/Admin/employee/models/QueryEmployeeDetailOutput";
 
 defineOptions({
@@ -192,7 +191,7 @@ const flattenPrimaryOrg = (apiRes: QueryEmployeeDetailOutput) => {
 };
 
 /** 将 UI 展平的单部门字段组装回 orgList 数组，用于提交 API */
-const buildOrgList = (): EmployeeOrgModel[] => {
+const buildOrgList = () => {
 	return [
 		{
 			orgId: state.formData.orgId,
@@ -221,7 +220,7 @@ const handleRoleChange = (val: CheckboxValueType[]) => {
 };
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -241,7 +240,7 @@ const handleConfirm = () => {
 };
 
 const detail = (employeeId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = apiRes;
@@ -253,7 +252,7 @@ const detail = (employeeId: string) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加职员";
 		state.formDisabled = false;
@@ -268,7 +267,7 @@ const add = () => {
 };
 
 const edit = (employeeId: string) => {
-	void faDialogRef.value.open(async () => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);

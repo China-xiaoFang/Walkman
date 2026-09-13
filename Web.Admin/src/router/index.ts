@@ -1,4 +1,3 @@
-import { useTitle } from "@vueuse/core";
 import { createRouter, createWebHistory } from "vue-router";
 import { ElMessage, ElNotification } from "element-plus";
 import { getLocalTimeGreeting, isMobileUserAgent, isTabletUserAgent, logger } from "@fast-china/utils";
@@ -19,7 +18,7 @@ const router = createRouter({
 const defaultRoutePath = defaultRoute.map((m) => m.path);
 
 /** 获取登录后的站内重定向地址 */
-const getLoginRedirect = (value: unknown): string => {
+const getLoginRedirect = (value: unknown) => {
 	const redirect = Array.isArray(value) ? value[0] : value;
 	return typeof redirect === "string" && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "";
 };
@@ -65,11 +64,10 @@ router.beforeEach(async (to, from) => {
 				return { path: "/login", query: from.query };
 			}
 			// 如果是默认路由，则不处理重定向
-			else if (defaultRoutePath.includes(to.path)) {
+			if (defaultRoutePath.includes(to.path)) {
 				return { path: "/login" };
-			} else {
-				return { path: "/login", query: { redirect: encodeURIComponent(to.redirectedFrom?.fullPath ?? to.fullPath) } };
 			}
+			return { path: "/login", query: { redirect: to.redirectedFrom?.fullPath ?? to.fullPath } };
 		}
 	} else {
 		// 判断 pinia 中的动态路由生成的状态，必须存在Token才加载
@@ -85,7 +83,7 @@ router.beforeEach(async (to, from) => {
 				userInfoStore.asyncRouterGen = true;
 
 				// 初始化 WebSocket
-				void initWebSocket();
+				initWebSocket();
 
 				// 延迟 0.5 秒显示欢迎信息
 				setTimeout(() => {
@@ -102,7 +100,7 @@ router.beforeEach(async (to, from) => {
 			} catch (error) {
 				logger.error("InitRoute", "发生异常", error);
 				// 退出登录
-				void userInfoStore.logout();
+				userInfoStore.logout();
 				return false;
 			}
 		}
@@ -110,7 +108,6 @@ router.beforeEach(async (to, from) => {
 		// 判断是否存在重定向路径，如果有则跳转
 		const redirect = getLoginRedirect(from.query.redirect);
 		if (redirect && redirect !== to.fullPath) {
-			delete from.query.redirect;
 			// 设置 replace: true，因此导航将不会留下历史记录
 			return {
 				path: redirect,
@@ -126,11 +123,10 @@ router.beforeEach(async (to, from) => {
 	}
 
 	// 刷新页面标题
-	const title = useTitle();
 	if (to.meta.title) {
-		title.value = `${to.meta.title} - ${userInfoStore.employeeName && `${userInfoStore.employeeName} - `}${userInfoStore.tenantName || appStore.appName}`;
+		document.title = `${to.meta.title} - ${userInfoStore.employeeName && `${userInfoStore.employeeName} - `}${userInfoStore.tenantName || appStore.appName}`;
 	} else {
-		title.value = `${userInfoStore.employeeName && `${userInfoStore.employeeName} - `}${userInfoStore.tenantName || appStore.appName}`;
+		document.title = `${userInfoStore.employeeName && `${userInfoStore.employeeName} - `}${userInfoStore.tenantName || appStore.appName}`;
 	}
 
 	return true;

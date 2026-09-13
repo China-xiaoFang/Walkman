@@ -56,12 +56,12 @@ export const useUserInfo = defineStore(
 		const hasWebSocket = ref(false);
 
 		/** 设置用户信息 */
-		const setUserInfo = (uInfo: GetLoginUserInfoOutput): void => {
+		const setUserInfo = (uInfo: GetLoginUserInfoOutput) => {
 			Object.assign(state, uInfo);
 		};
 
 		/** 删除 Token */
-		const removeToken = (): void => {
+		const removeToken = () => {
 			state.token = "";
 			state.refreshToken = "";
 			// 删除Token后，不用校验账号
@@ -69,7 +69,7 @@ export const useUserInfo = defineStore(
 		};
 
 		/** 设置 Token */
-		const setToken = (axiosResponse: AxiosResponse): void => {
+		const setToken = (axiosResponse: AxiosResponse) => {
 			if (!axiosResponse) return;
 			// 从请求头部中获取 Token
 			const token = (axiosResponse.headers.get as (headerName: string) => string)("access-token");
@@ -90,7 +90,7 @@ export const useUserInfo = defineStore(
 		 * 获取 Token
 		 * @description 从缓存中获取
 		 */
-		const getToken = (): { token: string; refreshToken: string } => {
+		const getToken = () => {
 			return { token: state.token, refreshToken: state.refreshToken };
 		};
 
@@ -124,23 +124,23 @@ export const useUserInfo = defineStore(
 		};
 
 		/** 登录 */
-		const login = (): void => {
+		const login = () => {
 			ElMessage.success("登录成功");
 			// 确保 getLoginUser 获取用户信息
 			asyncRouterGen.value = false;
 			// 进入系统
-			void router.push("/");
+			router.push("/");
 		};
 
-		const logoutClear = (): void => {
+		const logoutClear = () => {
 			removeToken();
 			// 删除 HTTP 缓存数据
 			Local.removeByPrefix("HTTP_CACHE_");
 			// 排除登录页面报错的问题
 			if (router.currentRoute.value.path === "/login") {
-				void router.push({ path: "/login" });
+				router.push({ path: "/login" });
 			} else {
-				void router.push({ path: "/login", query: { redirect: encodeURIComponent(router.currentRoute.value.fullPath) } });
+				router.push({ path: "/login", query: { redirect: router.currentRoute.value.fullPath } });
 			}
 		};
 
@@ -154,9 +154,9 @@ export const useUserInfo = defineStore(
 				type: 1 | 2;
 				message: string;
 			} = null
-		): Promise<void> => {
+		) => {
 			if (data?.type === 2) {
-				void ElMessageBox.alert(data?.message, {
+				ElMessageBox.alert(data?.message, {
 					type: "warning",
 				});
 				try {
@@ -180,7 +180,7 @@ export const useUserInfo = defineStore(
 				} finally {
 					logoutClear();
 					if (data !== null) {
-						void ElMessageBox.alert(data?.message, {
+						ElMessageBox.alert(data?.message, {
 							type: "warning",
 						});
 					}
@@ -189,7 +189,7 @@ export const useUserInfo = defineStore(
 		};
 
 		/** 刷新用户信息 */
-		const refreshUserInfo = async (): Promise<void> => {
+		const refreshUserInfo = async () => {
 			const apiRes = await authApi.getLoginUserInfo();
 			setUserInfo(apiRes);
 		};
