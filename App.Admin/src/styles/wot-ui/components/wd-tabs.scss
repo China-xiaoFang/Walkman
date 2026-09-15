@@ -1,0 +1,5 @@
+/* Fast 风格：强化激活标签字重，并缩短底部指示线 */
+.wd-tabs {
+	--wot-tabs-nav-font-weight-active: var(--wot-font-weight-semibold);
+	--wot-tabs-nav-line-width: 40rpx;
+}

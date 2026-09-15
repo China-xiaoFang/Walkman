@@ -1,0 +1,5 @@
+/* Fast 风格：使用页面底层填充色和圆角突出多行输入区域 */
+.wd-textarea {
+	--wot-textarea-bg: var(--wot-filled-bottom);
+	border-radius: var(--wot-radius-large);
+}

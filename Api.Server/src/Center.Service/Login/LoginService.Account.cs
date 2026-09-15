@@ -240,10 +240,6 @@ public partial class LoginService
             throw new UserFriendlyException("账号不存在！");
         }
 
-        if (!string.IsNullOrWhiteSpace(input.AccountKey)
-            && !string.Equals(input.AccountKey, accountModel.AccountKey, StringComparison.Ordinal))
-            throw new UserFriendlyException("账号与租户用户不匹配！");
-
         var dateTime = DateTime.Now;
 
         if (!string.IsNullOrWhiteSpace(input.LoginTicket))

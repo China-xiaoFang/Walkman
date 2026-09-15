@@ -1,0 +1,21 @@
+@use "./common.scss" as common;
+@use "./light.scss" as light;
+@use "./dark.scss" as dark;
+
+/* 页面公共变量，与明暗模式无关 */
+:root,
+page,
+.wd-root-portal {
+	@include common.fa-common-theme-vars;
+}
+
+page,
+.fa-layout.fa-layout__light.wot-theme-light,
+.fa-layout.fa-layout__light.wot-theme-light .wd-root-portal {
+	@include light.fa-light-theme-vars;
+}
+
+.fa-layout.fa-layout__dark.wot-theme-dark,
+.fa-layout.fa-layout__dark.wot-theme-dark .wd-root-portal {
+	@include dark.fa-dark-theme-vars;
+}

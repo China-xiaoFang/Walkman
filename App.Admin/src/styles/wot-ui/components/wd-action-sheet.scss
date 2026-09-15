@@ -1,0 +1,5 @@
+/* Fast 风格：放大操作面板和面板图片的圆角，使底部弹层与页面卡片保持一致 */
+.wd-action-sheet {
+	--wot-action-sheet-radius: var(--wot-radius-extra-large);
+	--wot-action-sheet-panel-img-radius: var(--wot-radius-large);
+}

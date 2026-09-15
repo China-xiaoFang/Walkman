@@ -23,14 +23,13 @@ defineOptions({
 	name: "IconSelect",
 });
 
-const props = withDefaults(
-	defineProps<{
-		placeholder?: string;
-	}>(),
-	{
-		placeholder: "请选择图标",
-	}
-);
+const props = defineProps({
+	/** @description 编辑区占位文本 */
+	placeholder: {
+		type: String,
+		default: "请选择图标",
+	},
+});
 
 const iconList = withDefineType<ElSelectorOutput<string>[]>([
 	{

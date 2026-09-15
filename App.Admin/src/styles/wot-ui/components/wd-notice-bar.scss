@@ -1,0 +1,4 @@
+/* Fast 风格：为页面内通知栏增加圆角，避免使用默认通栏外观 */
+.wd-notice-bar {
+	--wot-notice-bar-radius: var(--wot-radius-large);
+}

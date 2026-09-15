@@ -1,0 +1,6 @@
+/* Fast 风格：允许较长的提示内容按换行符和容器宽度正常换行 */
+.wd-toast {
+	.wd-toast__msg {
+		white-space: pre-wrap;
+	}
+}

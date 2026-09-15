@@ -124,7 +124,7 @@ const initWebSocket = async (): Promise<void> => {
 					});
 					logger.log("WebSocket", "系统连接成功...");
 				} catch (error) {
-					logger.error("WebSocket", "发生异常", error);
+					logger.error("WebSocket", error);
 					throw error;
 				} finally {
 					loadingInstance?.close();
@@ -187,7 +187,7 @@ const initWebSocket = async (): Promise<void> => {
 			await connection.start();
 		}
 	} catch (error) {
-		logger.error("WebSocket", "发生异常", error);
+		logger.error("WebSocket", error);
 	}
 };
 
@@ -200,7 +200,7 @@ const closeWebSocket = async (): Promise<void> => {
 			// WebSocket 退出登录
 			await connection.invoke("Logout");
 		} catch (error) {
-			logger.error("WebSocket", "发生异常", error);
+			logger.error("WebSocket", error);
 		}
 		await connection.stop();
 	}

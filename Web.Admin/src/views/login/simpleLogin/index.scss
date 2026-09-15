@@ -151,23 +151,23 @@
 
 .simple-orb {
 	filter: blur(16px);
+}
 
-	.simple-orb--one {
-		width: 240px;
-		height: 240px;
-		top: -100px;
-		left: -70px;
-		background: rgb(34 211 238 / 16%);
-	}
+.simple-orb.simple-orb--one {
+	width: 240px;
+	height: 240px;
+	top: -100px;
+	left: -70px;
+	background: rgb(34 211 238 / 16%);
+}
 
-	.simple-orb--two {
-		width: 210px;
-		height: 210px;
-		right: -80px;
-		bottom: -60px;
-		background: rgb(139 92 246 / 14%);
-		animation-delay: -4s;
-	}
+.simple-orb.simple-orb--two {
+	width: 210px;
+	height: 210px;
+	right: -80px;
+	bottom: -60px;
+	background: rgb(139 92 246 / 14%);
+	animation-delay: -4s;
 }
 
 html.dark .simple-login-page {

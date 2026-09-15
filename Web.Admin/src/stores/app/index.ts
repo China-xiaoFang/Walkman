@@ -86,7 +86,7 @@ export const useApp = defineStore(
 				Object.assign(state, apiRes);
 				state.hasLaunch = true;
 			} catch (error) {
-				logger.error("App", "发生异常", error);
+				logger.error("App", error);
 				// 避免 Launch 接口出现问题，如果存在缓存，也正常进入
 				if (!state.hasLaunch) {
 					ElMessageBox.alert("系统初始化失败，请稍后刷新浏览器重试。", {

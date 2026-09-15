@@ -1,11 +1,4 @@
 html.dark {
-	html,
-	body,
-	#app,
-	#watermark {
-		font-size: var(--el-font-size-extra-small);
-	}
-
 	.el-table {
 		// 深色模式下 table fixed 阴影
 		--el-table-fixed-left-column: inset 10px 0 10px -10px rgba(0, 0, 0, 0.72);

@@ -1,0 +1,74 @@
+{
+	"name": "com.fastdotnet.app",
+	"version": "1.0.0",
+	"description": "Fast.Admin mobile management application.",
+	"type": "module",
+	"license": "Apache-2.0",
+	"homepage": "https://admin.fastdotnet.com",
+	"bugs": {
+		"url": "https://gitee.com/FastDotnet/Fast.Admin/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://gitee.com/FastDotnet/Fast.Admin"
+	},
+	"author": "小方",
+	"scripts": {
+		"dev:h5": "uni -p h5",
+		"dev:app": "uni -p app",
+		"dev:mp-weixin": "uni -p mp-weixin",
+		"build:h5": "pnpm run check && uni build -p h5",
+		"build:app": "pnpm run check && uni build -p app",
+		"build:mp-weixin": "pnpm run check && uni build -p mp-weixin",
+		"typecheck": "vue-tsc --noEmit",
+		"lint": "eslint . --max-warnings 0",
+		"lint:fix": "eslint . --fix",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"check": "pnpm run typecheck && pnpm run lint && pnpm run format:check"
+	},
+	"dependencies": {
+		"@dcloudio/uni-app": "3.0.0-5020420260813003",
+		"@dcloudio/uni-app-plus": "3.0.0-5020420260813003",
+		"@dcloudio/uni-components": "3.0.0-5020420260813003",
+		"@dcloudio/uni-h5": "3.0.0-5020420260813003",
+		"@dcloudio/uni-mp-weixin": "3.0.0-5020420260813003",
+		"@fast-china/axios": "^2.0.4",
+		"@fast-china/utils": "^2.1.8",
+		"@wot-ui/ui": "^2.3.2",
+		"axios": "^1.20.0",
+		"dayjs": "^1.11.23",
+		"decimal.js": "^10.6.0",
+		"pinia": "3.0.4",
+		"pinia-plugin-persistedstate": "^4.7.1",
+		"uni-mini-router": "^0.1.6",
+		"vue": "3.4.38",
+		"z-paging": "^2.8.8"
+	},
+	"devDependencies": {
+		"@dcloudio/types": "^3.4.32",
+		"@dcloudio/uni-cli-shared": "3.0.0-5020420260813003",
+		"@dcloudio/uni-stacktracey": "3.0.0-5020420260813003",
+		"@dcloudio/uni-vue-devtools": "3.0.0-5020420260813003",
+		"@dcloudio/vite-plugin-uni": "3.0.0-5020420260813003",
+		"@fast-china/eslint-config": "^2.1.9",
+		"@types/node": "^24.13.4",
+		"@uni-helper/plugin-uni": "^0.1.0",
+		"@uni-helper/uni-types": "^1.3.0",
+		"@uni-helper/vite-plugin-uni-components": "^0.3.2",
+		"@uni-helper/vite-plugin-uni-layouts": "^0.1.11",
+		"@uni-helper/vite-plugin-uni-pages": "^0.5.0",
+		"@vue/runtime-core": "3.4.38",
+		"eslint": "^10.10.0",
+		"prettier": "^3.9.6",
+		"sass": "^1.104.1",
+		"terser": "^5.51.2",
+		"typescript": "^6.0.3",
+		"vite": "5.2.8",
+		"vue-tsc": "^3.3.10"
+	},
+	"engines": {
+		"node": "^24.18.0",
+		"pnpm": "^11.0.0"
+	}
+}

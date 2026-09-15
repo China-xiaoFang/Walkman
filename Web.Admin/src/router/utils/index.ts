@@ -141,7 +141,7 @@ export const routerUtil = {
 					message: "导航失败，路由无效！",
 					type: "error",
 				});
-				logger.error("routerUtil", "发生异常", error);
+				logger.error("routerUtil", error);
 				throw error;
 			});
 	},

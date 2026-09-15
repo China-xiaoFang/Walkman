@@ -98,7 +98,7 @@ router.beforeEach(async (to, from) => {
 				// 由于新添加的路由在本次不存在，所以进行重定向
 				return { ...(to.redirectedFrom ?? to), replace: true };
 			} catch (error) {
-				logger.error("InitRoute", "发生异常", error);
+				logger.error("InitRoute", error);
 				// 退出登录
 				userInfoStore.logout();
 				return false;

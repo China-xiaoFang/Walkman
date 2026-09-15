@@ -1,0 +1,5 @@
+/* Fast 风格：增大选择器弹层圆角，同时兼容根节点传送模式 */
+.wd-picker,
+.wd-picker__popup {
+	--wot-picker-radius: var(--wot-radius-extra-large);
+}

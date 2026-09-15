@@ -1,0 +1,194 @@
+{
+	"name": "Fast.App",
+	"appid": "__UNI__9D0B9F8",
+	"description": "Fast.Admin 移动管理端",
+	"versionName": "1.0.0",
+	"versionCode": "100000",
+	"app-plus": {
+		"compatible": {
+			"ignoreVersion": true,
+			"runtimeVersion": "5.24",
+			"compilerVersion": "5.24"
+		},
+		"usingComponents": true,
+		"nvueStyleCompiler": "uni-app",
+		"compilerVersion": 3,
+		"darkmode": true,
+		"themeLocation": "theme.json",
+		"safearea": {
+			"background": "#ffffff",
+			"backgroundDark": "#07111c",
+			"bottom": {
+				"offset": "auto"
+			}
+		},
+		"softinput": {
+			"navBar": "auto",
+			"auxiliary": false,
+			"mode": "adjustResize"
+		},
+		"splashscreen": {
+			"alwaysShowBeforeRender": true,
+			"waiting": true,
+			"autoclose": true
+		},
+		"modules": {
+			"Barcode": {},
+			"Bluetooth": {},
+			"Camera": {},
+			"VideoPlayer": {},
+			"Geolocation": {},
+			"Maps": {}
+		},
+		"distribute": {
+			"android": {
+				"permissions": [
+					"<uses-permission android:name=\"android.permission.INTERNET\" />",
+					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
+
+					"<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
+					"<uses-permission android:name=\"android.permission.VIBRATE\" />",
+					"<uses-permission android:name=\"android.permission.FLASHLIGHT\" />",
+					"<uses-permission android:name=\"android.permission.CAMERA\" />",
+
+					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\" />",
+					"<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\" />",
+					"<uses-permission android:name=\"android.permission.NEARBY_WIFI_DEVICES\" />",
+
+					"<uses-permission android:name=\"android.permission.BLUETOOTH\" android:maxSdkVersion=\"30\" />",
+					"<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\" android:maxSdkVersion=\"30\" />",
+					"<uses-permission android:name=\"android.permission.BLUETOOTH_SCAN\" />",
+					"<uses-permission android:name=\"android.permission.BLUETOOTH_CONNECT\" />",
+
+					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
+
+					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />"
+				],
+				"permissionExternalStorage": {
+					"request": "none"
+				},
+				"permissionPhoneState": {
+					"request": "none"
+				},
+				"minSdkVersion": 24,
+				"targetSdkVersion": 36,
+				"abiFilters": ["armeabi-v7a", "arm64-v8a"]
+			},
+			"ios": {
+				"dSYMs": false,
+				"idfa": false,
+				"UIBackgroundModes": ["audio"],
+				"privacyDescription": {
+					"NSCameraUsageDescription": "用于拍照和扫描二维码。",
+					"NSPhotoLibraryUsageDescription": "用于选择并上传图片。",
+					"NSPhotoLibraryAddUsageDescription": "用于保存图片到系统相册。",
+					"NSLocationWhenInUseUsageDescription": "用于获取您的位置信息。",
+					"NSBluetoothAlwaysUsageDescription": "用于发现并连接附近的蓝牙设备。"
+				}
+			},
+			"sdkConfigs": {
+				"geolocation": {
+					"system": {
+						"__platform__": ["ios", "android"]
+					}
+				},
+				"maps": {},
+				"push": {}
+			},
+			"splashscreen": {
+				"androidStyle": "common",
+				"useOriginalMsgbox": false
+			},
+			"icons": {
+				"android": {
+					"hdpi": "public/com.fastdotnet.app/72x72.png",
+					"xhdpi": "public/com.fastdotnet.app/96x96.png",
+					"xxhdpi": "public/com.fastdotnet.app/144x144.png",
+					"xxxhdpi": "public/com.fastdotnet.app/192x192.png"
+				},
+				"ios": {
+					"appstore": "public/com.fastdotnet.app/1024x1024.png",
+					"ipad": {
+						"app": "public/com.fastdotnet.app/76x76.png",
+						"app@2x": "public/com.fastdotnet.app/152x152.png",
+						"notification": "public/com.fastdotnet.app/20x20.png",
+						"notification@2x": "public/com.fastdotnet.app/40x40.png",
+						"proapp@2x": "public/com.fastdotnet.app/167x167.png",
+						"settings": "public/com.fastdotnet.app/29x29.png",
+						"settings@2x": "public/com.fastdotnet.app/58x58.png",
+						"spotlight": "public/com.fastdotnet.app/40x40.png",
+						"spotlight@2x": "public/com.fastdotnet.app/80x80.png"
+					},
+					"iphone": {
+						"app@2x": "public/com.fastdotnet.app/120x120.png",
+						"app@3x": "public/com.fastdotnet.app/180x180.png",
+						"notification@2x": "public/com.fastdotnet.app/40x40.png",
+						"notification@3x": "public/com.fastdotnet.app/60x60.png",
+						"settings@2x": "public/com.fastdotnet.app/58x58.png",
+						"settings@3x": "public/com.fastdotnet.app/87x87.png",
+						"spotlight@2x": "public/com.fastdotnet.app/80x80.png",
+						"spotlight@3x": "public/com.fastdotnet.app/120x120.png"
+					}
+				}
+			}
+		},
+		"nativePlugins": {}
+	},
+	"mp-weixin": {
+		"usingComponents": true,
+		"appid": "wx1e4b5c59fb34d91f",
+		"libVersion": "latest",
+		"mergeVirtualHostAttributes": true,
+		"darkmode": true,
+		"themeLocation": "theme.json",
+		"setting": {
+			"urlCheck": false,
+			"es6": true,
+			"minified": true,
+			"postcss": true
+		},
+		"plugins": {},
+		"permission": {
+			"scope.userLocation": {
+				"desc": "用于获取您的位置信息。"
+			}
+		},
+		"requiredPrivateInfos": ["getLocation", "chooseLocation"],
+		"requiredBackgroundModes": ["audio"],
+		"optimization": {
+			"subPackages": true
+		}
+	},
+	"h5": {
+		"title": "Fast.App",
+		"darkmode": true,
+		"themeLocation": "theme.json",
+		"devServer": {
+			"port": 3010,
+			"https": false
+		},
+		"router": {
+			"mode": "history"
+		}
+	},
+	"quickapp": {
+		"usingComponents": true
+	},
+	"mp-alipay": {
+		"usingComponents": true
+	},
+	"mp-baidu": {
+		"usingComponents": true
+	},
+	"mp-toutiao": {
+		"usingComponents": true
+	},
+	"uniStatistics": {
+		"enable": false
+	},
+	"vueVersion": "3",
+	"locale": "zh-Hans",
+	"fallbackLocale": "zh-Hans"
+}

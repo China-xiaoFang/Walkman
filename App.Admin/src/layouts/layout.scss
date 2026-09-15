@@ -1,0 +1,38 @@
+.fa-layout {
+	color: var(--wot-text-main);
+	background-color: var(--wot-filled-bottom);
+}
+
+.fa-main {
+	min-height: var(--fa-window-height, 100vh);
+	padding-left: var(--fa-area-inset-left, 0px);
+	padding-right: var(--fa-area-inset-right, 0px);
+	padding-bottom: var(--fa-area-inset-bottom, 0px);
+	:deep() {
+		.page {
+			min-height: var(--main-height);
+		}
+		.z-paging__page {
+			min-height: var(--main-height);
+		}
+	}
+
+	&.fa-main__page-scroll {
+		:deep() {
+			.page {
+				min-height: auto;
+				height: var(--main-height);
+				overflow-y: auto;
+			}
+			.z-paging__page {
+				min-height: auto;
+				height: var(--main-height);
+				overflow-y: auto;
+			}
+		}
+	}
+}
+
+.fa-main__tabBar {
+	padding-bottom: 0;
+}

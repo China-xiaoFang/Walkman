@@ -1,0 +1,4 @@
+/* Fast 风格：使用标准控件圆角，提升普通标签的辨识度 */
+.wd-tag {
+	--wot-tag-radius: var(--wot-radius-main);
+}

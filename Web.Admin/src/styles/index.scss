@@ -124,9 +124,9 @@ body,
 	justify-content: center;
 	align-items: center;
 	.icon {
-		width: 400px;
-		height: 400px;
-		margin-bottom: 50px;
+		width: min(400px, calc(100vw - 32px));
+		aspect-ratio: 1;
+		margin-bottom: clamp(20px, 5vh, 50px);
 		svg {
 			width: 100%;
 			height: 100%;

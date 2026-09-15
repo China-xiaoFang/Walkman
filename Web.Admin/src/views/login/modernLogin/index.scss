@@ -257,14 +257,14 @@
 		font-size: 18px;
 		color: var(--login-heading);
 	}
+}
 
-	.insight-stat--violet {
-		color: #8b5cf6;
-	}
+.insight-stat.insight-stat--violet {
+	color: #8b5cf6;
+}
 
-	.insight-stat--cyan {
-		color: #06b6d4;
-	}
+.insight-stat.insight-stat--cyan {
+	color: #06b6d4;
 }
 
 .modern-form-card {
@@ -303,17 +303,17 @@
 	filter: drop-shadow(0 0 7px rgb(96 165 250 / 42%));
 	transform: rotate(-14deg);
 	animation: modernBeam 8s ease-in-out infinite;
+}
 
-	.modern-beam--one {
-		top: 18%;
-		left: -18%;
-	}
+.modern-beam.modern-beam--one {
+	top: 18%;
+	left: -18%;
+}
 
-	.modern-beam--two {
-		right: -22%;
-		bottom: 20%;
-		animation-delay: -4s;
-	}
+.modern-beam.modern-beam--two {
+	right: -22%;
+	bottom: 20%;
+	animation-delay: -4s;
 }
 
 .modern-orb--one {

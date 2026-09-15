@@ -28,12 +28,6 @@ namespace Fast.Center.Service.Login.Dto;
 public class TenantLoginInput
 {
     /// <summary>
-    /// 账号Key
-    /// </summary>
-    [MaxLength(50, ErrorMessage = "账号Key不能超过50位字符")]
-    public string AccountKey { get; set; }
-
-    /// <summary>
     /// 用户Key
     /// </summary>
     [StringRequired(ErrorMessage = "用户Key不能为空"), MaxLength(50, ErrorMessage = "用户Key不能超过50位字符")]

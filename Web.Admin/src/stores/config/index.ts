@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 import { ElMessage } from "element-plus";
-import { mixHexColors, withDefineType } from "@fast-china/utils";
+import { mixHexColors, parseHexColor, withDefineType } from "@fast-china/utils";
 import { useApp } from "../app";
 import type { componentSizes } from "element-plus";
 import type { FaTableDataRange } from "fast-element-plus";
@@ -129,16 +129,20 @@ export const useConfig = defineStore(
 				color = useApp().themeColor;
 				ElMessage({ type: "success", message: `主题颜色已重置为 ${color}` });
 			}
-			// 计算主题颜色变化
-			document.documentElement.style.setProperty("--el-color-primary", color);
+			const html = document.documentElement;
+			const { red, green, blue } = parseHexColor(color);
+			html.style.setProperty("--el-color-primary", color);
+			html.style.setProperty("--el-color-primary-rgb", `${red}, ${green}, ${blue}`);
+
+			// Element Plus 深色模式的 light 色阶向页面底色混合，浅色模式向白色混合
+			const lightMixColor = layout.isDark ? "#141414" : "#ffffff";
 			for (let i = 1; i <= 9; i++) {
-				const primaryColor = layout.isDark ? mixHexColors(color, "#141414", i / 10) : mixHexColors(color, "#ffffff", i / 10);
-				document.documentElement.style.setProperty(`--el-color-primary-light-${i}`, primaryColor);
+				html.style.setProperty(`--el-color-primary-light-${i}`, mixHexColors(color, lightMixColor, i / 10));
 			}
-			for (let i = 1; i <= 9; i++) {
-				const primaryColor = layout.isDark ? mixHexColors(color, "#141414", i / 10) : mixHexColors(color, "#ffffff", i / 10);
-				document.documentElement.style.setProperty(`--el-color-primary-dark-${i}`, primaryColor);
-			}
+
+			// Element Plus 只定义 dark-2：浅色模式压暗，深色模式提亮
+			const darkMixColor = layout.isDark ? "#ffffff" : "#000000";
+			html.style.setProperty("--el-color-primary-dark-2", mixHexColors(color, darkMixColor, 0.2));
 			layout.themeColor = color;
 		};
 

@@ -1,0 +1,19 @@
+/* Fast 导航栏：吸顶并避开状态栏，滚动后切换为页面内容背景 */
+.fa-navbar {
+	position: sticky;
+	top: var(--fa-status-bar-height, 0px);
+	left: 0;
+	right: 0;
+	z-index: 1001;
+	.wd-navbar {
+		/* 使用紧凑标题规格，兼容自定义胶囊按钮布局 */
+		--wot-navbar-title-font-size: var(--wot-typography-label-size-large);
+		--wot-navbar-title-font-weight: var(--wot-font-weight-regular);
+		transition: background-color var(--fa-transition-duration);
+		&.is-scrolled {
+			/* 滚动后恢复标准内容背景和主文字颜色 */
+			--wot-navbar-bg: var(--wot-filled-oppo);
+			--wot-navbar-color: var(--wot-text-main);
+		}
+	}
+}

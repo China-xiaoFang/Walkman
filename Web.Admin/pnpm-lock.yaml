@@ -18,8 +18,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(rolldown@1.2.6)(vite@8.3.0(@types/node@24.13.4)(sass@1.104.1))
       '@fast-china/utils':
-        specifier: ^2.1.6
-        version: 2.1.6(vue@3.5.42(typescript@6.0.3))
+        specifier: ^2.1.8
+        version: 2.1.8(vue@3.5.42(typescript@6.0.3))
       '@fast-element-plus/icons-vue':
         specifier: ^2.0.2
         version: 2.0.2(vue@3.5.42(typescript@6.0.3))
@@ -45,8 +45,8 @@ importers:
         specifier: ^2.14.5
         version: 2.14.5(patch_hash=9f52f548f15f9dc02d7909fcd6c7e6bb17c650f2d664c9eddd951c472718a1cd)(vue@3.5.42(typescript@6.0.3))
       fast-element-plus:
-        specifier: ^2.0.17
-        version: 2.0.17(@element-plus/icons-vue@2.3.2(vue@3.5.42(typescript@6.0.3)))(@fast-element-plus/icons-vue@2.0.2(vue@3.5.42(typescript@6.0.3)))(element-plus@2.14.5(patch_hash=9f52f548f15f9dc02d7909fcd6c7e6bb17c650f2d664c9eddd951c472718a1cd)(vue@3.5.42(typescript@6.0.3)))(vue@3.5.42(typescript@6.0.3))
+        specifier: ^2.0.18
+        version: 2.0.18(@element-plus/icons-vue@2.3.2(vue@3.5.42(typescript@6.0.3)))(@fast-element-plus/icons-vue@2.0.2(vue@3.5.42(typescript@6.0.3)))(element-plus@2.14.5(patch_hash=9f52f548f15f9dc02d7909fcd6c7e6bb17c650f2d664c9eddd951c472718a1cd)(vue@3.5.42(typescript@6.0.3)))(vue@3.5.42(typescript@6.0.3))
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -79,8 +79,8 @@ importers:
         specifier: ^0.2.3
         version: 0.2.3
       '@vitejs/plugin-vue':
-        specifier: ^6.0.8
-        version: 6.0.8(vite@8.3.0(@types/node@24.13.4)(sass@1.104.1))(vue@3.5.42(typescript@6.0.3))
+        specifier: ^6.0.9
+        version: 6.0.9(vite@8.3.0(@types/node@24.13.4)(sass@1.104.1))(vue@3.5.42(typescript@6.0.3))
       '@vitejs/plugin-vue-jsx':
         specifier: ^5.1.6
         version: 5.1.6(supports-color@7.2.0)(vite@8.3.0(@types/node@24.13.4)(sass@1.104.1))(vue@3.5.42(typescript@6.0.3))
@@ -438,8 +438,8 @@ packages:
       eslint: ^10.0.0
       typescript: ^6.0.0
 
-  '@fast-china/utils@2.1.6':
-    resolution: {integrity: sha512-ToV/shKbe+KVltbvMZlEpAC8+6r3jaUiqEO7i9yS5THLTuDj8+AQ9R88uAmD3iOb7WrzqBdH3fl2iC8JEGZJEw==}
+  '@fast-china/utils@2.1.8':
+    resolution: {integrity: sha512-1lyp2EOv7iPEf0Mj60Bf2wzrgIwGJdPe1q7W1qaM+LXrReMY8BOhiUOtxDXZ8EJOcGEh5LeFuDmPxd2I53QXVg==}
     engines: {node: ^22.18.0 || ^24.18.0, pnpm: ^11.0.0}
     peerDependencies:
       vue: ^3.5.11
@@ -974,8 +974,8 @@ packages:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
       vue: ^3.0.0
 
-  '@vitejs/plugin-vue@6.0.8':
-    resolution: {integrity: sha512-0ZjgOg7oO6farnNGup7yvoM/YXZV84OZxHAwtflItNa/6zzQyVb5LNxyea3FEKEX2XlagIKzrlH7wwxkKgtiew==}
+  '@vitejs/plugin-vue@6.0.9':
+    resolution: {integrity: sha512-rD/MORlhaZMlXWW0rEn4FB4wMinWC0z/D7Ye160S5+Rs1mC8ZDAdcDp4SjKfUhG5t8q1ktcPVw4xuTkPRlzrSA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -1339,10 +1339,6 @@ packages:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
-  crypto-js@4.2.0:
-    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
-    deprecated: Active development of CryptoJS has been discontinued. This library is no longer maintained.
-
   cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
@@ -1664,8 +1660,8 @@ packages:
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
-  fast-element-plus@2.0.17:
-    resolution: {integrity: sha512-WQgDWEwlVocykY1okbvvlUZzSW4oMAg4OHJp9QLFpnwE6Mu5LQhBQHgIeBL5/EzvNzsZlsAq9d12mgKWJqY7kQ==}
+  fast-element-plus@2.0.18:
+    resolution: {integrity: sha512-7k1NC4lRZ/LccpFczZ8vd2sR9zdHQvma8Fb5VlJnttu5wQqix9hP0fR7f26BkP/F+dIRLJbzI9fCqL6HCsPbAg==}
     engines: {node: ^22.18.0 || ^24.18.0, pnpm: ^11.0.0}
     peerDependencies:
       '@element-plus/icons-vue': ^2.3.2
@@ -3353,9 +3349,8 @@ snapshots:
       - eslint-import-resolver-node
       - supports-color
 
-  '@fast-china/utils@2.1.6(vue@3.5.42(typescript@6.0.3))':
+  '@fast-china/utils@2.1.8(vue@3.5.42(typescript@6.0.3))':
     dependencies:
-      crypto-js: 4.2.0
       vue: 3.5.42(typescript@6.0.3)
 
   '@fast-element-plus/icons-vue@2.0.2(vue@3.5.42(typescript@6.0.3))':
@@ -3814,7 +3809,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue@6.0.8(vite@8.3.0(@types/node@24.13.4)(sass@1.104.1))(vue@3.5.42(typescript@6.0.3))':
+  '@vitejs/plugin-vue@6.0.9(vite@8.3.0(@types/node@24.13.4)(sass@1.104.1))(vue@3.5.42(typescript@6.0.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.3.0(@types/node@24.13.4)(sass@1.104.1)
@@ -4260,8 +4255,6 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  crypto-js@4.2.0: {}
-
   cssesc@3.0.0: {}
 
   csstype@3.2.3: {}
@@ -4665,7 +4658,7 @@ snapshots:
 
   fast-deep-equal@3.1.3: {}
 
-  fast-element-plus@2.0.17(@element-plus/icons-vue@2.3.2(vue@3.5.42(typescript@6.0.3)))(@fast-element-plus/icons-vue@2.0.2(vue@3.5.42(typescript@6.0.3)))(element-plus@2.14.5(patch_hash=9f52f548f15f9dc02d7909fcd6c7e6bb17c650f2d664c9eddd951c472718a1cd)(vue@3.5.42(typescript@6.0.3)))(vue@3.5.42(typescript@6.0.3)):
+  fast-element-plus@2.0.18(@element-plus/icons-vue@2.3.2(vue@3.5.42(typescript@6.0.3)))(@fast-element-plus/icons-vue@2.0.2(vue@3.5.42(typescript@6.0.3)))(element-plus@2.14.5(patch_hash=9f52f548f15f9dc02d7909fcd6c7e6bb17c650f2d664c9eddd951c472718a1cd)(vue@3.5.42(typescript@6.0.3)))(vue@3.5.42(typescript@6.0.3)):
     dependencies:
       '@element-plus/icons-vue': 2.3.2(vue@3.5.42(typescript@6.0.3))
       '@fast-element-plus/icons-vue': 2.0.2(vue@3.5.42(typescript@6.0.3))

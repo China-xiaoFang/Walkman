@@ -1,0 +1,4 @@
+/* Fast 风格：增大浮动通知圆角，使其与弹窗和页面卡片保持一致 */
+.wd-notify {
+	--wot-notify-floating-radius: var(--wot-radius-extra-large);
+}

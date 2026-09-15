@@ -1,0 +1,5 @@
+/* Fast 风格：增大日期时间选择弹层的顶部圆角，同时兼容根节点传送模式 */
+.wd-datetime-picker,
+.wd-datetime-picker__popup {
+	--wot-datetime-picker-popup-radius: var(--wot-radius-extra-large) var(--wot-radius-extra-large) 0 0;
+}

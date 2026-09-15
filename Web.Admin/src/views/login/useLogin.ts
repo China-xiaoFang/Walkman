@@ -110,7 +110,7 @@ const createLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButtonInst
 		}
 		try {
 			let apiRes: LoginOutput;
-			// 判断是否存在租户编号和用户Key，如果存在直接租户登录
+			// 判断是否存在用户Key，如果存在直接租户登录
 			if (userKey) {
 				apiRes = await loginApi.tenantLogin({ userKey, password: loginTicket ? undefined : password, loginTicket, captchaKey, captchaCode });
 			} else {

@@ -1,0 +1,21 @@
+/* Fast 风格：缩小卡片外边距，适配移动端页面的紧凑布局 */
+.wd-card {
+	--wot-card-margin-horizontal: 20rpx;
+	--wot-card-margin-bottom: 20rpx;
+}
+
+/* Fast 表格页卡片：明确标题、内容、操作区之间的分隔和留白 */
+.fa-card__page {
+	--wot-card-content-padding: 20rpx 0;
+	--wot-card-footer-padding: 15rpx 0;
+	--wot-card-footer-border-color: var(--wot-border-main);
+
+	.wd-card__title {
+		border-bottom: var(--wot-stroke-main) solid var(--wot-border-main);
+	}
+	.wd-card__footer {
+		.wd-button + .wd-button {
+			margin-left: 20rpx;
+		}
+	}
+}

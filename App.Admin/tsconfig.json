@@ -1,0 +1,96 @@
+{
+	"compilerOptions": {
+		/* 仅用于类型检查；Vite 的实际浏览器兼容目标由 build.target 控制。 */
+		"target": "ESNext",
+		/* 保留 JSX/TSX 语法，交给 Vue JSX 插件和 Vite 继续转换。 */
+		"jsx": "preserve",
+		/* 使用 Vue 3 的 JSX 类型定义，避免被识别为 React JSX。 */
+		"jsxImportSource": "vue",
+		/* 提供最新 ECMAScript、浏览器 DOM 及可迭代 DOM 集合类型。 */
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		/* 将所有源码按模块处理，避免无 import/export 文件污染全局作用域。 */
+		"moduleDetection": "force",
+		/* 使用符合 ECMAScript 标准的类字段初始化语义。 */
+		"useDefineForClassFields": true,
+
+		/* 保留 ESM，由 Vite 负责打包和降级转换。 */
+		"module": "ESNext",
+		/* 使用适合 Vite 等打包器的模块解析策略，并支持 package.json 的 imports/exports。 */
+		"moduleResolution": "Bundler",
+		/* 路径别名必须与 vite.config.ts 中的 resolve.alias 保持一致。 */
+		"paths": {
+			"@": ["./src"],
+			"@/*": ["./src/*"]
+		},
+		/* 允许直接导入 JSON，并获得其结构类型。 */
+		"resolveJsonModule": true,
+		/* 限定通用全局类型；框架或组件库的专属类型应在项目自己的 .d.ts 文件中引入。 */
+		"types": [
+			/* 提供 Node.js 全局变量、内置模块和 Vite 配置文件所需类型。 */
+			"node",
+			/* 提供 import.meta.env、HMR、CSS/LESS/SCSS 和静态资源导入声明。 */
+			"vite/client",
+			/* 提供 DCloud 官方 uni-app API、uni 全局对象和 HTML5 Plus 类型。 */
+			"@dcloudio/types",
+			/* 汇总 uni-app、uni-cloud 和 uni-ui 的组件类型。 */
+			"@uni-helper/uni-types",
+			/** 提供 uni-app 页面路由与 pages.json 生成相关类型。 */
+			"@uni-helper/vite-plugin-uni-pages",
+			/** 注册 wot-ui 全局组件类型，供 Volar 提示和模板类型检查。 */
+			"@wot-ui/ui/global",
+			/** 注册 z-paging 全局组件类型，供 Volar 提示和模板类型检查。 */
+			"z-paging/types"
+		],
+		/* 允许通过 *.d.<extension>.ts 为 CSS、LESS、SCSS 等任意扩展名提供精确声明。 */
+		"allowArbitraryExtensions": true,
+		/* noEmit 模式下允许显式导入 .ts、.tsx 等 TypeScript 扩展名。 */
+		"allowImportingTsExtensions": true,
+
+		/* 允许项目逐步接入现有 JavaScript 和 JSX 文件。 */
+		"allowJs": true,
+		/* 纳入 JavaScript 模块解析，但不强制检查旧 JavaScript 文件内部错误。 */
+		"checkJs": false,
+
+		/* 启用 TypeScript 完整严格模式。 */
+		"strict": true,
+		/* 关闭 null 和 undefined 的严格类型检查。 */
+		"strictNullChecks": false,
+		/* 防止 switch 分支意外贯穿。 */
+		"noFallthroughCasesInSwitch": true,
+		/* 派生类覆盖基类成员时必须显式使用 override。 */
+		"noImplicitOverride": true,
+		/* 要求函数的所有可达分支显式返回，避免意外得到 undefined。 */
+		"noImplicitReturns": true,
+		/* 索引访问结果包含 undefined，强制处理数组越界和不存在的动态键。 */
+		"noUncheckedIndexedAccess": true,
+		/* 报告未使用的局部变量。 */
+		"noUnusedLocals": true,
+		/* 报告未使用的函数参数；有意忽略的参数可使用下划线前缀。 */
+		"noUnusedParameters": true,
+		/* catch 变量使用 unknown，必须先缩小类型再访问。 */
+		"useUnknownInCatchVariables": true,
+
+		/* 只执行类型检查，不让 TypeScript 输出文件；构建产物统一由 Vite 生成。 */
+		"noEmit": true,
+
+		/* 改善 CommonJS 与 ESM 默认导入的互操作类型行为。 */
+		"esModuleInterop": true,
+		/* 防止不同操作系统的文件名大小写差异导致构建失败。 */
+		"forceConsistentCasingInFileNames": true,
+		/* 保证每个文件都能被 Vite 独立转换，不依赖跨文件类型信息生成代码。 */
+		"isolatedModules": true,
+		/* 完整保留值导入，强制使用 import type/export type 表达纯类型依赖。 */
+		"verbatimModuleSyntax": true,
+
+		/* 跳过第三方声明文件内部检查，避免依赖类型版本差异拖慢或阻断应用构建。 */
+		"skipLibCheck": true
+	},
+	"vueCompilerOptions": {
+		/* 为 Vue 语言服务补充 Uni-app 组件、页面和平台 API 类型。 */
+		"plugins": ["@uni-helper/uni-types/volar-plugin"]
+	},
+	/* 覆盖源码、公共声明及常见的 uni-app、Vite 配置文件。 */
+	"include": ["src", "types", "vite.config.*", "pages.config.*", "manifest.config.*"],
+	/* 排除依赖、构建结果、覆盖率和 uni-app 编译产物。 */
+	"exclude": ["node_modules", "dist", "coverage", "unpackage"]
+}

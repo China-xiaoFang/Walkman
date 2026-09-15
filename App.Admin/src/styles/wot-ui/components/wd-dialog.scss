@@ -1,0 +1,6 @@
+/* Fast 风格：统一对话框及图片圆角，并强化确认操作的视觉层级 */
+.wd-dialog {
+	--wot-dialog-radius: var(--wot-radius-extra-large);
+	--wot-dialog-img-border-radius: var(--wot-radius-extra-large);
+	--wot-dialog-actions-confirm-font-weight: var(--wot-font-weight-semibold);
+}

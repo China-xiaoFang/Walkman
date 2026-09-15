@@ -163,7 +163,7 @@ export const useUserInfo = defineStore(
 					// 关闭 WebSocket 连接
 					await closeWebSocket();
 				} catch (error) {
-					logger.error("Logout", "发生异常", error);
+					logger.error("Logout", error);
 				}
 				logoutClear();
 			} else {
@@ -171,12 +171,12 @@ export const useUserInfo = defineStore(
 					// 关闭 WebSocket 连接
 					await closeWebSocket();
 				} catch (error) {
-					logger.error("Logout", "发生异常", error);
+					logger.error("Logout", error);
 				}
 				try {
 					await loginApi.logout();
 				} catch (error) {
-					logger.error("Logout", "发生异常", error);
+					logger.error("Logout", error);
 				} finally {
 					logoutClear();
 					if (data !== null) {

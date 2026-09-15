@@ -6,13 +6,13 @@ import router from "./router";
 import { loadPinia, useApp } from "./stores";
 import { checkVersionUpdate } from "./updateVersion";
 import type { Component } from "vue";
-import "./styles/index.scss";
 if (import.meta.env.DEV) {
 	await import("element-plus/dist/index.css");
 	await import("element-plus/theme-chalk/dark/css-vars.css");
 	await import("fast-element-plus/style.css");
 	await import("vue-json-pretty/lib/styles.css");
 }
+await import("./styles/index.scss");
 
 checkVersionUpdate(import.meta.env.VITE_APP_VERSION);
 

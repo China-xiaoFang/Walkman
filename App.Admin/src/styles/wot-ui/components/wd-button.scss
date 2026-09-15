@@ -1,0 +1,5 @@
+/* Fast 风格：补全信息按钮描边，并统一非圆形按钮的圆角 */
+.wd-button {
+	--wot-button-info-plain-border: var(--wot-border-main);
+	--wot-button-radius-main: 10rpx;
+}

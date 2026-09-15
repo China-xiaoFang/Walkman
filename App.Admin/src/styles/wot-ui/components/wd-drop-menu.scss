@@ -1,0 +1,9 @@
+/* Fast 风格：取消菜单项等宽拉伸，让多个筛选项按内容宽度紧凑排列 */
+.wd-drop-menu {
+	.wd-drop-menu__list {
+		gap: 10rpx;
+		.wd-drop-menu__option {
+			flex: initial;
+		}
+	}
+}

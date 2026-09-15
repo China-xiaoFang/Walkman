@@ -1,0 +1,11 @@
+/* Fast 风格：弱化单元格分隔线，并让功能图标跟随应用主题色 */
+.wd-cell-group {
+	--wot-cell-border-color: var(--wot-divider-light);
+	--wot-cell-icon-color: var(--wot-primary-6);
+}
+
+/* 页面卡片已提供背景，内部单元格组使用透明背景避免出现双层色块 */
+.page-card > .wd-cell-group {
+	--wot-cell-bg: transparent;
+	--wot-cell-group-bg: transparent;
+}
