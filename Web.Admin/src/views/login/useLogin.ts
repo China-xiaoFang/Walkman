@@ -161,11 +161,9 @@ const createLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButtonInst
 	};
 
 	/** 表单登录 */
-	const handleFormLogin = (event: MouseEvent, done?: () => void) => {
-		formUtil.validate(elFormRef).then(
-			() => handleLogin(event, done),
-			() => done?.()
-		);
+	const handleFormLogin = async (event: MouseEvent, done?: () => void) => {
+		await formUtil.validate(elFormRef).finally(() => done?.());
+		handleLogin(event, done);
 	};
 
 	/** 回车键摁下 */
