@@ -213,7 +213,6 @@
 	.split-login__form-wrap {
 		position: relative;
 		display: flex;
-		min-width: 0;
 		flex: 1;
 		flex-direction: column;
 		overflow: hidden;
@@ -246,7 +245,6 @@
 			position: relative;
 			z-index: 1;
 			display: flex;
-			min-height: 0;
 			flex: 1;
 			align-items: center;
 			justify-content: center;
@@ -344,7 +342,6 @@ html.dark .split-login {
 
 @media (max-width: 900px) {
 	.split-login {
-		min-width: 0;
 		flex-direction: column;
 
 		.split-login__panel {
@@ -396,8 +393,6 @@ html.dark .split-login {
 		}
 
 		.split-login__form-wrap {
-			min-height: 0;
-
 			.form-stage {
 				padding: 36px clamp(24px, 7vw, 56px);
 			}

@@ -427,7 +427,6 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 .tenant-list {
 	flex: 0 0 400px;
 	height: 400px;
-	min-height: 0;
 	margin-right: -8px;
 	padding-right: 8px;
 }
@@ -463,7 +462,6 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 
 	.tenant-card__body {
 		display: flex;
-		min-width: 0;
 		flex-direction: column;
 		gap: 4px;
 
@@ -540,7 +538,6 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 
 :global(.login-tenant-popper .tenant-option__content) {
 	display: flex;
-	min-width: 0;
 	flex-direction: column;
 	gap: 2px;
 }

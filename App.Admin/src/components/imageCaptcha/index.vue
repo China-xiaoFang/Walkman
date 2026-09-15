@@ -112,7 +112,6 @@ defineExpose({
 	justify-content: center;
 	width: 100%;
 	height: 80rpx;
-	min-width: 0;
 	padding: 0;
 	font-size: 24rpx;
 	color: var(--wot-text-auxiliary);

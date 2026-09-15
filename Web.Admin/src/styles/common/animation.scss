@@ -8,7 +8,9 @@
 .slide-bottom-enter-active,
 .slide-bottom-leave-active {
 	will-change: transform;
-	transition: all var(--el-transition-duration) ease;
+	transition:
+		opacity var(--el-transition-duration) ease,
+		transform var(--el-transition-duration) ease;
 }
 /* 左右切换 */
 .slide-right-enter-from {

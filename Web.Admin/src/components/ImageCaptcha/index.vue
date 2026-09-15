@@ -107,14 +107,12 @@ defineExpose({
 .image-captcha {
 	display: grid;
 	width: 100%;
-	min-width: 0;
 	grid-template-columns: minmax(0, 1fr) 132px;
 	align-items: center;
 	gap: 8px;
 }
 .image-captcha__image {
 	height: 46px;
-	min-width: 0;
 	padding: 0;
 	cursor: pointer;
 	color: var(--el-text-color-secondary);

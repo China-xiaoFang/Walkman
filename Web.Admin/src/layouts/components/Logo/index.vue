@@ -49,7 +49,6 @@ html.small {
 	gap: 10px;
 	padding: 0 10px;
 	// border-bottom: var(--el-border);
-	box-sizing: border-box;
 	cursor: pointer;
 	img {
 		height: 80%;

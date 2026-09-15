@@ -11,7 +11,7 @@
 						<view class="tenant-card__meta">{{ item.departmentName || "无部门" }} · {{ item.employeeName }}</view>
 					</view>
 					<FaTag size="small" name="EditionEnum" :value="item.edition" />
-					<wd-icon name="arrow-right" size="28rpx" />
+					<wd-icon name="arrow-right" size="28rpx" color="var(--wot-text-auxiliary)" />
 				</view>
 			</view>
 		</scroll-view>
@@ -72,9 +72,15 @@ onLoad(() => {
 </script>
 
 <style scoped lang="scss">
+.page {
+	display: flex;
+	flex-direction: column;
+}
+
 .tenant-list {
 	flex: 1;
 	min-height: 0;
+	height: 0;
 	margin-top: 36rpx;
 }
 
@@ -91,20 +97,8 @@ onLoad(() => {
 	align-items: center;
 }
 
-.tenant-card__logo {
-	display: flex;
-	flex: none;
-	align-items: center;
-	justify-content: center;
-	width: 84rpx;
-	height: 84rpx;
-	overflow: hidden;
-	color: var(--wot-primary-6);
-	background-color: var(--wot-primary-1);
-	border-radius: 18rpx;
-}
-
 .tenant-card__image {
+	flex: none;
 	width: 84rpx;
 	height: 84rpx;
 	border-radius: 18rpx;
@@ -113,6 +107,7 @@ onLoad(() => {
 
 .tenant-card__content {
 	flex: 1;
+	overflow: hidden;
 }
 
 .tenant-card__name {
@@ -129,9 +124,5 @@ onLoad(() => {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-}
-
-.wd-icon-arrow-right {
-	color: var(--wot-text-auxiliary);
 }
 </style>

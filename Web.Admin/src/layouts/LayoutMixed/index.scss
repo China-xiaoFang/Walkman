@@ -21,7 +21,6 @@
 				align-items: center;
 				justify-content: space-between;
 				border-bottom: var(--el-border);
-				box-sizing: border-box;
 				overflow: hidden;
 				.left {
 					flex: 1;
@@ -80,7 +79,6 @@
 			}
 		}
 		.el-main {
-			box-sizing: border-box;
 			overflow-x: hidden;
 			background-color: var(--el-bg-color-page);
 			:deep(.el-scrollbar) {

@@ -45,7 +45,7 @@
 					cursor: pointer;
 					border-radius: 6px;
 					box-shadow: 0 0 5px 1px var(--el-border-color-dark);
-					transition: all 0.2s;
+					transition: box-shadow 0.2s;
 					&:hover {
 						box-shadow: 0 0 5px 1px var(--el-text-color-secondary);
 					}

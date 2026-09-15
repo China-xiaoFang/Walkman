@@ -7,7 +7,6 @@
 	user-select: none;
 	transition: height var(--el-transition-duration);
 	border-bottom: var(--el-border);
-	box-sizing: border-box;
 	overflow: hidden;
 	.icon-arrow {
 		height: 100%;
@@ -81,7 +80,10 @@
 				align-items: center;
 				font-size: var(--el-font-size-small);
 				border: var(--el-border);
-				transition: all var(--el-transition-duration) ease;
+				transition:
+					color var(--el-transition-duration) ease,
+					border-color var(--el-transition-duration) ease,
+					background-color var(--el-transition-duration) ease;
 				border-radius: var(--el-border-radius-base);
 				cursor: pointer;
 				&:hover {
@@ -134,7 +136,7 @@
 				flex-direction: row;
 				align-items: center;
 				font-size: var(--el-font-size-small);
-				transition: all var(--el-transition-duration) ease;
+				transition: color var(--el-transition-duration) ease;
 				cursor: pointer;
 				&::after {
 					content: "";
@@ -144,7 +146,7 @@
 					width: 0;
 					height: 2px;
 					background-color: var(--el-color-primary);
-					transition: all var(--el-transition-duration) ease;
+					transition: width var(--el-transition-duration) ease;
 					border-radius: 1px;
 				}
 				&:hover {
@@ -191,7 +193,9 @@
 				flex-direction: row;
 				align-items: center;
 				font-size: var(--el-font-size-small);
-				transition: all var(--el-transition-duration) ease;
+				transition:
+					color var(--el-transition-duration) ease,
+					background-color var(--el-transition-duration) ease;
 				cursor: pointer;
 				border-radius: 8px 8px 0 0;
 				margin-top: auto;
@@ -203,7 +207,9 @@
 					width: 0;
 					height: 0;
 					background-color: var(--el-color-primary);
-					transition: all var(--el-transition-duration) ease;
+					transition:
+						width var(--el-transition-duration) ease,
+						height var(--el-transition-duration) ease;
 					border-radius: 1px;
 				}
 				&:hover {

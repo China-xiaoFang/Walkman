@@ -29,7 +29,6 @@ defineOptions({
 	justify-content: center;
 	background: var(--el-bg-color-page);
 	padding: 20px;
-	box-sizing: border-box;
 	.mobile-blocked__card {
 		text-align: center;
 		max-width: 360px;
